@@ -32,7 +32,7 @@ public class GameboardView extends Composite{
 	}
 
 	public void init(int x, int y, int width, int height) {
-		setBackground(SWTResourceManager.getColor(150, 150, 150));
+		setBackground(SWTResourceManager.getColor(110, 110, 110));
 		setBounds(x,y,width,height);
 		buildGameboard();
 	}
@@ -66,16 +66,16 @@ public class GameboardView extends Composite{
 	private void buildGameboardSeperators()
 	{
 		Label vertSep1 = new Label(this, SWT.SEPARATOR);
-		vertSep1.setBounds(((btnSize + BTN_PADDING * 2) * 3)-5, 0, 4, this.getBounds().height);
+		vertSep1.setBounds(((btnSize + BTN_PADDING * 2) * 3)-6, 0, 5, this.getBounds().height);
 		vertSep1.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		Label vertSep2 = new Label(this, SWT.SEPARATOR);
-		vertSep2.setBounds(((btnSize + BTN_PADDING * 2) * 6)-5, 0, 4, this.getBounds().height);
+		vertSep2.setBounds(((btnSize + BTN_PADDING * 2) * 6)-6, 0, 5, this.getBounds().height);
 		vertSep2.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		Label horzSep1 = new Label(this, SWT.SEPARATOR);
-		horzSep1.setBounds(0, ((btnSize + BTN_PADDING * 2) * 3)-3, this.getBounds().width, 2);
+		horzSep1.setBounds(0, ((btnSize + BTN_PADDING * 2) * 3)-4, this.getBounds().width, 4);
 		horzSep1.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		Label horzSep2 = new Label(this, SWT.SEPARATOR);
-		horzSep2.setBounds(0, ((btnSize + BTN_PADDING * 2) * 6)-3, this.getBounds().width, 2);
+		horzSep2.setBounds(0, ((btnSize + BTN_PADDING * 2) * 6)-4, this.getBounds().width, 4);
 		horzSep2.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 	}
 	

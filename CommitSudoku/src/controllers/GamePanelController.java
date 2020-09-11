@@ -1,7 +1,11 @@
 package controllers;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Shell;
 
 import events.SaveObserver;
 import model.GameModel;
@@ -16,12 +20,14 @@ public class GamePanelController
 {
 	private GameModel model;
 	private GamePanelView view;
+	private Shell shell;
 	private int currentSolution;
 	
-	public GamePanelController(GameModel model, GamePanelView view)
+	public GamePanelController(GameModel model, Shell shell, GamePanelView view)
 	{
 		this.model = model;
 		this.view = view;
+		this.shell = shell;
 		currentSolution = 0;
 	}
 	
@@ -34,10 +40,21 @@ public class GamePanelController
 	private void initGameList()
 	{
 		view.updateGameList(PuzzleSaveList.getInstance().getListAsStrings());
+		Util.println(PuzzleSaveList.getInstance().getSaveList().size()+"");
 	}
 	
 	private void initListeners()
 	{
+		shell.addListener(SWT.Close, new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				savePuzzleAction();
+				shell.setVisible(false);
+				
+			}
+		});
+		
 		view.getPlayButton().addSelectionListener(new SelectionListener() {
 			
 			@Override
@@ -100,6 +117,8 @@ public class GamePanelController
 	private void savePuzzleAction()
 	{
 		SaveManager.saveSudokuPuzzle(model.getPuzzle(), true);
+		PuzzleSaveList.getInstance().refresh();
+		initGameList();
 	}
 	
 	private void updateGameState()

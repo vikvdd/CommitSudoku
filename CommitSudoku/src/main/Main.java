@@ -26,6 +26,7 @@ public class Main {
 		ViewScaleManager sm = new ViewScaleManager(1024, true);
 		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120);
 		
+		
 		//INIT MODEL
 		GameModel model = new GameModel();
 		
@@ -57,7 +58,7 @@ public class Main {
 		shell = new Shell();
 		shell.setSize(width, height);
 		shell.setText("CommitSudoku");
-		shell.setBackground(new Color(null,133, 133, 133));
+		shell.setBackground(new Color(null,209, 191, 174));
 		return shell;
 	}
 	
@@ -65,7 +66,7 @@ public class Main {
 	{
 		GameboardController boardController = new GameboardController(model, board, buttonsView);
 		boardController.init();
-		GamePanelController panelController = new GamePanelController(model, panelView);
+		GamePanelController panelController = new GamePanelController(model, shell, panelView);
 		panelController.init();
 	}
 }

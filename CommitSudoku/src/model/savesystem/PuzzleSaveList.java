@@ -96,6 +96,7 @@ public class PuzzleSaveList implements Serializable
 		}
 		saveList.add(save);
 		updateSaveFile();
+		loadSaveList();
 	}
 	
 	public String[] getListAsStrings() 
