@@ -79,9 +79,9 @@ public class GamePanelView extends Composite{
 		
 		emptySpaces = new Spinner(this, SWT.BORDER);
 		emptySpaces.setBounds(getBounds().width - (getBounds().width/4) - 25-(emptySpaces.getBounds().width/2), playButton.getBounds().y + playButton.getBounds().height + 50, 50, 25);
-		emptySpaces.setMaximum(64);
+		emptySpaces.setMaximum(81);
 		emptySpaces.setMinimum(10);
-		emptySpaces.setSelection(40);
+		emptySpaces.setSelection(50);
 		
 		generateBtn = new Button(this, SWT.PUSH);
 		generateBtn.setBounds(getBounds().width/2-60, emptySpaces.getBounds().y + 40, 120, 50);

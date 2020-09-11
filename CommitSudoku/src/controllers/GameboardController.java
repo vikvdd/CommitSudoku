@@ -107,10 +107,14 @@ public class GameboardController implements ModelChangeObserver
 		}
 	}
 	public void selectTileAction(Coordinate coordinate) {
+		SudokuPuzzle puzzle = model.getPuzzle();
+		if(puzzle.get()[selectedY][selectedX] == 0) view.getSelectedButton().setBackground(GameboardView.DEFAULT_TILE);
 		selectedX = coordinate.x;
 		selectedY = coordinate.y;
-		Util.println(view.getButton(selectedY,selectedX).getText());
-		view.setSelectedButton(view.getButton(coordinate.y, coordinate.x));
+		Button btn = view.getButton(selectedY, selectedX);
+		if(puzzle.get()[selectedY][selectedX] != 0)  btn.setBackground(GameboardView.MAIN_TILE);
+		else btn.setBackground(GameboardView.SELECTED_TILE);
+		view.setSelectedButton(btn);
 	}
 	
 	private void numButtonAction(int val) throws IOException
@@ -138,13 +142,14 @@ public class GameboardController implements ModelChangeObserver
 	{
 		Button btn = view.getButton(y,x);
 		SudokuPuzzle puzzle = model.getPuzzle();
+		btn.setBackground(GameboardView.DEFAULT_TILE);
 	
 		if(puzzle.get()[y][x] != 0)
 		{
 			btn.setFont(GameboardView.DEFAULT_FONT);
 			btn.setForeground(GameboardView.DEFAULT_COLOR);
-			if(val != 0) btn.setText(val + "");
-			else btn.setText("");
+			btn.setBackground(GameboardView.MAIN_TILE);
+			btn.setText(puzzle.get()[y][x] + "");
 			return;
 		}
 		else if(puzzle.get()[y][x] == 0 && puzzle.getUserPuzzle()[y][x] == 0) btn.setText("");
@@ -155,23 +160,23 @@ public class GameboardController implements ModelChangeObserver
 				if(SudokuLogic.possible(puzzle.get(), y, x, val))
 				{
 					btn.setFont(GameboardView.ENTRY_FONT);
-					btn.setForeground(GameboardView.DEFAULT_COLOR);
+					btn.setForeground(GameboardView.DEFAULT_COLOR);					
 					btn.setText(val + "");
 				}
 				else {
 					btn.setFont(GameboardView.INVALID_FONT);
-					btn.setForeground(GameboardView.INVALID_COLOR);
+					btn.setForeground(GameboardView.INVALID_COLOR);				
 					btn.setText(val + "");
 				}
 			}		
 		}
+		if(puzzle.get()[selectedY][selectedX] == 0 ) view.getSelectedButton().setBackground(GameboardView.SELECTED_TILE);
 		
 	}
 	
 
 	@Override
 	public void update() {
-		Util.println("pls");
 		fillGameboard();		
 	}
 

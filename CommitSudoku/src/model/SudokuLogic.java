@@ -48,11 +48,10 @@ public class SudokuLogic {
 	}
 	
 	
-	
 	//returns random puzzle using default values
 	public static SudokuPuzzle generateRandomPuzzle()
 	{	
-		SudokuPuzzle puzzle = generateRandomPuzzle(40, 100);
+		SudokuPuzzle puzzle = generateRandomPuzzle(50, 100);
 		
 		return puzzle;	
 	}
@@ -103,7 +102,7 @@ public class SudokuLogic {
 			}
 		}
 		
-		//System.out.println("Generated new puzzle:");
+		System.out.println("Generated new puzzle:");
 	}
 	
 	private static void removeRandomValues(int total, int[][] puz)

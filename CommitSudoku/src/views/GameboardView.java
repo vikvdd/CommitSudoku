@@ -12,12 +12,13 @@ import org.eclipse.wb.swt.SWTResourceManager;
 public class GameboardView extends Composite{
 	
 	private static final int BTN_PADDING = 2;
-	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI", 14, SWT.BOLD);
-	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 11, SWT.NORMAL);
-	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 11, SWT.BOLD | SWT.ITALIC);
+	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.BOLD);
+	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL);
+	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 15, SWT.BOLD | SWT.ITALIC);
 	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
-	public static final Color DEFAULT_TILE = new Color(null, 230,230,230);
+	public static final Color MAIN_TILE = new Color(null, 190,190,190);
+	public static final Color DEFAULT_TILE = new Color(null, 220,220,220);
 	public static final Color SELECTED_TILE = new Color(null, 250,250,250);
 	
 	private int btnSize;
@@ -31,7 +32,7 @@ public class GameboardView extends Composite{
 	}
 
 	public void init(int x, int y, int width, int height) {
-		setBackground(SWTResourceManager.getColor(192, 192, 192));
+		setBackground(SWTResourceManager.getColor(150, 150, 150));
 		setBounds(x,y,width,height);
 		buildGameboard();
 	}
@@ -71,10 +72,10 @@ public class GameboardView extends Composite{
 		vertSep2.setBounds(((btnSize + BTN_PADDING * 2) * 6)-5, 0, 4, this.getBounds().height);
 		vertSep2.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		Label horzSep1 = new Label(this, SWT.SEPARATOR);
-		horzSep1.setBounds(0, ((btnSize + BTN_PADDING * 2) * 3)-4, this.getBounds().width, 2);
+		horzSep1.setBounds(0, ((btnSize + BTN_PADDING * 2) * 3)-3, this.getBounds().width, 2);
 		horzSep1.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 		Label horzSep2 = new Label(this, SWT.SEPARATOR);
-		horzSep2.setBounds(0, ((btnSize + BTN_PADDING * 2) * 6)-4, this.getBounds().width, 2);
+		horzSep2.setBounds(0, ((btnSize + BTN_PADDING * 2) * 6)-3, this.getBounds().width, 2);
 		horzSep2.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 	}
 	
@@ -84,11 +85,13 @@ public class GameboardView extends Composite{
 	}
 	
 	public void setSelectedButton(Button button)
-	{
-		if(selectedBtn != null) selectedBtn.setBackground(DEFAULT_TILE);		
-		button.setBackground(SELECTED_TILE);
-		
+	{	
 		selectedBtn = button;
+	}
+	
+	public Button getSelectedButton()
+	{
+		return selectedBtn;
 	}
 	
 	public void fillGameboard(int[][] grid)
@@ -118,24 +121,9 @@ public class GameboardView extends Composite{
 		}
 	}
 	
-	public Button getButton(String btnKey)
-	{
-		return buttons.get(btnKey);
-	}
-	
 	public Button getButton(int y, int x)
 	{
 		return gameboardBtns[y][x];
-	}
-	
-	public void setButtonText(String text, String btnKey)
-	{
-		buttons.get(btnKey).setText(text);
-	}
-	
-	public void setButtonFont(Font font, String btnKey)
-	{
-		buttons.get(btnKey).setFont(font);
 	}
 	
 	public Map<String, Button> getBoardButtons()

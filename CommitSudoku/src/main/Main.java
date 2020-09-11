@@ -24,7 +24,7 @@ public class Main {
 		//INIT DISPLAY/WINDOW
 		Display display = Display.getDefault();
 		ViewScaleManager sm = new ViewScaleManager(1024, true);
-		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize());
+		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120);
 		
 		//INIT MODEL
 		GameModel model = new GameModel();
@@ -32,7 +32,7 @@ public class Main {
 		//INIT VIEWS
 		Util.println("..." + sm.getBoardSize());
 		GameboardView board = new GameboardView(shell, SWT.BORDER);
-		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize(), sm.getBoardSize());
+		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize()-5, sm.getBoardSize()-5);
 		GamePanelView panelView = new GamePanelView(shell, SWT.BORDER);
 		panelView.init(board.getBounds().width + sm.getPadding()*2, sm.getPadding(), sm.getPanelSize(), board.getBounds().height);
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
@@ -57,7 +57,7 @@ public class Main {
 		shell = new Shell();
 		shell.setSize(width, height);
 		shell.setText("CommitSudoku");
-		shell.setBackground(new Color(null,28, 28, 28));
+		shell.setBackground(new Color(null,133, 133, 133));
 		return shell;
 	}
 	
