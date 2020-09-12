@@ -13,8 +13,8 @@ public class GameboardView extends Composite{
 	
 	private static final int BTN_PADDING = 2;
 	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.BOLD);
-	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 15, SWT.NORMAL);
-	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 15, SWT.BOLD | SWT.ITALIC);
+	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.NORMAL);
+	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.BOLD | SWT.ITALIC);
 	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
 	public static final Color MAIN_TILE = new Color(null, 190,190,190);

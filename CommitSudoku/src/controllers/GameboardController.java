@@ -6,8 +6,10 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 
 import events.ModelChangeObserver;
+import model.ActionLog;
 import model.Coordinate;
 import model.GameModel;
+import model.PuzzleAction;
 import model.SudokuLogic;
 import model.SudokuPuzzle;
 import model.savesystem.PuzzleSaveList;
@@ -119,10 +121,11 @@ public class GameboardController implements ModelChangeObserver
 	
 	private void numButtonAction(int val) throws IOException
 	{
-		
 		SudokuPuzzle puzzle = model.getPuzzle();
 		int[][] userPuz = puzzle.getUserPuzzle();
 		if(val == userPuz[selectedY][selectedX]) val = 0;
+		PuzzleAction action = new PuzzleAction(new Coordinate(selectedX, selectedY), userPuz[selectedY][selectedX], val);
+		ActionLog.getInstance().performAction(action);
 		model.updateUserPuzzle(val, selectedY, selectedX);
 		setButtonText(val, selectedY, selectedX);
 
