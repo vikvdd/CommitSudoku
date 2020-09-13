@@ -26,6 +26,8 @@ public class GamePanelView extends Composite{
 	private Spinner maxSolutionsSpin;
 	private Spinner emptySpaces;
 	private Button generateBtn;
+	private Label gameTitleLbl;
+	
 	private Button solveButton;
 	
 	
@@ -142,10 +144,4 @@ public class GamePanelView extends Composite{
 	{
 		return solveButton;
 	}
-	
-	private void addToList(String gameName)
-	{
-		gameList.add(gameName);
-	}
-	
 }
