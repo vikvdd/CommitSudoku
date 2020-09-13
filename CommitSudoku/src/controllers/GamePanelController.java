@@ -15,15 +15,16 @@ import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;
 import views.GamePanelView;
+import views.PanelView;
 
 public class GamePanelController
 {
 	private GameModel model;
-	private GamePanelView view;
+	private PanelView view;
 	private Shell shell;
 	private int currentSolution;
 	
-	public GamePanelController(GameModel model, Shell shell, GamePanelView view)
+	public GamePanelController(GameModel model, Shell shell, PanelView view)
 	{
 		this.model = model;
 		this.view = view;
@@ -35,6 +36,7 @@ public class GamePanelController
 	{
 		initGameList();		
 		initListeners();
+		updateGameTitles();
 	}
 	
 	private void initGameList()
@@ -69,7 +71,7 @@ public class GamePanelController
 			}
 		});
 		
-		view.getGenerateButton().addSelectionListener(new SelectionListener() {
+		view.getGenerateBtn().addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -84,7 +86,7 @@ public class GamePanelController
 			}
 		});
 		
-		view.getSolveButton().addSelectionListener(new SelectionListener() {
+		view.getSolveBtn().addSelectionListener(new SelectionListener() {
 			
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -107,7 +109,9 @@ public class GamePanelController
 			updateGameState();
 			PuzzleSaveList saveList = PuzzleSaveList.getInstance();
 			SudokuPuzzle puzzle = SaveManager.loadSudokuPuzzle(PuzzleSaveList.getInstance().getSelectedSave().getName());			
-			model.setGamePuzzle(puzzle);	
+			model.setGamePuzzle(puzzle);
+			updateGameTitles();
+			
 		} catch (Exception e) {
 			Util.println("No puzzle was selected.");
 		}
@@ -119,6 +123,13 @@ public class GamePanelController
 		SaveManager.saveSudokuPuzzle(model.getPuzzle(), true);
 		PuzzleSaveList.getInstance().refresh();
 		initGameList();
+	}
+	
+	private void updateGameTitles()
+	{
+		SudokuPuzzle puzzle = model.getPuzzle();
+		view.getPuzzleNameLbl().setText(puzzle.getName());
+		view.getDifficultyLbl().setText(puzzle.getDifficulty().name());
 	}
 	
 	private void updateGameState()

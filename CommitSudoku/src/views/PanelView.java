@@ -39,12 +39,26 @@ public class PanelView extends Composite{
 	private Composite composite_3;
 	private Button btnSolve;
 	
-	
+	public static Color primaryColor;
+	public static Color secondaryColor = new Color(null, 232, 232, 232);
 	
 	
 	public List getGameList()
 	{
 		return gameList;
+	}
+	
+	public void updateGameList(String[] newList)
+	{
+		gameList.removeAll();
+		if(newList.length > 0)
+		{
+			for(String str : newList)
+			{
+				if(str!=null)
+					gameList.add(str);
+			}
+		}
 	}
 	
 	public Button getPlayButton()
@@ -118,10 +132,10 @@ public class PanelView extends Composite{
 		composite_2.setLayout(gl_composite_2);
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		composite_3 = new Composite(composite_2, SWT.NONE);
+		composite_3 = new Composite(composite_2, SWT.BORDER);
+		composite_3.setBackground(secondaryColor);
 		GridLayout gl_composite_3 = new GridLayout(2, true);
 		gl_composite_3.verticalSpacing = 3;
-		gl_composite_3.marginHeight = 0;
 		composite_3.setLayout(gl_composite_3);
 		GridData gd_composite_3 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_composite_3.heightHint = 87;
@@ -130,37 +144,48 @@ public class PanelView extends Composite{
 		lblTime = new Label(composite_3, SWT.NONE);
 		lblTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 1));
 		lblTime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
+		lblTime.setBackground(secondaryColor);
 		lblTime.setText("5:12");
 		
 		lblPuzzle = new Label(composite_3, SWT.NONE);
 		lblPuzzle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPuzzle.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblPuzzle.setText("Puzzle Name:");
+		lblPuzzle.setBackground(secondaryColor);
 		
 		lblPuzzleName = new Label(composite_3, SWT.NONE);
+		lblPuzzleName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblPuzzleName.setText("ExamplePuzzle");
+		lblPuzzleName.setBackground(secondaryColor);
 		
 		lblDifficultyTitle = new Label(composite_3, SWT.NONE);
 		lblDifficultyTitle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblDifficultyTitle.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblDifficultyTitle.setText("Difficulty:");
+		lblDifficultyTitle.setBackground(secondaryColor);
 		
 		lbldifficulty = new Label(composite_3, SWT.NONE);
+		lbldifficulty.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lbldifficulty.setText("HARD AF");
+		lbldifficulty.setBackground(secondaryColor);
 		
 		lblDateCompletedTitle = new Label(composite_3, SWT.NONE);
 		lblDateCompletedTitle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblDateCompletedTitle.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblDateCompletedTitle.setText("Date Completed:");
+		lblDateCompletedTitle.setBackground(secondaryColor);
 		
 		lblDateCompleted = new Label(composite_3, SWT.NONE);
 		lblDateCompleted.setText("-");
+		lblDateCompleted.setBackground(secondaryColor);
 		new Label(composite_3, SWT.NONE);
 		new Label(composite_3, SWT.NONE);
 		
 		gameList = new List(composite_2, SWT.BORDER | SWT.V_SCROLL);
-		gameList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		gameList.setItems(new String[] {"test", "test", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck", "fuck"});
+		GridData gd_gameList = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_gameList.heightHint = 200;
+		gameList.setLayoutData(gd_gameList);
+		gameList.setItems(new String[] {});
 		
 		playButton = new Button(composite_2, SWT.NONE);
 		GridData gd_playButton = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
@@ -203,10 +228,15 @@ public class PanelView extends Composite{
 		lblemptySpaces.setText("Empty Spaces");
 		
 		totalSolutionsSpin = new Spinner(compositePuzzleGen, SWT.BORDER);
+		totalSolutionsSpin.setMaximum(1000);
+		totalSolutionsSpin.setMinimum(1);
+		totalSolutionsSpin.setSelection(10);
 		totalSolutionsSpin.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		totalSolutionsSpin.setBounds(0, 0, 47, 22);
 		
 		emptySpacesSpin = new Spinner(compositePuzzleGen, SWT.BORDER);
+		emptySpacesSpin.setMaximum(81);
+		emptySpacesSpin.setSelection(40);
 		emptySpacesSpin.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		emptySpacesSpin.setBounds(0, 0, 47, 22);
 		

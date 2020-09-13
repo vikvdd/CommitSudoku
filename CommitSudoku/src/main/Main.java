@@ -2,6 +2,8 @@ package main;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import controllers.GamePanelController;
@@ -11,6 +13,7 @@ import util.Util;
 import views.GameButtonsView;
 import views.GamePanelView;
 import views.GameboardView;
+import views.PanelView;
 import views.ViewScaleManager;
 
 public class Main {
@@ -34,8 +37,9 @@ public class Main {
 		Util.println("..." + sm.getBoardSize());
 		GameboardView board = new GameboardView(shell, SWT.BORDER);
 		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize()-5, sm.getBoardSize()-5);
-		GamePanelView panelView = new GamePanelView(shell, SWT.BORDER);
-		panelView.init(board.getBounds().width + sm.getPadding()*2, sm.getPadding(), sm.getPanelSize(), board.getBounds().height);
+		/*GamePanelView panelView1 = new GamePanelView(shell, SWT.BORDER);
+		panelView.init(board.getBounds().width + sm.getPadding()*2, sm.getPadding(), sm.getPanelSize(), board.getBounds().height);*/
+		PanelView panelView = new PanelView(shell, SWT.NONE);
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
 		buttonsView.init(sm.getBoardSize()/2-sm.getButtonViewSize()/2, sm.getBoardSize() + sm.getPadding()*4, sm.getButtonViewSize(), 60);
 		
@@ -59,10 +63,13 @@ public class Main {
 		shell.setSize(width, height);
 		shell.setText("CommitSudoku");
 		shell.setBackground(new Color(null,209, 191, 174));
+		GridLayout gridLayout = new GridLayout(2, false);
+		GridData shellData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		shell.setLayout(gridLayout);
 		return shell;
 	}
 	
-	private static void initControllers(GameModel model, Shell shell, GameboardView board, GameButtonsView buttonsView, GamePanelView panelView)
+	private static void initControllers(GameModel model, Shell shell, GameboardView board, GameButtonsView buttonsView, PanelView panelView)
 	{
 		GameboardController boardController = new GameboardController(model, board, buttonsView);
 		boardController.init();
