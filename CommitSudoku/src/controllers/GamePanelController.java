@@ -71,6 +71,20 @@ public class GamePanelController
 			}
 		});
 		
+		view.getDeleteButton().addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				deleteButtonAction();	
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		view.getGenerateBtn().addSelectionListener(new SelectionListener() {
 			
 			@Override
@@ -118,6 +132,19 @@ public class GamePanelController
 		
 	}
 	
+	private void deleteButtonAction()
+	{
+		try {
+			SaveManager.deleteSudokuPuzzle(view.getGameList().getItem(view.getGameList().getSelectionIndex()));
+			PuzzleSaveList saveList = PuzzleSaveList.getInstance();
+			saveList.refresh();
+			initGameList();
+			
+		} catch (Exception e) {
+			Util.println("Failed to delete puzzle.");
+		}
+	}
+	
 	private void savePuzzleAction()
 	{
 		SaveManager.saveSudokuPuzzle(model.getPuzzle(), true);
@@ -127,9 +154,14 @@ public class GamePanelController
 	
 	private void updateGameTitles()
 	{
-		SudokuPuzzle puzzle = model.getPuzzle();
-		view.getPuzzleNameLbl().setText(puzzle.getName());
-		view.getDifficultyLbl().setText(puzzle.getDifficulty().name());
+		try {
+			SudokuPuzzle puzzle = model.getPuzzle();
+			view.getPuzzleNameLbl().setText(puzzle.getName());
+			view.getDifficultyLbl().setText(puzzle.getDifficulty().name());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 	
 	private void updateGameState()

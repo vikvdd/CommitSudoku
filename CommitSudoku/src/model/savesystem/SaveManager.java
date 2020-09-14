@@ -1,5 +1,9 @@
 package model.savesystem;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -46,6 +50,17 @@ public class SaveManager
 	{
 		SudokuPuzzle puzzle = (SudokuPuzzle)SerializationHandler.LoadSave(file);
 		return puzzle;
+	}
+	
+	public static void deleteSudokuPuzzle(String fileName)
+	{
+		File file = new File(saveDir + fileName + ".txt");
+		deleteSudokuPuzzle(file);
+	}
+	
+	public static void deleteSudokuPuzzle(File file)
+	{		
+		if(file.delete()) Util.println("Deleted " + file.getName());
 	}
 	
 	public static File generateUniqueFileName(String fileName)

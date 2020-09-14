@@ -41,6 +41,7 @@ public class PanelView extends Composite{
 	
 	public static Color primaryColor;
 	public static Color secondaryColor = new Color(null, 232, 232, 232);
+	private Button deleteBtn;
 	
 	
 	public List getGameList()
@@ -64,6 +65,11 @@ public class PanelView extends Composite{
 	public Button getPlayButton()
 	{
 		return playButton;
+	}
+	
+	public Button getDeleteButton()
+	{
+		return deleteBtn;
 	}
 	
 	public Label getTimeLabel()
@@ -127,7 +133,7 @@ public class PanelView extends Composite{
 		setLayoutData(gridData);
 		
 		composite_2 = new Composite(this, SWT.NONE);
-		GridLayout gl_composite_2 = new GridLayout(1, false);
+		GridLayout gl_composite_2 = new GridLayout(2, true);
 		gl_composite_2.verticalSpacing = 10;
 		composite_2.setLayout(gl_composite_2);
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -137,7 +143,7 @@ public class PanelView extends Composite{
 		GridLayout gl_composite_3 = new GridLayout(2, true);
 		gl_composite_3.verticalSpacing = 3;
 		composite_3.setLayout(gl_composite_3);
-		GridData gd_composite_3 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		GridData gd_composite_3 = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		gd_composite_3.heightHint = 87;
 		composite_3.setLayoutData(gd_composite_3);
 		
@@ -182,7 +188,7 @@ public class PanelView extends Composite{
 		new Label(composite_3, SWT.NONE);
 		
 		gameList = new List(composite_2, SWT.BORDER | SWT.V_SCROLL);
-		GridData gd_gameList = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		GridData gd_gameList = new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1);
 		gd_gameList.heightHint = 200;
 		gameList.setLayoutData(gd_gameList);
 		gameList.setItems(new String[] {});
@@ -195,6 +201,17 @@ public class PanelView extends Composite{
 		playButton.setLayoutData(gd_playButton);
 		playButton.setText("Play");
 		playButton.setBackground(new Color(null, 74, 194, 76));
+		
+		deleteBtn = new Button(composite_2, SWT.NONE);
+		GridData gd_btnNewButton = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		gd_btnNewButton.heightHint = 40;
+		gd_btnNewButton.widthHint = 100;
+		gd_btnNewButton.minimumWidth = 100;
+		gd_btnNewButton.minimumHeight = 40;
+		deleteBtn.setLayoutData(gd_btnNewButton);
+		deleteBtn.setText("Delete");
+		deleteBtn.setBackground(new Color(null, 235, 59, 59));
+
 		
 		//////////////////////GAME INFO COMPOSITE//////////////////////////////////////
 		

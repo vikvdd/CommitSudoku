@@ -11,7 +11,6 @@ import controllers.GameboardController;
 import model.GameModel;
 import util.Util;
 import views.GameButtonsView;
-import views.GamePanelView;
 import views.GameboardView;
 import views.PanelView;
 import views.ViewScaleManager;
@@ -27,20 +26,19 @@ public class Main {
 		//INIT DISPLAY/WINDOW
 		Display display = Display.getDefault();
 		ViewScaleManager sm = new ViewScaleManager(1024, true);
-		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120);
-		
+		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120); 
 		
 		//INIT MODEL
 		GameModel model = new GameModel();
 		
 		//INIT VIEWS
-		Util.println("..." + sm.getBoardSize());
 		GameboardView board = new GameboardView(shell, SWT.BORDER);
 		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize()-5, sm.getBoardSize()-5);
-		/*GamePanelView panelView1 = new GamePanelView(shell, SWT.BORDER);
-		panelView.init(board.getBounds().width + sm.getPadding()*2, sm.getPadding(), sm.getPanelSize(), board.getBounds().height);*/
 		PanelView panelView = new PanelView(shell, SWT.NONE);
+		GridData buttonsData = new GridData();
+		buttonsData.horizontalAlignment = SWT.CENTER;
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
+		buttonsView.setLayoutData(buttonsData);
 		buttonsView.init(sm.getBoardSize()/2-sm.getButtonViewSize()/2, sm.getBoardSize() + sm.getPadding()*4, sm.getButtonViewSize(), 60);
 		
 		//INIT CONTROLLERS
