@@ -1,6 +1,9 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
@@ -9,6 +12,9 @@ import events.ModelChangeObserver;
 import model.ActionLog;
 import model.Coordinate;
 import model.GameModel;
+import model.GameStatTracker;
+import model.GameTime;
+import model.NumTile;
 import model.PuzzleAction;
 import model.SudokuLogic;
 import model.SudokuPuzzle;
@@ -24,17 +30,22 @@ public class GameboardController implements ModelChangeObserver
 	private GameboardView view;
 	private GameButtonsView btnView;
 	private GameModel model;
+	private GameStatTracker statTracker;
 	private int selectedX;
 	private int selectedY;
+	List<Coordinate> highlightedNumbers;
 	
 	public GameboardController(GameModel model, GameboardView view, GameButtonsView buttonView)
 	{
 		this.model = model;
 		this.view = view;
 		this.btnView = buttonView;
+		highlightedNumbers = new ArrayList<Coordinate>();
 		selectedX = 0;
 		selectedY = 0;
 	}
+	
+	////////////////INIT FUNCTIONS////////////////
 	
 	public void init()
 	{
@@ -42,6 +53,8 @@ public class GameboardController implements ModelChangeObserver
 		initBoardButtons();
 		initGameButtons();
 		fillGameboard();
+		loadGame();
+		GameTime.getInstance().start();
 	}
 	
 	private void initModel()
@@ -71,7 +84,6 @@ public class GameboardController implements ModelChangeObserver
 					
 					@Override
 					public void widgetDefaultSelected(SelectionEvent arg0) {
-						// TODO Auto-generated method stub
 						
 					}
 				});
@@ -91,10 +103,8 @@ public class GameboardController implements ModelChangeObserver
 					try {
 						numButtonAction(Integer.parseInt(btn.getText()));
 					} catch (NumberFormatException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -108,6 +118,9 @@ public class GameboardController implements ModelChangeObserver
 			});
 		}
 	}
+	
+	//////////////////////ACTION FUNCTIONS//////////////////////////////////
+	
 	public void selectTileAction(Coordinate coordinate) {
 		SudokuPuzzle puzzle = model.getPuzzle();
 		if(puzzle.get()[selectedY][selectedX] == 0) view.getSelectedButton().setBackground(GameboardView.DEFAULT_TILE);
@@ -122,65 +135,107 @@ public class GameboardController implements ModelChangeObserver
 	private void numButtonAction(int val) throws IOException
 	{
 		SudokuPuzzle puzzle = model.getPuzzle();
-		int[][] userPuz = puzzle.getUserPuzzle();
+		int[][] userPuz = Util.Clone2dArray(puzzle.getUserPuzzle());
 		if(val == userPuz[selectedY][selectedX]) val = 0;
-		PuzzleAction action = new PuzzleAction(new Coordinate(selectedX, selectedY), userPuz[selectedY][selectedX], val);
-		ActionLog.getInstance().performAction(action);
+		PuzzleAction action = new PuzzleAction(new Coordinate(selectedX, selectedY), userPuz[selectedY][selectedX],val);
+		ActionLog.getInstance().addAction(action);
+		statTracker.addCoordinate(selectedY, selectedX, val);
 		model.updateUserPuzzle(val, selectedY, selectedX);
-		setButtonText(val, selectedY, selectedX);
 
 		return;
+	}
+	
+	
+	//////////////////////BOARD FUNCTIONS///////////////////////////////
+	
+	private void loadGame()
+	{
+		statTracker = new GameStatTracker(model);
+		fillGameboard();
+	}
+	
+	private void updateGame()
+	{
+		fillGameboard();
+	}
+	
+	private void highlightMatchingTiles()
+	{
+		
 	}
 	
 	private void fillGameboard()
 	{
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
-				setButtonText(model.getPuzzle().getUserPuzzle()[y][x], y, x);
+				int[][] puzzle = model.getPuzzle().getUserPuzzle();
+				int val = puzzle[y][x];
+				puzzle[y][x] = 0;				
+				NumTile tileType = findNumTileType(y, x);
+				setButtonText(val, y, x, tileType);
 			}	
 		}
 	}
 	
-	private void setButtonText(int val, int y, int x)
-	{
+	private void setButtonText(int val, int y, int x, NumTile tileType)
+	{	
 		Button btn = view.getButton(y,x);
 		SudokuPuzzle puzzle = model.getPuzzle();
 		btn.setBackground(GameboardView.DEFAULT_TILE);
-	
-		if(puzzle.get()[y][x] != 0)
-		{
+		
+		switch (tileType) {
+		case Number:
 			btn.setFont(GameboardView.DEFAULT_FONT);
 			btn.setForeground(GameboardView.DEFAULT_COLOR);
 			btn.setBackground(GameboardView.MAIN_TILE);
 			btn.setText(puzzle.get()[y][x] + "");
-			return;
+			break;
+		case Empty:
+			btn.setText("");
+			break;
+		case ValidEntry:
+			btn.setFont(GameboardView.ENTRY_FONT);
+			btn.setForeground(GameboardView.DEFAULT_COLOR);					
+			btn.setText(val + "");
+			break;
+		case InvalidEntry:
+			btn.setFont(GameboardView.INVALID_FONT);
+			btn.setForeground(GameboardView.INVALID_COLOR);				
+			btn.setText(val + "");
+			break;
+		}		
+	}
+	
+	//when val matches userpuzzle[y][x] it returns empty tile
+	private NumTile findNumTileType(int y, int x)
+	{
+		int[][] puzzle = Util.Clone2dArray(model.getPuzzle().get());
+		int[][] userPuz = model.getPuzzle().getUserPuzzle();
+		if(puzzle[y][x] != 0) return NumTile.Number;
+		else {
+			if(isValidEntry(userPuz[y][x], y, x)) return NumTile.ValidEntry;
+			else if(userPuz[y][x] == 0) return NumTile.Empty; 
 		}
-		else if(puzzle.get()[y][x] == 0 && puzzle.getUserPuzzle()[y][x] == 0) btn.setText("");
-		else 
+		return NumTile.InvalidEntry;
+	}
+	
+	private boolean isValidEntry(int val, int y, int x)
+	{
+		int[][] puz = Util.Clone2dArray(model.getPuzzle().get());
+		int[][] userPuz = model.getPuzzle().getUserPuzzle();
+		if(puz[y][x] == 0)
 		{
-			if(val != 0)
-			{
-				if(SudokuLogic.possible(puzzle.get(), y, x, val))
-				{
-					btn.setFont(GameboardView.ENTRY_FONT);
-					btn.setForeground(GameboardView.DEFAULT_COLOR);					
-					btn.setText(val + "");
-				}
-				else {
-					btn.setFont(GameboardView.INVALID_FONT);
-					btn.setForeground(GameboardView.INVALID_COLOR);				
-					btn.setText(val + "");
-				}
-			}		
+			userPuz[y][x] = 0;
+			if(SudokuLogic.possible(userPuz, y, x, val))
+				return SudokuLogic.possible(puz, y, x, val);
 		}
-		if(puzzle.get()[selectedY][selectedX] == 0 ) view.getSelectedButton().setBackground(GameboardView.SELECTED_TILE);
-		
+		return false;
 	}
 	
 
 	@Override
 	public void update() {
-		fillGameboard();		
+		updateGame();		
 	}
 
 }

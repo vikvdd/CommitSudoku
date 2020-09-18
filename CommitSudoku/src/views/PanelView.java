@@ -38,6 +38,8 @@ public class PanelView extends Composite{
 	private Composite composite_2;
 	private Composite composite_3;
 	private Button btnSolve;
+	private Button undoButton;
+	private Button redoButton;
 	
 	public static Color primaryColor;
 	public static Color secondaryColor = new Color(null, 232, 232, 232);
@@ -112,6 +114,15 @@ public class PanelView extends Composite{
 		return btnSolve;
 	}
 	
+	public Button getUndoButton()
+	{
+		return undoButton;
+	}
+	
+	public Button getRedoButton()
+	{
+		return redoButton;
+	}
 	private void initGamePanel()
 	{
 		
@@ -276,7 +287,13 @@ public class PanelView extends Composite{
 		
 		btnSolve = new Button(composite_1, SWT.NONE);
 		btnSolve.setText("Solve");
-		new Label(composite_1, SWT.NONE);
+		
+		undoButton = new Button(composite_1, SWT.NONE);
+		undoButton.setText("Undo");
+		
+		redoButton = new Button(composite_1, SWT.NONE);
+		redoButton.setText("Redo");
+		//new Label(composite_1, SWT.NONE);
 		
 		
 		//initGamePanel();

@@ -19,7 +19,7 @@ public class GameboardView extends Composite{
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
 	public static final Color MAIN_TILE = new Color(null, 190,190,190);
 	public static final Color DEFAULT_TILE = new Color(null, 220,220,220);
-	public static final Color SELECTED_TILE = new Color(null, 250,250,250);
+	public static final Color SELECTED_TILE = new Color(null, 158, 221, 255);
 	
 	private int btnSize;
 	private Button[][] gameboardBtns;

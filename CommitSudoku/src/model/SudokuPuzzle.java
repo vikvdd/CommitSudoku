@@ -29,7 +29,7 @@ public class SudokuPuzzle implements Serializable{
 	public SudokuPuzzle(int[][] _puzzle)
 	{
 		puzzle = _puzzle;
-		userPuzzle = Util.Clone2dArray(_puzzle);
+		userPuzzle = Util.Clone2dArray(puzzle);
 		solutions = new ArrayList<int[][]>();
 		totalSolutions = 0;
 		difficulty = Difficulty.UNSOLVED;
@@ -48,7 +48,6 @@ public class SudokuPuzzle implements Serializable{
 	
 	public void enterValue(int val, int y, int x)
 	{
-		puzzle[y][x] = val;
 		userPuzzle[y][x] = val;
 	}
 	

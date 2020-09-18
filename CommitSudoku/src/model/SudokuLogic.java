@@ -123,7 +123,6 @@ public class SudokuLogic {
 	}
 	
 	
-	
 	public static boolean possible(int[][] puzzle, int y, int x, int n)
 	{
 		for(int i = 0; i < 9; i++)

@@ -17,13 +17,13 @@ public class PuzzleAction {
 		return coordinate;
 	}
 	
-	public int getOldValue()
-	{
-		return oldValue;
-	}
-	
 	public int getNewValue()
 	{
 		return newValue;
+	}
+	
+	public int getOldValue()
+	{
+		return oldValue;
 	}
 }

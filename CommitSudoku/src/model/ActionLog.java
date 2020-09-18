@@ -3,16 +3,22 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.DefaultEditorKit.PasteAction;
+
+import org.eclipse.ui.operations.UndoActionHandler;
+
+import util.Util;
+
 public class ActionLog {
 	
 	private static ActionLog instance;
 	
 	private List<PuzzleAction> actions = new ArrayList<PuzzleAction>();
-	private int lastAction = -1;
+	private int actionIndex = -1;
 	
-	private ActionLog()
+	public ActionLog()
 	{
-		
+		actions = new ArrayList<PuzzleAction>();
 	}
 	
 	public static ActionLog getInstance()
@@ -21,38 +27,42 @@ public class ActionLog {
 		return instance;
 	}
 	
-	
-	public void performAction(PuzzleAction action)
+	public PuzzleAction getAction()
 	{
-		if(lastAction < actions.size()-1)
-		{
-			removeActionsFromEnd(lastAction+1);
-		}
-		lastAction++;
+		return actions.get(actionIndex);
+	}
+	
+	public void addAction(PuzzleAction action)
+	{
+		if(actionIndex > 0 && actionIndex < actions.size()-1) removeOldActions();
 		actions.add(action);
+		actionIndex = actions.size()-1;
 	}
 	
-	public PuzzleAction getPreviousAction()
+	public void undoAction()
 	{
-		if(lastAction != 0) lastAction--;
-		return actions.get(lastAction);
+		if(actionIndex > 0) actionIndex--;
 	}
 	
-	public PuzzleAction getNextAction()
+	public void redoAction()
 	{
-		if(lastAction < actions.size()-1)
+		if(actionIndex < actions.size()-1) actionIndex++;
+	}
+	
+	public void restartLog()
+	{
+		actions = new ArrayList<PuzzleAction>();
+	}
+	
+	public void removeOldActions()
+	{
+		List<PuzzleAction> newActionList = new ArrayList<PuzzleAction>();
+		Util.println("wtf");
+		for(int i = 0; i < actionIndex+1; i++)
 		{
-			lastAction++;
+			newActionList.add(actions.get(i));
 		}
-		return actions.get(lastAction);
+		actions = newActionList;
+		Util.println(actions.size() + ">>>");
 	}
-	
-	private void removeActionsFromEnd(int startIndex)
-	{
-		for(int i = startIndex; startIndex < actions.size(); startIndex++)
-		{
-			actions.remove(i);
-		}
-	}
-
 }
