@@ -12,12 +12,12 @@ import org.eclipse.swt.widgets.Shell;
 
 import events.EventObserver;
 import events.SaveObserver;
-import model.ActionLog;
 import model.GameModel;
-import model.GameTime;
-import model.PuzzleAction;
-import model.SudokuLogic;
-import model.SudokuPuzzle;
+import model.game.GameTime;
+import model.game.actions.ActionLog;
+import model.game.actions.PuzzleAction;
+import model.game.puzzle.SudokuLogic;
+import model.game.puzzle.SudokuPuzzle;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;
@@ -249,11 +249,6 @@ public class GamePanelController implements EventObserver
 		SudokuLogic.solve(model.getPuzzle());
 		int[][] userPuz = model.getPuzzle().getSolution(currentSolution);
 		model.setUserPuzzle(userPuz);
-		for (int y = 0; y < 9; y++) {
-			for (int x = 0; x < 9; x++) {
-				Util.print(model.getPuzzle().getUserPuzzle()[y][x]+"");
-			}
-		}
 	}
 
 	@Override

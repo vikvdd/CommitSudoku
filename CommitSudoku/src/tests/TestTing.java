@@ -1,7 +1,7 @@
 package tests;
 
-import model.SudokuLogic;
-import model.SudokuPuzzle;
+import model.game.puzzle.SudokuLogic;
+import model.game.puzzle.SudokuPuzzle;
 
 public class TestTing {
 	

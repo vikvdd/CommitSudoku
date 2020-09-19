@@ -9,15 +9,16 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 
 import events.ModelChangeObserver;
-import model.ActionLog;
-import model.Coordinate;
+import model.EntryType;
 import model.GameModel;
-import model.GameStatTracker;
-import model.GameTime;
-import model.NumTile;
-import model.PuzzleAction;
-import model.SudokuLogic;
-import model.SudokuPuzzle;
+import model.EntryType;
+import model.game.GameTime;
+import model.game.actions.ActionLog;
+import model.game.actions.PuzzleAction;
+import model.game.puzzle.Coordinate;
+import model.game.puzzle.SudokuLogic;
+import model.game.puzzle.SudokuPuzzle;
+import model.game.stats.GameStatTracker;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;
@@ -30,7 +31,6 @@ public class GameboardController implements ModelChangeObserver
 	private GameboardView view;
 	private GameButtonsView btnView;
 	private GameModel model;
-	private GameStatTracker statTracker;
 	private int selectedX;
 	private int selectedY;
 	List<Coordinate> highlightedNumbers;
@@ -139,7 +139,7 @@ public class GameboardController implements ModelChangeObserver
 		if(val == userPuz[selectedY][selectedX]) val = 0;
 		PuzzleAction action = new PuzzleAction(new Coordinate(selectedX, selectedY), userPuz[selectedY][selectedX],val);
 		ActionLog.getInstance().addAction(action);
-		statTracker.addCoordinate(selectedY, selectedX, val);
+		
 		model.updateUserPuzzle(val, selectedY, selectedX);
 
 		return;
@@ -150,7 +150,6 @@ public class GameboardController implements ModelChangeObserver
 	
 	private void loadGame()
 	{
-		statTracker = new GameStatTracker(model);
 		fillGameboard();
 	}
 	
@@ -171,20 +170,20 @@ public class GameboardController implements ModelChangeObserver
 				int[][] puzzle = model.getPuzzle().getUserPuzzle();
 				int val = puzzle[y][x];
 				puzzle[y][x] = 0;				
-				NumTile tileType = findNumTileType(y, x);
+				EntryType tileType = findNumTileType(y, x);
 				setButtonText(val, y, x, tileType);
 			}	
 		}
 	}
 	
-	private void setButtonText(int val, int y, int x, NumTile tileType)
+	private void setButtonText(int val, int y, int x, EntryType tileType)
 	{	
 		Button btn = view.getButton(y,x);
 		SudokuPuzzle puzzle = model.getPuzzle();
 		btn.setBackground(GameboardView.DEFAULT_TILE);
 		
 		switch (tileType) {
-		case Number:
+		case Fixed:
 			btn.setFont(GameboardView.DEFAULT_FONT);
 			btn.setForeground(GameboardView.DEFAULT_COLOR);
 			btn.setBackground(GameboardView.MAIN_TILE);
@@ -207,16 +206,16 @@ public class GameboardController implements ModelChangeObserver
 	}
 	
 	//when val matches userpuzzle[y][x] it returns empty tile
-	private NumTile findNumTileType(int y, int x)
+	private EntryType findNumTileType(int y, int x)
 	{
 		int[][] puzzle = Util.Clone2dArray(model.getPuzzle().get());
 		int[][] userPuz = model.getPuzzle().getUserPuzzle();
-		if(puzzle[y][x] != 0) return NumTile.Number;
+		if(puzzle[y][x] != 0) return EntryType.Fixed;
 		else {
-			if(isValidEntry(userPuz[y][x], y, x)) return NumTile.ValidEntry;
-			else if(userPuz[y][x] == 0) return NumTile.Empty; 
+			if(isValidEntry(userPuz[y][x], y, x)) return EntryType.ValidEntry;
+			else if(userPuz[y][x] == 0) return EntryType.Empty; 
 		}
-		return NumTile.InvalidEntry;
+		return EntryType.InvalidEntry;
 	}
 	
 	private boolean isValidEntry(int val, int y, int x)

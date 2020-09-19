@@ -1,4 +1,4 @@
-package model;
+package model.game.puzzle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -142,6 +142,20 @@ public class SudokuLogic {
 			}
 		}
 		return true; 
+	}
+	
+	public static List<Coordinate> findCoordinatesOfN(int[][] puzzle, int n)
+	{
+		List<Coordinate> total = new ArrayList<Coordinate>();
+		for(int y = 0; y < 9; y++)
+		{
+			for(int x = 0; x < 9; x++)
+			{
+				if(puzzle[y][x] == n) total.add(new Coordinate(x, y));
+			}
+		}
+		
+		return total;
 	}
 	
 	

@@ -1,9 +1,9 @@
 package tests;
 import java.util.ArrayList;
 
-import model.Difficulty;
-import model.SudokuLogic;
-import model.SudokuPuzzle;
+import model.game.puzzle.Difficulty;
+import model.game.puzzle.SudokuLogic;
+import model.game.puzzle.SudokuPuzzle;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;

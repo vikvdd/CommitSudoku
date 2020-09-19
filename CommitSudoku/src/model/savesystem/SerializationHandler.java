@@ -9,7 +9,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.ibm.icu.text.DateFormat.BooleanAttribute;
 
-import model.SudokuPuzzle;
+import model.game.puzzle.SudokuPuzzle;
 import util.Util;
 
 public class SerializationHandler 

@@ -1,4 +1,6 @@
-package model;
+package model.game.actions;
+
+import model.game.puzzle.Coordinate;
 
 public class PuzzleAction {
 	Coordinate coordinate;

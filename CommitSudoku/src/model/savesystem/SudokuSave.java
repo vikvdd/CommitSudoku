@@ -1,7 +1,7 @@
 package model.savesystem;
 import java.io.Serializable;
 
-import model.Difficulty;
+import model.game.puzzle.Difficulty;
 
 public class SudokuSave implements Serializable{
 	

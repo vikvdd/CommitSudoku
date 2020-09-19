@@ -7,6 +7,8 @@ import java.util.List;
 
 
 import events.ModelChangeObserver;
+import model.game.puzzle.SudokuLogic;
+import model.game.puzzle.SudokuPuzzle;
 
 public class GameModel{
 	private SudokuPuzzle puzzle;

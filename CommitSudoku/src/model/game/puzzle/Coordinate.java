@@ -1,4 +1,4 @@
-package model;
+package model.game.puzzle;
 
 public class Coordinate {
 	public final int x;

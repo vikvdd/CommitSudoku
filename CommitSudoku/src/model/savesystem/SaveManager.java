@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import events.SaveObserver;
-import model.SudokuPuzzle;
+import model.game.puzzle.SudokuPuzzle;
 import util.Util;
 
 public class SaveManager 
