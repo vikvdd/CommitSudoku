@@ -9,6 +9,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+import model.game.puzzle.Coordinate;
+
 public class GameboardView extends Composite{
 	
 	private static final int BTN_PADDING = 2;
@@ -124,6 +126,11 @@ public class GameboardView extends Composite{
 	public Button getButton(int y, int x)
 	{
 		return gameboardBtns[y][x];
+	}
+	
+	public Button getButton(Coordinate coord)
+	{
+		return gameboardBtns[coord.y][coord.x];
 	}
 	
 	public Map<String, Button> getBoardButtons()
