@@ -56,6 +56,32 @@ public class SudokuPuzzle implements Serializable{
 		userPuzzle[y][x] = val;
 	}
 	
+	public void addSolution(int[][] _solution)
+	{
+		solutions.add(_solution);
+		totalSolutions = solutions.size();
+	}
+	
+	public void setUserPuzzle(int[][] _puzzle)
+	{
+		userPuzzle = _puzzle;
+	}
+	
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+	public void setDifficulty(Difficulty difficulty)
+	{
+		this.difficulty = difficulty;
+	}
+	
+	public void setSolutions(List<int[][]> solutions)
+	{
+		this.solutions = solutions;
+	}
+	
 	public int[][] get()
 	{
 		return puzzle;
@@ -65,12 +91,7 @@ public class SudokuPuzzle implements Serializable{
 	{
 		return puzzle[y][x];
 	}
-	
-	public void setUserPuzzle(int[][] _puzzle)
-	{
-		userPuzzle = _puzzle;
-	}
-	
+		
 	public int[][] getUserPuzzle()
 	{
 		return Util.clone2dArray(userPuzzle);
@@ -107,27 +128,6 @@ public class SudokuPuzzle implements Serializable{
 	public Boolean isSolved()
 	{
 		return solved;
-	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	public void setDifficulty(Difficulty difficulty)
-	{
-		this.difficulty = difficulty;
-	}
-	
-	public void setSolutions(List<int[][]> solutions)
-	{
-		this.solutions = solutions;
-	}
-	
-	public void addSolution(int[][] _solution)
-	{
-		solutions.add(_solution);
-		totalSolutions = solutions.size();
 	}
 	
 	public void verifyPuzzle()

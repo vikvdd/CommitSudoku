@@ -5,14 +5,16 @@ import java.util.List;
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.Button;
 import events.GameListener;
+import events.GameStatListener;
 import model.EntryType;
 import model.game.SudokuGame;
 import model.game.puzzle.*;
+import util.Util;
 import views.GameButtonsView;
 import views.GameboardView;
 import views.TileType;
 
-public class BoardController implements GameListener{
+public class BoardController implements GameListener, GameStatListener{
 	
 	private SudokuGame game;
 	private GameboardView view;
@@ -33,6 +35,7 @@ public class BoardController implements GameListener{
 		initBoardButtons();
 		initGameButtons();
 		game.loadNewGame(SudokuLogic.generateRandomPuzzle());
+		game.getStatTracker().addGameStatListener(this);
 		selectedCoord = new Coordinate(0, 0);
 		selectTileAction(selectedCoord);
 	}
@@ -116,6 +119,13 @@ public class BoardController implements GameListener{
 		
 	}
 	
+	@Override
+	public void onNumberCompleted(int number) {
+		Util.println(number + "");
+		Button btn = btnView.getButton(number-1);
+		btn.setEnabled(false);
+		
+	}
 	
 	private void selectTileAction(Coordinate coord)
 	{
@@ -246,6 +256,8 @@ public class BoardController implements GameListener{
 			break;
 		}
 	}
+
+	
 	
 	
 

@@ -3,11 +3,15 @@ package model.game.stats;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import events.GameStatListener;
 import model.game.actions.PuzzleAction;
+import util.Util;
+
 
 public class GameStatTracker{
 
+	private List<GameStatListener> listeners = new ArrayList<GameStatListener>();
+	
 	List<Integer> total = new ArrayList<Integer>();
 	int t0;
 	int t1;
@@ -23,14 +27,20 @@ public class GameStatTracker{
 	int totalEmptySpaces;
 	int mistakes;
 	
-	public GameStatTracker()
-	{
-	}
-	
 	public void init(int[][] puzzle)
 	{
 		total = Arrays.asList(t0,t1,t2,t3,t4,t5,t6,t7,t8,t9);
 		updateAllCounts(puzzle);
+	}
+	
+	public void addGameStatListener(GameStatListener listener)
+	{
+		listeners.add(listener);
+	}
+	
+	public void removeGameStatListener(GameStatListener listener)
+	{
+		listeners.remove(listener);
 	}
 	
 	public void updateAllCounts(int[][] puzzle)
@@ -49,16 +59,21 @@ public class GameStatTracker{
 			}
 		}
 		total.set(n, nTotal);
+		UpdateCompletetionEvents(n);
 	}
 	
 	public void addAction(PuzzleAction action)
 	{
-		int totOld = total.get(action.getOldValue());
-		int totNew = total.get(action.getNewValue());
+		int oldVal = action.getOldValue();
+		int newVal = action.getNewValue();
+		int totOld = total.get(oldVal);
+		int totNew = total.get(newVal);
 		totOld--;
 		totNew++;
-		total.set(action.getOldValue(), totOld);
-		total.set(action.getNewValue(), totNew);
+		total.set(oldVal, totOld);
+		total.set(newVal, totNew);
+
+		UpdateCompletetionEvents(newVal);
 	}
 	
 	public void addMistake()
@@ -66,9 +81,20 @@ public class GameStatTracker{
 		mistakes++;
 	}
 	
-	public boolean isFinished()
+	private void UpdateCompletetionEvents(int n)
 	{
-		if(totalFilledSpaces == 81) return true;
+		if(isNumberCompleted(n)) notifyNumberCompleted(n);
+		if(isPuzzleCompleted()) notifyPuzzleCompleted();
+	}
+	
+	public boolean isNumberCompleted(int n)
+	{
+		return (total.get(n) >= 9);
+	}
+	
+	public boolean isPuzzleCompleted()
+	{
+		if(getTotalFilledSpaces() >= 81) return true;
 		else return false;
 	}
 	
@@ -81,11 +107,28 @@ public class GameStatTracker{
 				totalFilled += total.get(i);
 			}
 		}
+		totalFilledSpaces = totalFilled;
 		return totalFilled;
 	}
 	
 	public int getTotalEmptySpaces()
 	{
-		return total.get(0);
+		totalEmptySpaces = total.get(0);
+		return totalEmptySpaces;
+	}
+	
+	public void notifyNumberCompleted(int number)
+	{
+		for (GameStatListener listener : listeners) {
+			listener.onNumberCompleted(number);
+		}
+	}
+	
+	public void notifyPuzzleCompleted()
+	{
+		for(GameStatListener listener : listeners)
+		{
+			listener.onPuzzleCompleted();
+		}
 	}
 }

@@ -3,6 +3,7 @@ package model.game;
 import java.util.List;
 
 import events.GameModelEvent;
+import events.GameStatListener;
 import model.EntryType;
 import model.game.actions.ActionLog;
 import model.game.actions.PuzzleAction;
@@ -13,7 +14,7 @@ import model.game.stats.GameStatTracker;
 import util.Util;
 
 
-public class SudokuGame extends GameModelEvent{
+public class SudokuGame extends GameModelEvent implements GameStatListener{
 	private SudokuPuzzle puzzle;
 	private ActionLog actionLog;
 	private GameStatTracker statTracker;
@@ -23,6 +24,7 @@ public class SudokuGame extends GameModelEvent{
 	{
 		super();
 		actionLog = new ActionLog();
+		statTracker = new GameStatTracker();
 	}
 	
 	public void loadNewGame(SudokuPuzzle puzzle)
@@ -36,6 +38,7 @@ public class SudokuGame extends GameModelEvent{
 		actionLog = new ActionLog();
 		statTracker = new GameStatTracker();
 		statTracker.init(puzzle.getUserPuzzle());
+		statTracker.addGameStatListener(this);
 		notifyGameStart(Util.clone2dArray(puzzle.getUserPuzzle()));
 	}
 	
@@ -128,6 +131,11 @@ public class SudokuGame extends GameModelEvent{
 		return SudokuLogic.findCoordinatesOfN(puzzle.getUserPuzzle(), n);
 	}
 	
+	public GameStatTracker getStatTracker()
+	{
+		return statTracker;
+	}
+	
 	public boolean isFixedTile(Coordinate coord)
 	{
 		if(puzzle.get()[coord.y][coord.x] != 0) return true;
@@ -137,5 +145,19 @@ public class SudokuGame extends GameModelEvent{
 	public boolean isEntryTile(Coordinate coord)
 	{
 		return !isFixedTile(coord);
+	}
+
+	
+	@Override
+	public void onNumberCompleted(int number) {
+		
+	}
+
+	
+	@Override
+	public void onPuzzleCompleted() {
+		Util.println("PUZZLE COMPLETED!!!!");
+		end();
+		
 	}
 }
