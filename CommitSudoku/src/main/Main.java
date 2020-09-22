@@ -6,9 +6,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+
+import controllers.BoardController;
 import controllers.GamePanelController;
 import controllers.GameboardController;
 import model.GameModel;
+import model.game.SudokuGame;
 import util.Util;
 import views.GameButtonsView;
 import views.GameboardView;
@@ -30,6 +33,7 @@ public class Main {
 		
 		//INIT MODEL
 		GameModel model = new GameModel();
+		SudokuGame game = new SudokuGame();
 		
 		//INIT VIEWS
 		GameboardView board = new GameboardView(shell, SWT.BORDER);
@@ -42,7 +46,7 @@ public class Main {
 		buttonsView.init(sm.getBoardSize()/2-sm.getButtonViewSize()/2, sm.getBoardSize() + sm.getPadding()*4, sm.getButtonViewSize(), 60);
 		
 		//INIT CONTROLLERS
-		initControllers(model, shell, board, buttonsView, panelView);
+		initControllers(game, shell, board, buttonsView, panelView);
 		
 		shell.open();
 		shell.layout();
@@ -67,11 +71,13 @@ public class Main {
 		return shell;
 	}
 	
-	private static void initControllers(GameModel model, Shell shell, GameboardView board, GameButtonsView buttonsView, PanelView panelView)
+	private static void initControllers(SudokuGame game, Shell shell, GameboardView board, GameButtonsView buttonsView, PanelView panelView)
 	{
-		GameboardController boardController = new GameboardController(model, board, buttonsView);
+		/*GameboardController boardController = new GameboardController(game, board, buttonsView);
+		boardController.init();*/
+		BoardController boardController = new BoardController(game, board, buttonsView);
 		boardController.init();
-		GamePanelController panelController = new GamePanelController(model, shell, panelView);
+		GamePanelController panelController = new GamePanelController(game, shell, panelView);
 		panelController.init();
 	}
 }

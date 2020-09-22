@@ -123,11 +123,11 @@ public class GameboardController implements ModelChangeObserver
 	
 	public void selectTileAction(Coordinate coordinate) {
 		SudokuPuzzle puzzle = model.getPuzzle();
-		if(puzzle.get()[selectedY][selectedX] == 0) view.getSelectedButton().setBackground(GameboardView.DEFAULT_TILE);
+		if(puzzle.get()[selectedY][selectedX] == 0) view.getSelectedButton().setBackground(GameboardView.NORMAL_TILE);
 		selectedX = coordinate.x;
 		selectedY = coordinate.y;
 		Button btn = view.getButton(selectedY, selectedX);
-		if(puzzle.get()[selectedY][selectedX] != 0)  btn.setBackground(GameboardView.MAIN_TILE);
+		if(puzzle.get()[selectedY][selectedX] != 0)  btn.setBackground(GameboardView.HIGHLIGHTED_TILE);
 		else btn.setBackground(GameboardView.SELECTED_TILE);
 		view.setSelectedButton(btn);
 	}
@@ -135,7 +135,7 @@ public class GameboardController implements ModelChangeObserver
 	private void numButtonAction(int val) throws IOException
 	{
 		SudokuPuzzle puzzle = model.getPuzzle();
-		int[][] userPuz = Util.Clone2dArray(puzzle.getUserPuzzle());
+		int[][] userPuz = Util.clone2dArray(puzzle.getUserPuzzle());
 		if(val == userPuz[selectedY][selectedX]) val = 0;
 		PuzzleAction action = new PuzzleAction(new Coordinate(selectedX, selectedY), userPuz[selectedY][selectedX],val);
 		ActionLog.getInstance().addAction(action);
@@ -180,24 +180,24 @@ public class GameboardController implements ModelChangeObserver
 	{	
 		Button btn = view.getButton(y,x);
 		SudokuPuzzle puzzle = model.getPuzzle();
-		btn.setBackground(GameboardView.DEFAULT_TILE);
+		btn.setBackground(GameboardView.NORMAL_TILE);
 		
 		switch (tileType) {
-		case Fixed:
+		case FIXED:
 			btn.setFont(GameboardView.DEFAULT_FONT);
 			btn.setForeground(GameboardView.DEFAULT_COLOR);
-			btn.setBackground(GameboardView.MAIN_TILE);
+			btn.setBackground(GameboardView.HIGHLIGHTED_TILE);
 			btn.setText(puzzle.get()[y][x] + "");
 			break;
-		case Empty:
+		/*case EMPTY:
 			btn.setText("");
-			break;
-		case ValidEntry:
+			break;*/
+		case VALIDENTRY:
 			btn.setFont(GameboardView.ENTRY_FONT);
 			btn.setForeground(GameboardView.DEFAULT_COLOR);					
 			btn.setText(val + "");
 			break;
-		case InvalidEntry:
+		case INVALIDENTRY:
 			btn.setFont(GameboardView.INVALID_FONT);
 			btn.setForeground(GameboardView.INVALID_COLOR);				
 			btn.setText(val + "");
@@ -208,19 +208,19 @@ public class GameboardController implements ModelChangeObserver
 	//when val matches userpuzzle[y][x] it returns empty tile
 	private EntryType findNumTileType(int y, int x)
 	{
-		int[][] puzzle = Util.Clone2dArray(model.getPuzzle().get());
+		int[][] puzzle = Util.clone2dArray(model.getPuzzle().get());
 		int[][] userPuz = model.getPuzzle().getUserPuzzle();
-		if(puzzle[y][x] != 0) return EntryType.Fixed;
+		if(puzzle[y][x] != 0) return EntryType.FIXED;
 		else {
-			if(isValidEntry(userPuz[y][x], y, x)) return EntryType.ValidEntry;
-			else if(userPuz[y][x] == 0) return EntryType.Empty; 
+			if(isValidEntry(userPuz[y][x], y, x)) return EntryType.VALIDENTRY;
+			//else if(userPuz[y][x] == 0) return EntryType.EMPTY; 
 		}
-		return EntryType.InvalidEntry;
+		return EntryType.INVALIDENTRY;
 	}
 	
 	private boolean isValidEntry(int val, int y, int x)
 	{
-		int[][] puz = Util.Clone2dArray(model.getPuzzle().get());
+		int[][] puz = Util.clone2dArray(model.getPuzzle().get());
 		int[][] userPuz = model.getPuzzle().getUserPuzzle();
 		if(puz[y][x] == 0)
 		{

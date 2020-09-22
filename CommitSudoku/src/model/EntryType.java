@@ -1,5 +1,5 @@
 package model;
 
 public enum EntryType {
-	Fixed, Empty, ValidEntry, InvalidEntry
+	FIXED, VALIDENTRY, INVALIDENTRY
 }

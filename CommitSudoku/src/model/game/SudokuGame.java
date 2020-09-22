@@ -1,8 +1,6 @@
 package model.game;
 
-import java.util.List;
-
-import events.GameListener;
+import events.GameModelEvent;
 import model.EntryType;
 import model.game.actions.ActionLog;
 import model.game.actions.PuzzleAction;
@@ -10,42 +8,79 @@ import model.game.puzzle.Coordinate;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
 import model.game.stats.GameStatTracker;
+import util.Util;
 
-public class SudokuGame {
+
+public class SudokuGame extends GameModelEvent{
 	private SudokuPuzzle puzzle;
 	private ActionLog actionLog;
 	private GameStatTracker statTracker;
 	private GameTime gameTime;
 	
-	private List<GameListener> listeners;
-	
 	public SudokuGame()
 	{
+		super();
 		actionLog = new ActionLog();
-		statTracker = new GameStatTracker(puzzle.getUserPuzzle());
 	}
 	
-	public void addGameListener(GameListener gameListener)
+	public void loadNewGame(SudokuPuzzle puzzle)
 	{
-		listeners.add(gameListener);
+		this.puzzle = puzzle;
+		start();
 	}
 	
 	public void start()
 	{
-		statTracker.init();
+		notifyGameStart(Util.clone2dArray(puzzle.getUserPuzzle()));
 	}
 	
 	public void end()
 	{
-		
+		notifyGameEnd();
 	}
 	
 	public void enterNumber(Coordinate coord, int num)
 	{
 		int n = getEntryValue(coord, num);
 		if(n == -1) return;
-		actionLog.addAction(new PuzzleAction(coord, puzzle.getUserPuzzle()[coord.y][coord.x], num));
+		actionLog.addAction(new PuzzleAction(coord, puzzle.getUserPuzzle()[coord.y][coord.x], n));
+		puzzle.enterValue(n, coord);
+		notifyNumberEntry(coord, n);
+	}
+	
+	public void solve()
+	{
+		SudokuLogic.solve(puzzle);
+	}
+	
+	public void solveCurrentPuzzle()
+	{
 		
+	}
+	
+	public void undoAction()
+	{
+		PuzzleAction action = actionLog.getAction();
+		int val = action.getOldValue();
+		Coordinate coord = action.getCoordinate();
+		puzzle.enterValue(val,coord);
+		actionLog.undoAction();
+		notifyNumberEntry(coord, val);
+	}
+	
+	public void redoAction()
+	{
+		actionLog.redoAction();
+		PuzzleAction action = actionLog.getAction();
+		int val = action.getNewValue();
+		Coordinate coord = action.getCoordinate();
+		puzzle.enterValue(val,coord);
+		notifyNumberEntry(coord, val);
+	}
+	
+	public SudokuPuzzle getPuzzleInfo()
+	{
+		return puzzle;
 	}
 	
 	public int getNumAtCoordinate(Coordinate coord)
@@ -53,24 +88,14 @@ public class SudokuGame {
 		return puzzle.getUserPuzzle()[coord.y][coord.x];
 	}
 	
-	public void undoAction()
-	{
-		
-	}
-	
-	public void redoAction()
-	{
-		
-	}
-	
 	public EntryType getEntryType(Coordinate coord, int n)
 	{
 		int[][] puz = puzzle.get();
 		int[][] userPuz = puzzle.getUserPuzzle();
-		if(puz[coord.y][coord.x] == 0) return EntryType.Fixed;
-		if(userPuz[coord.y][coord.x] == n) return EntryType.Empty;
-		else if(SudokuLogic.possible(userPuz, coord.y, coord.x, n)) return EntryType.ValidEntry;
-		else return EntryType.InvalidEntry;
+		if(puz[coord.y][coord.x] != 0) return EntryType.FIXED;
+		//if(userPuz[coord.y][coord.x] == n) return EntryType.EMPTY;
+		else if(SudokuLogic.possible(userPuz, coord.y, coord.x, n)) return EntryType.VALIDENTRY;
+		else return EntryType.INVALIDENTRY;
 		
 	}
 	
@@ -79,9 +104,19 @@ public class SudokuGame {
 	{
 		int[][] userPuz = puzzle.getUserPuzzle();
 		int[][] puz = puzzle.get();
-		if(puz[coord.y][coord.x] <= 0 || puz[coord.y][coord.x] > 9) return -1;
+		if(puz[coord.y][coord.x] != 0) return -1;
 		else if(userPuz[coord.y][coord.x] == n) return 0;
 		else return n;
 	}
 	
+	public boolean isFixedTile(Coordinate coord)
+	{
+		if(puzzle.get()[coord.y][coord.x] != 0) return true;
+		else return false;
+	}
+	
+	public boolean isEntryTile(Coordinate coord)
+	{
+		return !isFixedTile(coord);
+	}
 }

@@ -12,7 +12,7 @@ import events.SaveObserver;
 import model.game.puzzle.SudokuPuzzle;
 import util.Util;
 
-public class SaveManager 
+public class SaveManager
 {
 	public static final String saveDir = "";
 	public static final String fileExtension = ".txt";

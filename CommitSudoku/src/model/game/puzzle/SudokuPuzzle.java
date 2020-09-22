@@ -29,7 +29,7 @@ public class SudokuPuzzle implements Serializable{
 	public SudokuPuzzle(int[][] _puzzle)
 	{
 		puzzle = _puzzle;
-		userPuzzle = Util.Clone2dArray(puzzle);
+		userPuzzle = Util.clone2dArray(puzzle);
 		solutions = new ArrayList<int[][]>();
 		totalSolutions = 0;
 		difficulty = Difficulty.UNSOLVED;
@@ -44,6 +44,11 @@ public class SudokuPuzzle implements Serializable{
 		this.solutions = solutions;
 		this.totalSolutions = totalSolutions;
 		this.solved = solved;
+	}
+	
+	public void enterValue(int val, Coordinate coord)
+	{
+		enterValue(val, coord.y, coord.x);
 	}
 	
 	public void enterValue(int val, int y, int x)
@@ -68,13 +73,13 @@ public class SudokuPuzzle implements Serializable{
 	
 	public int[][] getUserPuzzle()
 	{
-		return Util.Clone2dArray(userPuzzle);
+		return Util.clone2dArray(userPuzzle);
 	}
 	
 	public int[][] getSolution(int index)
 	{
 		if (solutions.size() > 0)
-			return Util.Clone2dArray(solutions.get(index));
+			return Util.clone2dArray(solutions.get(index));
 		else return null;
 	}
 	

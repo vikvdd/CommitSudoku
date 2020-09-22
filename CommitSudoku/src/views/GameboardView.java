@@ -16,12 +16,12 @@ public class GameboardView extends Composite{
 	private static final int BTN_PADDING = 2;
 	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.BOLD);
 	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.NORMAL);
-	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.BOLD | SWT.ITALIC);
+	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.NORMAL);
 	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
-	public static final Color MAIN_TILE = new Color(null, 190,190,190);
-	public static final Color DEFAULT_TILE = new Color(null, 220,220,220);
-	public static final Color SELECTED_TILE = new Color(null, 158, 221, 255);
+	public static final Color HIGHLIGHTED_TILE = new Color(null, 190,190,190);
+	public static final Color NORMAL_TILE = new Color(null, 220,220,220);
+	public static final Color SELECTED_TILE = new Color(null, 164, 218, 237);
 	
 	private int btnSize;
 	private Button[][] gameboardBtns;
@@ -53,7 +53,7 @@ public class GameboardView extends Composite{
 			for (int x = 0; x < 9; x++) 
 			{
 				Button button = new Button(this, SWT.PUSH);
-				button.setBackground(DEFAULT_TILE);
+				button.setBackground(NORMAL_TILE);
 				button.setBounds(x * (BTN_PADDING*2 + btnSize), y * (BTN_PADDING*2 + btnSize), btnSize, btnSize);
 				button.setFont(SWTResourceManager.getFont("Segoe UI", 13, SWT.BOLD));
 				button.setText(0 + "");
@@ -80,11 +80,7 @@ public class GameboardView extends Composite{
 		horzSep2.setBounds(0, ((btnSize + BTN_PADDING * 2) * 6)-4, this.getBounds().width, 4);
 		horzSep2.setBackground(SWTResourceManager.getColor(SWT.COLOR_BLACK));
 	}
-	
-	public int test()
-	{
-		return buttons.size();
-	}
+
 	
 	public void setSelectedButton(Button button)
 	{	

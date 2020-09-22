@@ -13,10 +13,8 @@ public class SudokuLogic {
 	public static void solve(SudokuPuzzle puzzle)
 	{
 		puzzle.setSolutions(new ArrayList<int[][]>());
-		solveRec(puzzle, Util.Clone2dArray(puzzle.get()));
+		solveRec(puzzle, Util.clone2dArray(puzzle.get()));
 		if(puzzle.getTotSolutions() > 0)
-			//System.out.println("Puzzle successfully completed with " + puzzle.getTotSolutions() + " solutions!");
-
 		return;
 	}
 	
@@ -43,7 +41,7 @@ public class SudokuLogic {
 			}
 		}
 		
-		puz.addSolution(Util.Clone2dArray(sol));
+		puz.addSolution(Util.clone2dArray(sol));
 		return;
 	}
 	
@@ -73,7 +71,7 @@ public class SudokuLogic {
 			maxAttemps--;
 		}
 		removeRandomValues(removeTotal, puzzle.get());
-		puzzle.setUserPuzzle(Util.Clone2dArray(puzzle.get()));
+		puzzle.setUserPuzzle(Util.clone2dArray(puzzle.get()));
 		
 		return puzzle;
 	}
@@ -127,18 +125,18 @@ public class SudokuLogic {
 	{
 		for(int i = 0; i < 9; i++)
 		{
-			if(puzzle[y][i] == n) return false;
+			if(puzzle[y][i] == n && i != x) return false;
 		}
 		for(int i = 0; i < 9; i++)
 		{
-			if(puzzle[i][x] == n) return false;
+			if(puzzle[i][x] == n && i != y) return false;
 		}
 		int x0 = Math.floorDiv(x, 3) * 3; 
 		int y0 = Math.floorDiv(y, 3) * 3;
 		for(int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++) {
-				if(puzzle[y0 + i][x0 + j] == n) return false;
+				if(puzzle[y0 + i][x0 + j] == n && (y0 + i) != y && (x0 + j) != x) return false;
 			}
 		}
 		return true; 

@@ -1,8 +1,5 @@
 package controllers;
 
-import java.awt.Desktop.Action;
-import java.io.IOException;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -10,30 +7,28 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-import events.EventObserver;
-import events.SaveObserver;
-import model.GameModel;
+import events.GameListener;
 import model.game.GameTime;
-import model.game.actions.ActionLog;
-import model.game.actions.PuzzleAction;
+import model.game.SudokuGame;
+import model.game.puzzle.Coordinate;
+import model.game.puzzle.Difficulty;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;
-import views.GamePanelView;
 import views.PanelView;
 
-public class GamePanelController implements EventObserver
+public class GamePanelController implements GameListener
 {
-	private GameModel model;
+	private SudokuGame game;
 	private PanelView view;
 	private Shell shell;
 	private int currentSolution;
 	
-	public GamePanelController(GameModel model, Shell shell, PanelView view)
+	public GamePanelController(SudokuGame game, Shell shell, PanelView view)
 	{
-		this.model = model;
+		this.game = game;
 		this.view = view;
 		this.shell = shell;
 		currentSolution = 0;
@@ -43,7 +38,6 @@ public class GamePanelController implements EventObserver
 	{
 		initGameList();		
 		initListeners();
-		updateGameTitles();
 	}
 	
 	private void initGameList()
@@ -54,7 +48,7 @@ public class GamePanelController implements EventObserver
 	
 	private void initListeners()
 	{
-		GameTime.getInstance().attach(this);
+		game.addGameListener(this);
 		shell.addListener(SWT.Close, new Listener() {
 			
 			@Override
@@ -164,9 +158,7 @@ public class GamePanelController implements EventObserver
 			updateGameState();
 			PuzzleSaveList saveList = PuzzleSaveList.getInstance();
 			SudokuPuzzle puzzle = SaveManager.loadSudokuPuzzle(PuzzleSaveList.getInstance().getSelectedSave().getName());			
-			model.setGamePuzzle(puzzle);
-			updateGameTitles();
-			
+			game.loadNewGame(puzzle);	
 		} catch (Exception e) {
 			Util.println("No puzzle was selected.");
 		}
@@ -188,30 +180,30 @@ public class GamePanelController implements EventObserver
 	
 	private void savePuzzleAction()
 	{
-		SaveManager.saveSudokuPuzzle(model.getPuzzle(), true);
+		//SaveManager.saveSudokuPuzzle(game.getPuzzle(), true);
 		PuzzleSaveList.getInstance().refresh();
 		initGameList();
 	}
 	
 	private void undoButtonAction()
 	{
-		PuzzleAction move = ActionLog.getInstance().getAction();
-		if(move == null) {
-			
-			return;
-		}
-		model.updateUserPuzzle(move.getOldValue(), move.getCoordinate().y, move.getCoordinate().x);
-		ActionLog.getInstance().undoAction();
+		game.undoAction();
 	}
 	
 	private void redoButtonAction()
 	{
-		PuzzleAction move = ActionLog.getInstance().getAction();
-		ActionLog.getInstance().redoAction();
-		Util.println(move.getCoordinate().y + ":" + move.getCoordinate().x + "...." + move.getOldValue() + ".." + move.getNewValue());
-		model.updateUserPuzzle(move.getNewValue(), move.getCoordinate().y, move.getCoordinate().x);
-		
-		return;
+		game.redoAction();
+	}
+	
+	private void generatePuzzleAction(int emptySpaces, int maxSolutions)
+	{
+		savePuzzleAction();
+		game.loadNewGame(SudokuLogic.generateRandomPuzzle(emptySpaces, maxSolutions));
+	}
+	
+	private void solvePuzzleAction()
+	{
+		game.solve();
 	}
 	
 	private void updateGameTime()
@@ -219,12 +211,11 @@ public class GamePanelController implements EventObserver
 		view.getTimeLabel().setText(GameTime.getInstance().getTime().toString());
 	}
 	
-	private void updateGameTitles()
+	private void updateGameTitles(String name, Difficulty difficulty)
 	{
 		try {
-			SudokuPuzzle puzzle = model.getPuzzle();
-			view.getPuzzleNameLbl().setText(puzzle.getName());
-			view.getDifficultyLbl().setText(puzzle.getDifficulty().name());
+			view.getPuzzleNameLbl().setText(Util.formatStringToTitle(name));
+			view.getDifficultyLbl().setText(Util.capitalizeFirstLetter(difficulty.name()));
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -237,22 +228,32 @@ public class GamePanelController implements EventObserver
 		saveList.setSelectedSave(saveList.getSaveList().get(view.getGameList().getSelectionIndex()));
 		savePuzzleAction();
 	}
-	
-	private void generatePuzzleAction(int emptySpaces, int maxSolutions)
-	{
-		savePuzzleAction();
-		model.setGamePuzzle(SudokuLogic.generateRandomPuzzle(emptySpaces, maxSolutions));
-	}
-	
-	private void solvePuzzleAction()
-	{
-		SudokuLogic.solve(model.getPuzzle());
-		int[][] userPuz = model.getPuzzle().getSolution(currentSolution);
-		model.setUserPuzzle(userPuz);
+
+	@Override
+	public void onGameStart(int[][] puzzleClone) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void update() {
-		updateGameTime();
+	public void onGameEnd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPuzzleChanged(String name, Difficulty difficulty, String gameTime) {
+		updateGameTitles(name, difficulty);
+	}
+
+	@Override
+	public void onNumberEntry(Coordinate coord, int num) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPuzzleCompleted() {
+		// TODO Auto-generated method stub
+		
 	}
 }

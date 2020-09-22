@@ -28,7 +28,7 @@ public class GameModel{
 	
 	public void start()
 	{
-		puzzle.setUserPuzzle(Util.Clone2dArray(puzzle.get()));
+		puzzle.setUserPuzzle(Util.clone2dArray(puzzle.get()));
 		startTime = System.currentTimeMillis();
 		Util.println("Started puzzle at: " + startTime);
 	}

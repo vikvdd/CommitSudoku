@@ -1,6 +1,7 @@
 package model.game.stats;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameStatTracker {
@@ -19,6 +20,7 @@ public class GameStatTracker {
 	public GameStatTracker(int[][] puzzle)
 	{
 		this.puzzle = puzzle;
+		total = Arrays.asList(t1,t2,t3,t4,t5,t6,t7,t8,t9);
 	}
 	
 	public void init()
@@ -30,7 +32,7 @@ public class GameStatTracker {
 	{
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
-				if(puzzle[y][x] != 0)
+				if(puzzle[y][x] >= 0)
 				{
 					int tN = total.get(puzzle[y][x]-1);
 					tN++;

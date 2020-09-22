@@ -1,7 +1,9 @@
 package util;
 
+import java.util.Arrays;
+
 public class Util {
-	public static int[][] Clone2dArray(int[][] array)
+	public static int[][] clone2dArray(int[][] array)
 	{
 		int[][] clone = new int[9][9];
 		for(int y = 0; y < 9; y++)
@@ -22,5 +24,21 @@ public class Util {
 	public static void print(String string)
 	{
 		System.out.print(string);
+	}
+	
+	public static String formatStringToTitle(String text)
+	{
+		String[] words = text.split(" ");
+		for(int i = 0; i < words.length; i++)
+		{
+			words[i] = capitalizeFirstLetter(words[i]);
+		}
+		return Arrays.toString(words);
+	}
+	
+	public static String capitalizeFirstLetter(String word)
+	{
+		String output = word.substring(0,1).toUpperCase() + word.substring(1);
+		return output;
 	}
 }
