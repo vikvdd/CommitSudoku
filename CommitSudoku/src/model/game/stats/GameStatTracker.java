@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GameStatTracker {
-	int[][] puzzle = new int[9][9];
+import model.game.actions.PuzzleAction;
+
+public class GameStatTracker{
+
 	List<Integer> total = new ArrayList<Integer>();
 	int t0;
 	int t1;
@@ -21,37 +23,69 @@ public class GameStatTracker {
 	int totalEmptySpaces;
 	int mistakes;
 	
-	public GameStatTracker(int[][] puzzle)
+	public GameStatTracker()
 	{
-		this.puzzle = puzzle;
+	}
+	
+	public void init(int[][] puzzle)
+	{
 		total = Arrays.asList(t0,t1,t2,t3,t4,t5,t6,t7,t8,t9);
+		updateAllCounts(puzzle);
 	}
 	
-	public void init()
+	public void updateAllCounts(int[][] puzzle)
 	{
-		updateAllCounts();
+		for (int i = 0; i < 10; i++) {
+			updateTotalN(puzzle, i);
+		}
 	}
 	
-	public void updateAllCounts()
+	public void updateTotalN(int[][] puzzle, int n)
 	{
-		
+		int nTotal = 0;
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
+				if(puzzle[y][x] == n) nTotal++;
+			}
+		}
+		total.set(n, nTotal);
 	}
 	
-	public void updateTotalN(int n)
+	public void addAction(PuzzleAction action)
 	{
-		int tot = total.get(n);
-		
+		int totOld = total.get(action.getOldValue());
+		int totNew = total.get(action.getNewValue());
+		totOld--;
+		totNew++;
+		total.set(action.getOldValue(), totOld);
+		total.set(action.getNewValue(), totNew);
+	}
+	
+	public void addMistake()
+	{
+		mistakes++;
 	}
 	
 	public boolean isFinished()
 	{
-		updateAllCounts();
-		int count = 0;
-		for(int n : total)
-		{
-			count+=n;
-		}
-		if(count == 81) return true;
+		if(totalFilledSpaces == 81) return true;
 		else return false;
+	}
+	
+	public int getTotalFilledSpaces()
+	{
+		int totalFilled = 0;
+		if(total.size() > 0)
+		{
+			for (int i = 1; i < 10; i++) {
+				totalFilled += total.get(i);
+			}
+		}
+		return totalFilled;
+	}
+	
+	public int getTotalEmptySpaces()
+	{
+		return total.get(0);
 	}
 }

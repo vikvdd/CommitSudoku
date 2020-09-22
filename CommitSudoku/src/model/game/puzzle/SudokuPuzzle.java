@@ -11,8 +11,8 @@ public class SudokuPuzzle implements Serializable{
 	
 	private String name; 
 	private Difficulty difficulty;
-	private int[][] puzzle;
-	private int[][] userPuzzle;
+	private final int[][] puzzle;//puzzle grid with only the numbers that can't change
+	private int[][] userPuzzle;//user puzzle with all base puzzle numbers and user entered numbers
 	private List<int[][]> solutions;
 	private int totalSolutions;
 	private Boolean solved;
@@ -107,12 +107,6 @@ public class SudokuPuzzle implements Serializable{
 	public Boolean isSolved()
 	{
 		return solved;
-	}
-	
-	
-	public void setPuzzle(int[][] _puzzle)
-	{
-		puzzle = _puzzle;
 	}
 	
 	public void setName(String name)

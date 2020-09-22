@@ -16,7 +16,6 @@ public class GameButtonsView extends Composite{
 	private static final int BTN_PADDING = 2;
 	
 	private int btnSize;
-	//private Map<Integer, Button> buttons;
 	private Button[] buttons;
 	
 	public GameButtonsView(Composite parent, int style) {
@@ -42,9 +41,7 @@ public class GameButtonsView extends Composite{
 			button.setBackground(new Color(null, 207, 207, 207));
 			button.setFont(SWTResourceManager.getFont("DejaVu Sans Condensed", 13, SWT.BOLD));
 			buttons[i] = button;
-			//buttons.put(i+1, button);
 		}
-		//Util.println(buttons.size() + "");
 	}
 	
 	public Button[] getButtons()
@@ -56,9 +53,4 @@ public class GameButtonsView extends Composite{
 	{
 		return buttons[index];
 	}
-	
-	/*public Map<Integer, Button> getNumButtons()
-	{
-		return buttons;
-	}*/
 }

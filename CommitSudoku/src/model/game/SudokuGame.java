@@ -34,6 +34,8 @@ public class SudokuGame extends GameModelEvent{
 	public void start()
 	{
 		actionLog = new ActionLog();
+		statTracker = new GameStatTracker();
+		statTracker.init(puzzle.getUserPuzzle());
 		notifyGameStart(Util.clone2dArray(puzzle.getUserPuzzle()));
 	}
 	
@@ -46,7 +48,9 @@ public class SudokuGame extends GameModelEvent{
 	{
 		int n = getEntryValue(coord, num);
 		if(n == -1) return;
-		actionLog.addAction(new PuzzleAction(coord, puzzle.getUserPuzzle()[coord.y][coord.x], n));
+		PuzzleAction action = new PuzzleAction(coord, puzzle.getUserPuzzle()[coord.y][coord.x], n);
+		actionLog.addAction(action);
+		statTracker.addAction(action);
 		puzzle.enterValue(n, coord);
 		notifyNumberEntry(coord, n);
 	}

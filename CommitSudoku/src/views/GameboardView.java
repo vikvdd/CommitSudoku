@@ -44,6 +44,7 @@ public class GameboardView extends Composite{
 	{
 		buildGameboardButtons();
 		buildGameboardSeperators();
+		setSelectedButton(gameboardBtns[0][0]);
 	}
 	
 	private void buildGameboardButtons()
@@ -63,7 +64,6 @@ public class GameboardView extends Composite{
 				gameboardBtns[y][x] = button;
 			}
 		}
-		setSelectedButton(gameboardBtns[0][0]);
 	}
 	
 	private void buildGameboardSeperators()
