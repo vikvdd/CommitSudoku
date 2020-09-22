@@ -14,9 +14,9 @@ public class TestSave {
 		SudokuPuzzle puzzle1 = new SudokuPuzzle("BeginnerPuzzle", Difficulty.EASY, SudokuLogic.generateRandomPuzzle().get(), SudokuLogic.generateRandomPuzzle().get(), new ArrayList<int[][]>(), 1,false);
 		SudokuPuzzle puzzle2 = new SudokuPuzzle("IntermediatePuzzle", Difficulty.MEDIUM, SudokuLogic.generateRandomPuzzle().get(), SudokuLogic.generateRandomPuzzle().get(), new ArrayList<int[][]>(), 1,false);
 		SudokuPuzzle puzzle3 = new SudokuPuzzle("FuckyouPuzzle", Difficulty.HARD, SudokuLogic.generateRandomPuzzle().get(), SudokuLogic.generateRandomPuzzle().get(), new ArrayList<int[][]>(), 1,false);
-		SaveManager.saveSudokuPuzzle(puzzle1, true);
-		SaveManager.saveSudokuPuzzle(puzzle2, true);
-		SaveManager.saveSudokuPuzzle(puzzle3, true);
+		SaveManager.savePuzzle(puzzle1, true);
+		SaveManager.savePuzzle(puzzle2, true);
+		SaveManager.savePuzzle(puzzle3, true);
 		Util.println(PuzzleSaveList.getInstance().getSaveList().get(0).getName() + "");
 		
 		for(String save : PuzzleSaveList.getInstance().getListAsStrings())

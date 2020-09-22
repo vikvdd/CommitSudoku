@@ -1,5 +1,7 @@
 package model.game;
 
+import java.util.List;
+
 import events.GameModelEvent;
 import model.EntryType;
 import model.game.actions.ActionLog;
@@ -78,10 +80,10 @@ public class SudokuGame extends GameModelEvent{
 		notifyNumberEntry(coord, val);
 	}
 	
-	public SudokuPuzzle getPuzzleInfo()
+	public String getPuzzleName()
 	{
-		return puzzle;
-	}
+		return puzzle.getName();
+	} 
 	
 	public int getNumAtCoordinate(Coordinate coord)
 	{
@@ -107,6 +109,11 @@ public class SudokuGame extends GameModelEvent{
 		if(puz[coord.y][coord.x] != 0) return -1;
 		else if(userPuz[coord.y][coord.x] == n) return 0;
 		else return n;
+	}
+	
+	public List<Coordinate> getAllCoordinatesOfN(int n)
+	{
+		return SudokuLogic.findCoordinatesOfN(puzzle.getUserPuzzle(), n);
 	}
 	
 	public boolean isFixedTile(Coordinate coord)

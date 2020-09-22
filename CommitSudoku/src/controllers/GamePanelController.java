@@ -157,7 +157,7 @@ public class GamePanelController implements GameListener
 		try {
 			updateGameState();
 			PuzzleSaveList saveList = PuzzleSaveList.getInstance();
-			SudokuPuzzle puzzle = SaveManager.loadSudokuPuzzle(PuzzleSaveList.getInstance().getSelectedSave().getName());			
+			SudokuPuzzle puzzle = SaveManager.loadPuzzle(PuzzleSaveList.getInstance().getSelectedSave().getName());			
 			game.loadNewGame(puzzle);	
 		} catch (Exception e) {
 			Util.println("No puzzle was selected.");
@@ -168,7 +168,7 @@ public class GamePanelController implements GameListener
 	private void deleteButtonAction()
 	{
 		try {
-			SaveManager.deleteSudokuPuzzle(view.getGameList().getItem(view.getGameList().getSelectionIndex()));
+			SaveManager.deletePuzzle(view.getGameList().getItem(view.getGameList().getSelectionIndex()));
 			PuzzleSaveList saveList = PuzzleSaveList.getInstance();
 			saveList.refresh();
 			initGameList();

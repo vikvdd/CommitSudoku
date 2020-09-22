@@ -61,7 +61,7 @@ public class GameboardController implements ModelChangeObserver
 	{
 		SudokuPuzzle puzzle;
 		try {
-			puzzle = SaveManager.loadSudokuPuzzle(PuzzleSaveList.getInstance().getSaveList().get(0).getName());
+			puzzle = SaveManager.loadPuzzle(PuzzleSaveList.getInstance().getSaveList().get(0).getName());
 			model.setGamePuzzle(puzzle);
 		} catch (Exception e) {
 			// TODO: handle exception

@@ -12,12 +12,12 @@ import events.SaveObserver;
 import model.game.puzzle.SudokuPuzzle;
 import util.Util;
 
-public class SaveManager
+public class SaveManager 
 {
 	public static final String saveDir = "";
 	public static final String fileExtension = ".txt";
 	
-	public static void saveSudokuPuzzle(SudokuPuzzle puzzle, Boolean overwrite)
+	public static void savePuzzle(SudokuPuzzle puzzle, Boolean overwrite)
 	{	
 		if(puzzle.getName()==null) 
 		{
@@ -41,24 +41,24 @@ public class SaveManager
 		PuzzleSaveList.getInstance().addPuzzle(save);
 	}
 	
-	public static SudokuPuzzle loadSudokuPuzzle(String fileName)
+	public static SudokuPuzzle loadPuzzle(String fileName)
 	{
-		return loadSudokuPuzzle(new File(saveDir + fileName+ ".txt"));
+		return loadPuzzle(new File(saveDir + fileName+ ".txt"));
 	}
 	
-	public static SudokuPuzzle loadSudokuPuzzle(File file)
+	public static SudokuPuzzle loadPuzzle(File file)
 	{
 		SudokuPuzzle puzzle = (SudokuPuzzle)SerializationHandler.LoadSave(file);
 		return puzzle;
 	}
 	
-	public static void deleteSudokuPuzzle(String fileName)
+	public static void deletePuzzle(String fileName)
 	{
 		File file = new File(saveDir + fileName + ".txt");
-		deleteSudokuPuzzle(file);
+		deletePuzzle(file);
 	}
 	
-	public static void deleteSudokuPuzzle(File file)
+	public static void deletePuzzle(File file)
 	{		
 		if(file.delete()) Util.println("Deleted " + file.getName());
 	}

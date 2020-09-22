@@ -1,12 +1,13 @@
 package controllers;
 
+import java.util.List;
+
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.Button;
 import events.GameListener;
 import model.EntryType;
 import model.game.SudokuGame;
 import model.game.puzzle.*;
-import util.Util;
 import views.GameButtonsView;
 import views.GameboardView;
 import views.TileType;
@@ -34,33 +35,6 @@ public class BoardController implements GameListener{
 		game.loadNewGame(SudokuLogic.generateRandomPuzzle());
 		selectedCoord = new Coordinate(0, 0);
 		selectTileAction(selectedCoord);
-	}
-
-	@Override
-	public void onGameStart(int[][] puzzleClone) {
-		// TODO Auto-generated method stub
-		fillGameboard(puzzleClone);
-	}
-
-	@Override
-	public void onGameEnd() {
-		
-	}
-
-	@Override
-	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
-		init();
-	}
-
-	@Override
-	public void onNumberEntry(Coordinate coord, int n) {
-		updateBoardTile(coord, n);
-	}
-
-	@Override
-	public void onPuzzleCompleted() {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void initBoardButtons() {
@@ -113,23 +87,66 @@ public class BoardController implements GameListener{
 	{
 		game.addGameListener(this);
 	}
+
+	
+	@Override
+	public void onGameStart(int[][] puzzleClone) {
+		// TODO Auto-generated method stub
+		fillGameboard(puzzleClone);
+	}
+
+	@Override
+	public void onGameEnd() {
+		
+	}
+
+	@Override
+	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
+		init();
+	}
+
+	@Override
+	public void onNumberEntry(Coordinate coord, int n) {
+		updateBoardTile(coord, n);
+	}
+
+	@Override
+	public void onPuzzleCompleted() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	private void selectTileAction(Coordinate coord)
 	{
-		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) return;
-		setHighlighedButtonsTileType(TileType.NORMAL, selectedCoord);
 		view.getSelectedButton().setBackground(GameboardView.NORMAL_TILE);
+		setHighlighedButtonsTileType(TileType.NORMAL, selectedCoord);
+		setMatchingNumbersTileType(TileType.NORMAL, selectedCoord);
 		selectedCoord = coord;
 		
-		setHighlighedButtonsTileType(TileType.HIGHLIGHTED, selectedCoord);
+		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) fixedTileClickAction(coord);
+		else entryTileClickAction(coord);
+			
 		view.setSelectedButton(view.getButton(selectedCoord));
 		view.getSelectedButton().setBackground(GameboardView.SELECTED_TILE);
+	}
+	
+	private void fixedTileClickAction(Coordinate coord)
+	{
+		
+		setMatchingNumbersTileType(TileType.HIGHLIGHTED, selectedCoord);
+	}
+	
+	private void entryTileClickAction(Coordinate coord)
+	{
+		setHighlighedButtonsTileType(TileType.HIGHLIGHTED, selectedCoord);
 	}
 	
 	private void numButtonAction(int num)
 	{
 		game.enterNumber(selectedCoord, num);
 	}
+	
 	
 	private void fillGameboard(int[][] puz)
 	{
@@ -141,11 +158,11 @@ public class BoardController implements GameListener{
 		}
 	}
 	
-	private void updateBoardTile(Coordinate coord, int n)
+	private void updateBoardTile(Coordinate coord, int num)
 	{
-		EntryType entryType = game.getEntryType(coord, n);
+		EntryType entryType = game.getEntryType(coord, num);
 		formatTileText(entryType, view.getButton(coord));
-		updateBoardTileText(coord, n);
+		updateBoardTileText(coord, num);
 	}
 	
 	private void formatTileText(EntryType entryType, Button btn)
@@ -174,6 +191,7 @@ public class BoardController implements GameListener{
 		btn.setText(text);
 	}
 	
+	
 	private void setHighlighedButtonsTileType(TileType tileType, Coordinate coord)
 	{
 		setButtonColumnTileType(tileType, coord.x);
@@ -197,11 +215,20 @@ public class BoardController implements GameListener{
 	
 	private void setButtonSubGridTileType(TileType tileType, Coordinate coord)
 	{
-		Coordinate subGrid = getNearestSubGridCoordinates(coord);
+		Coordinate subGrid = SudokuLogic.getNearestSubGridCoordinate(coord);
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
 				setTileType(tileType, view.getButton(subGrid.y + y, subGrid.x + x));
 			}
+		}
+	}
+	
+	private void setMatchingNumbersTileType(TileType tileType, Coordinate coord)
+	{
+		List<Coordinate> coordinates = game.getAllCoordinatesOfN(game.getNumAtCoordinate(coord));
+		for(int i = 0; i < coordinates.size(); i++)
+		{
+			setTileType(tileType, view.getButton(coordinates.get(i)));
 		}
 	}
 	
@@ -220,11 +247,6 @@ public class BoardController implements GameListener{
 		}
 	}
 	
-	private Coordinate getNearestSubGridCoordinates(Coordinate coord)
-	{
-		int y0 = Math.floorDiv(coord.y, 3) * 3;
-		int x0 = Math.floorDiv(coord.x, 3) * 3;
-		return new Coordinate(x0, y0);
-	}
+	
 
 }

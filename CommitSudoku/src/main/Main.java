@@ -11,6 +11,7 @@ import controllers.BoardController;
 import controllers.GamePanelController;
 import controllers.GameboardController;
 import model.GameModel;
+import model.game.GameDataSaver;
 import model.game.SudokuGame;
 import util.Util;
 import views.GameButtonsView;
@@ -79,5 +80,10 @@ public class Main {
 		boardController.init();
 		GamePanelController panelController = new GamePanelController(game, shell, panelView);
 		panelController.init();
+	}
+	
+	private static void initSaveSystem()
+	{
+		
 	}
 }

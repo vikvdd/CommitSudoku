@@ -131,12 +131,11 @@ public class SudokuLogic {
 		{
 			if(puzzle[i][x] == n && i != y) return false;
 		}
-		int x0 = Math.floorDiv(x, 3) * 3; 
-		int y0 = Math.floorDiv(y, 3) * 3;
+		Coordinate subGrid = getNearestSubGridCoordinate(new Coordinate(x, y));
 		for(int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++) {
-				if(puzzle[y0 + i][x0 + j] == n && (y0 + i) != y && (x0 + j) != x) return false;
+				if(puzzle[subGrid.y + i][subGrid.x + j] == n && (subGrid.y + i) != y && (subGrid.x + j) != x) return false;
 			}
 		}
 		return true; 
@@ -156,5 +155,11 @@ public class SudokuLogic {
 		return total;
 	}
 	
+	public static Coordinate getNearestSubGridCoordinate(Coordinate coord)
+	{
+		int y0 = Math.floorDiv(coord.y, 3) * 3;
+		int x0 = Math.floorDiv(coord.x, 3) * 3;
+		return new Coordinate(x0, y0);
+	}
 	
 }
