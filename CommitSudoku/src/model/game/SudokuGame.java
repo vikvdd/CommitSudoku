@@ -33,6 +33,7 @@ public class SudokuGame extends GameModelEvent{
 	
 	public void start()
 	{
+		actionLog = new ActionLog();
 		notifyGameStart(Util.clone2dArray(puzzle.getUserPuzzle()));
 	}
 	
@@ -62,22 +63,29 @@ public class SudokuGame extends GameModelEvent{
 	
 	public void undoAction()
 	{
-		PuzzleAction action = actionLog.getAction();
-		int val = action.getOldValue();
-		Coordinate coord = action.getCoordinate();
-		puzzle.enterValue(val,coord);
-		actionLog.undoAction();
-		notifyNumberEntry(coord, val);
+		try {
+			PuzzleAction action = actionLog.getAction();
+			int val = action.getOldValue();
+			Coordinate coord = action.getCoordinate();
+			puzzle.enterValue(val,coord);
+			actionLog.undoAction();
+			notifyNumberEntry(coord, val);
+		} catch (Exception e) {
+		}
 	}
 	
 	public void redoAction()
 	{
-		actionLog.redoAction();
-		PuzzleAction action = actionLog.getAction();
-		int val = action.getNewValue();
-		Coordinate coord = action.getCoordinate();
-		puzzle.enterValue(val,coord);
-		notifyNumberEntry(coord, val);
+		try {
+			actionLog.redoAction();
+			PuzzleAction action = actionLog.getAction();
+			int val = action.getNewValue();
+			Coordinate coord = action.getCoordinate();
+			puzzle.enterValue(val,coord);
+			notifyNumberEntry(coord, val);
+		} catch (Exception e) {
+		}
+		
 	}
 	
 	public String getPuzzleName()

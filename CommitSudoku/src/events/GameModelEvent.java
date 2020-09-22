@@ -2,10 +2,8 @@ package events;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
-import util.Util;
 
 public class GameModelEvent {
 	

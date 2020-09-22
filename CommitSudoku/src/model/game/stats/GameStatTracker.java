@@ -7,6 +7,7 @@ import java.util.List;
 public class GameStatTracker {
 	int[][] puzzle = new int[9][9];
 	List<Integer> total = new ArrayList<Integer>();
+	int t0;
 	int t1;
 	int t2;
 	int t3;
@@ -16,11 +17,14 @@ public class GameStatTracker {
 	int t7;
 	int t8;
 	int t9;
+	int totalFilledSpaces;
+	int totalEmptySpaces;
+	int mistakes;
 	
 	public GameStatTracker(int[][] puzzle)
 	{
 		this.puzzle = puzzle;
-		total = Arrays.asList(t1,t2,t3,t4,t5,t6,t7,t8,t9);
+		total = Arrays.asList(t0,t1,t2,t3,t4,t5,t6,t7,t8,t9);
 	}
 	
 	public void init()
@@ -30,30 +34,13 @@ public class GameStatTracker {
 	
 	public void updateAllCounts()
 	{
-		for (int y = 0; y < 9; y++) {
-			for (int x = 0; x < 9; x++) {
-				if(puzzle[y][x] >= 0)
-				{
-					int tN = total.get(puzzle[y][x]-1);
-					tN++;
-				}	
-			}
-		}
+		
 	}
 	
 	public void updateTotalN(int n)
 	{
-		if(n != 0)
-		{
-			int count = 0;
-			for (int y = 0; y < 9; y++) {
-				for (int x = 0; x < 9; x++) {
-					if(puzzle[y][x] == n) count++;
-				}
-			}
-			int tot = total.get(n-1);
-			tot = count;
-		}
+		int tot = total.get(n);
+		
 	}
 	
 	public boolean isFinished()

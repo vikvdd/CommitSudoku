@@ -6,14 +6,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-
 import controllers.BoardController;
 import controllers.GamePanelController;
-import controllers.GameboardController;
-import model.GameModel;
-import model.game.GameDataSaver;
 import model.game.SudokuGame;
-import util.Util;
 import views.GameButtonsView;
 import views.GameboardView;
 import views.PanelView;
@@ -33,7 +28,6 @@ public class Main {
 		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120); 
 		
 		//INIT MODEL
-		GameModel model = new GameModel();
 		SudokuGame game = new SudokuGame();
 		
 		//INIT VIEWS
@@ -74,8 +68,6 @@ public class Main {
 	
 	private static void initControllers(SudokuGame game, Shell shell, GameboardView board, GameButtonsView buttonsView, PanelView panelView)
 	{
-		/*GameboardController boardController = new GameboardController(game, board, buttonsView);
-		boardController.init();*/
 		BoardController boardController = new BoardController(game, board, buttonsView);
 		boardController.init();
 		GamePanelController panelController = new GamePanelController(game, shell, panelView);

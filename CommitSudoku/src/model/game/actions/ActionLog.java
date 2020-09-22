@@ -27,7 +27,7 @@ public class ActionLog {
 		return instance;
 	}
 	
-	public PuzzleAction getAction()
+	public PuzzleAction getAction() 
 	{
 		return actions.get(actionIndex);
 	}

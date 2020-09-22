@@ -3,9 +3,6 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import events.SaveObserver;
-import model.game.puzzle.Difficulty;
 import util.Util;
 
 public class PuzzleSaveList implements Serializable
