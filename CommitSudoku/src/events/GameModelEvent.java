@@ -2,6 +2,8 @@ package events;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import model.game.actions.PuzzleAction;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 
@@ -55,6 +57,14 @@ public class GameModelEvent {
 		for(GameListener listener : listeners)
 		{
 			listener.onPuzzleCompleted();
+		}
+	}
+	
+	protected void notifyPuzzleSolved(int[][] solution)
+	{
+		for(GameListener listener: listeners)
+		{
+			listener.onPuzzleSolved(solution);
 		}
 	}
 }

@@ -7,8 +7,6 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import events.SaveObserver;
 import model.game.puzzle.SudokuPuzzle;
 import util.Util;
 

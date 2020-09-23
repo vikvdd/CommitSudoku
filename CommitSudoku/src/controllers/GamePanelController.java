@@ -256,4 +256,10 @@ public class GamePanelController implements GameListener
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void onPuzzleSolved(int[][] solution) {
+		// TODO Auto-generated method stub
+		
+	}
 }

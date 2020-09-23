@@ -24,13 +24,13 @@ public class GameDataSaver implements GameListener{
 	@Override
 	public void onGameEnd() {
 		// TODO Auto-generated method stub
-		
+		sudokuDAO.savePuzzle(new File(game.getPuzzleName() + ".txt"));
 	}
 
 	@Override
 	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
 		// TODO Auto-generated method stub
-		sudokuDAO.savePuzzle(new File(game.getPuzzleName() + ".txt"));
+		sudokuDAO.savePuzzle(new File(name + ".txt"));
 	}
 
 	@Override
@@ -41,6 +41,12 @@ public class GameDataSaver implements GameListener{
 
 	@Override
 	public void onPuzzleCompleted() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onPuzzleSolved(int[][] solution) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -24,7 +24,7 @@ public class Main {
 	{
 		//INIT DISPLAY/WINDOW
 		Display display = Display.getDefault();
-		ViewScaleManager sm = new ViewScaleManager(1024, true);
+		ViewScaleManager sm = new ViewScaleManager(1037, true);
 		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120); 
 		
 		//INIT MODEL

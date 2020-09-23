@@ -13,8 +13,8 @@ public class SudokuLogic {
 	public static void solve(SudokuPuzzle puzzle)
 	{
 		puzzle.setSolutions(new ArrayList<int[][]>());
-		solveRec(puzzle, Util.clone2dArray(puzzle.get()));
-		if(puzzle.getTotSolutions() > 0)
+		solveRec(puzzle, puzzle.get());
+		//if(puzzle.getTotSolutions() > 0)
 		return;
 	}
 	
@@ -49,7 +49,7 @@ public class SudokuLogic {
 	//returns random puzzle using default values
 	public static SudokuPuzzle generateRandomPuzzle()
 	{	
-		SudokuPuzzle puzzle = generateRandomPuzzle(50, 100);
+		SudokuPuzzle puzzle = generateRandomPuzzle(45, 100);
 		
 		return puzzle;	
 	}

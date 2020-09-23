@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.swt.events.*;
@@ -34,10 +35,8 @@ public class BoardController implements GameListener, GameStatListener{
 		initModel();
 		initBoardButtons();
 		initGameButtons();
-		game.loadNewGame(SudokuLogic.generateRandomPuzzle());
-		game.getStatTracker().addGameStatListener(this);
-		selectedCoord = new Coordinate(0, 0);
-		selectTileAction(selectedCoord);
+		loadStartBoard();
+		game.start();
 	}
 	
 	private void initBoardButtons() {
@@ -59,6 +58,7 @@ public class BoardController implements GameListener, GameStatListener{
 				});
 			}
 		}
+		setBoardButtonTileType(TileType.NORMAL);
 	}
 	
 	private void initGameButtons()
@@ -90,12 +90,20 @@ public class BoardController implements GameListener, GameStatListener{
 	{
 		game.addGameListener(this);
 	}
-
+	
+	private void loadStartBoard() 
+	{
+		setBoardButtonTileType(TileType.NORMAL);
+		toggleAllNumButtons(true);
+	}
 	
 	@Override
 	public void onGameStart(int[][] puzzleClone) {
-		// TODO Auto-generated method stub
+		game.getStatTracker().addGameStatListener(this);
 		fillGameboard(puzzleClone);
+		loadStartBoard();
+		selectedCoord = new Coordinate(0, 0);
+		selectTileAction(selectedCoord);
 	}
 
 	@Override
@@ -105,7 +113,7 @@ public class BoardController implements GameListener, GameStatListener{
 
 	@Override
 	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
-		init();
+		game.start();
 	}
 
 	@Override
@@ -120,18 +128,24 @@ public class BoardController implements GameListener, GameStatListener{
 	}
 	
 	@Override
+	public void onPuzzleSolved(int[][] solution) {
+		//fillGameboard(solution);
+	}
+	
+	@Override
 	public void onNumberCompleted(int number) {
-		Util.println(number + "");
-		Button btn = btnView.getButton(number-1);
-		btn.setEnabled(false);
-		
+		Util.println("go");
+		try {
+			Button btn = btnView.getButton(number-1);
+			btn.setEnabled(false);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	private void selectTileAction(Coordinate coord)
 	{
-		view.getSelectedButton().setBackground(GameboardView.NORMAL_TILE);
-		setHighlighedButtonsTileType(TileType.NORMAL, selectedCoord);
-		setMatchingNumbersTileType(TileType.NORMAL, selectedCoord);
+		setBoardButtonTileType(TileType.NORMAL);
 		selectedCoord = coord;
 		
 		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) fixedTileClickAction(coord);
@@ -157,6 +171,17 @@ public class BoardController implements GameListener, GameStatListener{
 		game.enterNumber(selectedCoord, num);
 	}
 	
+	private void toggleAllNumButtons(boolean isEnabled)
+	{
+		for (int i = 0; i < 9; i++) {
+			toggleNumButton(isEnabled, i);
+		}
+	}
+	
+	private void toggleNumButton(boolean isEnabled, int number)
+	{
+		if(number > 0 && number < 10) btnView.getButton(number-1).setEnabled(isEnabled);
+	}
 	
 	private void fillGameboard(int[][] puz)
 	{
@@ -199,6 +224,19 @@ public class BoardController implements GameListener, GameStatListener{
 		String text = "";
 		if(n != 0) text = n + "";
 		btn.setText(text);
+	}
+	
+	private void setBoardButtonTileType(TileType tileType)
+	{
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
+				try {
+					setTileType(tileType, view.getButton(y, x));
+				} catch (Exception e) {
+				}
+				
+			}
+		}
 	}
 	
 	
@@ -256,9 +294,4 @@ public class BoardController implements GameListener, GameStatListener{
 			break;
 		}
 	}
-
-	
-	
-	
-
 }

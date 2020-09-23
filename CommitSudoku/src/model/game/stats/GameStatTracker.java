@@ -47,6 +47,7 @@ public class GameStatTracker{
 	{
 		for (int i = 0; i < 10; i++) {
 			updateTotalN(puzzle, i);
+			if(isNumberCompleted(i)) notifyNumberCompleted(i);
 		}
 	}
 	
@@ -59,7 +60,7 @@ public class GameStatTracker{
 			}
 		}
 		total.set(n, nTotal);
-		UpdateCompletetionEvents(n);
+		if(isNumberCompleted(n)) notifyNumberCompleted(n);;
 	}
 	
 	public void addAction(PuzzleAction action)
@@ -73,7 +74,7 @@ public class GameStatTracker{
 		total.set(oldVal, totOld);
 		total.set(newVal, totNew);
 
-		UpdateCompletetionEvents(newVal);
+		isNumberCompleted(newVal);
 	}
 	
 	public void addMistake()
@@ -81,15 +82,17 @@ public class GameStatTracker{
 		mistakes++;
 	}
 	
-	private void UpdateCompletetionEvents(int n)
-	{
-		if(isNumberCompleted(n)) notifyNumberCompleted(n);
-		if(isPuzzleCompleted()) notifyPuzzleCompleted();
-	}
-	
 	public boolean isNumberCompleted(int n)
 	{
-		return (total.get(n) >= 9);
+		Util.println("total " + n + ": " + total.get(n));
+		if(total.get(n) >= 9)
+		{
+			notifyNumberCompleted(n);
+			return true;
+		}
+		return false;
+			
+	
 	}
 	
 	public boolean isPuzzleCompleted()
@@ -122,6 +125,7 @@ public class GameStatTracker{
 		for (GameStatListener listener : listeners) {
 			listener.onNumberCompleted(number);
 		}
+		if(isPuzzleCompleted()) notifyPuzzleCompleted();
 	}
 	
 	public void notifyPuzzleCompleted()

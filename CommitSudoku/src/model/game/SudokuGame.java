@@ -25,6 +25,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		super();
 		actionLog = new ActionLog();
 		statTracker = new GameStatTracker();
+		puzzle = SudokuLogic.generateRandomPuzzle(45, 10);
 	}
 	
 	public void loadNewGame(SudokuPuzzle puzzle)
@@ -61,11 +62,12 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public void solve()
 	{
 		SudokuLogic.solve(puzzle);
-	}
-	
-	public void solveCurrentPuzzle()
-	{
-		
+		try {
+			notifyPuzzleSolved(puzzle.getSolution(0));
+		}
+		catch (Exception e) {
+
+		}
 	}
 	
 	public void undoAction()
@@ -110,7 +112,6 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		int[][] puz = puzzle.get();
 		int[][] userPuz = puzzle.getUserPuzzle();
 		if(puz[coord.y][coord.x] != 0) return EntryType.FIXED;
-		//if(userPuz[coord.y][coord.x] == n) return EntryType.EMPTY;
 		else if(SudokuLogic.possible(userPuz, coord.y, coord.x, n)) return EntryType.VALIDENTRY;
 		else return EntryType.INVALIDENTRY;
 		
@@ -160,4 +161,6 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		end();
 		
 	}
+	
+	
 }
