@@ -45,6 +45,9 @@ public class PanelView extends Composite{
 	public static Color secondaryColor = new Color(null, 232, 232, 232);
 	private Button deleteBtn;
 	
+	public PanelView(Composite parent, int style) {
+		super(parent, style);
+	}
 	
 	public List getGameList()
 	{
@@ -52,7 +55,7 @@ public class PanelView extends Composite{
 	}
 	
 	public void updateGameList(String[] newList)
-	{
+	{	
 		gameList.removeAll();
 		if(newList.length > 0)
 		{
@@ -123,13 +126,8 @@ public class PanelView extends Composite{
 	{
 		return redoButton;
 	}
-	private void initGamePanel()
+	public void init()
 	{
-		
-	}
-	
-	public PanelView(Composite parent, int style) {
-		super(parent, style);
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.verticalSpacing = 10;
 		gridLayout.marginTop = 10;
@@ -138,7 +136,7 @@ public class PanelView extends Composite{
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.widthHint = SWT.FILL;
 		gridData.heightHint = SWT.DEFAULT;
-		parent.setLayoutData(gridData);
+		setLayoutData(gridData);
 		
 		setLayout(gridLayout);
 		setLayoutData(gridData);
@@ -294,8 +292,5 @@ public class PanelView extends Composite{
 		redoButton = new Button(composite_1, SWT.NONE);
 		redoButton.setText("Redo");
 		//new Label(composite_1, SWT.NONE);
-		
-		
-		//initGamePanel();
 	}
 }

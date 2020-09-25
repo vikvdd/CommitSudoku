@@ -1,53 +1,50 @@
-package model.game;
-
-import java.io.File;
+package model.savesystem;
 
 import events.GameListener;
+import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
-import model.savesystem.SudokuDAO;
+import util.Util;
 
 public class GameDataSaver implements GameListener{
-	SudokuDAO sudokuDAO;
+	
+	
+	IGameDAO sudokuDAO;
 	SudokuGame game;
 	
-	public GameDataSaver(SudokuDAO sudokuDAO) {
+	public GameDataSaver(IGameDAO sudokuDAO, SudokuGame game) {
 		this.sudokuDAO = sudokuDAO;
+		this.game = game;
+		game.addGameListener(this);
 	}
 
 	@Override
-	public void onGameStart(int[][] puzzleClone) {
-		// TODO Auto-generated method stub
-		
+	public void onGameStart(int[][] puzzleClone) {		
 	}
 
 	@Override
 	public void onGameEnd() {
-		// TODO Auto-generated method stub
-		sudokuDAO.savePuzzle(new File(game.getPuzzleName() + ".txt"));
+		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
 
 	@Override
 	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
-		// TODO Auto-generated method stub
-		sudokuDAO.savePuzzle(new File(name + ".txt"));
+		Util.println("Goon laddy");
+		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
 
 	@Override
 	public void onNumberEntry(Coordinate coord, int number) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onPuzzleCompleted() {
-		// TODO Auto-generated method stub
-		
+		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
 
 	@Override
 	public void onPuzzleSolved(int[][] solution) {
-		// TODO Auto-generated method stub
-		
+		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
 }

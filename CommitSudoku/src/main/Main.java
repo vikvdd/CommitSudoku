@@ -1,5 +1,9 @@
 package main;
 
+import java.io.File;
+
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -9,6 +13,13 @@ import org.eclipse.swt.widgets.Shell;
 import controllers.BoardController;
 import controllers.GamePanelController;
 import model.game.SudokuGame;
+import model.game.puzzle.SudokuLogic;
+import model.game.puzzle.SudokuPuzzle;
+import model.savesystem.GameDAO;
+import model.savesystem.GameDataSaver;
+import model.savesystem.IGameDAO;
+import model.savesystem.PuzzleSaveList;
+import model.savesystem.SaveManager;
 import views.GameButtonsView;
 import views.GameboardView;
 import views.PanelView;
@@ -29,11 +40,16 @@ public class Main {
 		
 		//INIT MODEL
 		SudokuGame game = new SudokuGame();
+		SaveManager saveManager = new SaveManager();
+		IGameDAO gameDAO = new GameDAO();
+		GameDataSaver dataSaver = new GameDataSaver(gameDAO, game);
+		game.loadNewGame(tryLoadFirstPuzzle(gameDAO));
 		
 		//INIT VIEWS
 		GameboardView board = new GameboardView(shell, SWT.BORDER);
 		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize()-5, sm.getBoardSize()-5);
 		PanelView panelView = new PanelView(shell, SWT.NONE);
+		panelView.init();
 		GridData buttonsData = new GridData();
 		buttonsData.horizontalAlignment = SWT.CENTER;
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
@@ -74,8 +90,15 @@ public class Main {
 		panelController.init();
 	}
 	
-	private static void initSaveSystem()
+	private static SudokuPuzzle tryLoadFirstPuzzle(IGameDAO dao)
 	{
-		
+		SudokuPuzzle puzzle = SudokuLogic.generateRandomPuzzle();
+		try {
+			String puzName = PuzzleSaveList.getInstance().getListAsStrings()[0];
+			puzzle = dao.loadPuzzle(new File(puzName + ".txt"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return puzzle;
 	}
 }

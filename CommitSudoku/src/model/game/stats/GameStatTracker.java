@@ -84,15 +84,12 @@ public class GameStatTracker{
 	
 	public boolean isNumberCompleted(int n)
 	{
-		Util.println("total " + n + ": " + total.get(n));
 		if(total.get(n) >= 9)
 		{
 			notifyNumberCompleted(n);
 			return true;
 		}
 		return false;
-			
-	
 	}
 	
 	public boolean isPuzzleCompleted()

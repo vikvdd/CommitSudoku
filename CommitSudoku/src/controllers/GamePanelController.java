@@ -14,12 +14,13 @@ import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
+import model.savesystem.GameDAOListener;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;
 import views.PanelView;
 
-public class GamePanelController implements GameListener
+public class GamePanelController implements GameListener, GameDAOListener
 {
 	private SudokuGame game;
 	private PanelView view;
@@ -43,7 +44,6 @@ public class GamePanelController implements GameListener
 	private void initGameList()
 	{
 		view.updateGameList(PuzzleSaveList.getInstance().getListAsStrings());
-		Util.println(PuzzleSaveList.getInstance().getSaveList().size()+"");
 	}
 	
 	private void initListeners()
@@ -259,6 +259,18 @@ public class GamePanelController implements GameListener
 
 	@Override
 	public void onPuzzleSolved(int[][] solution) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onGameSave() {
+		updateGameState();
+		initGameList();
+	}
+
+	@Override
+	public void onGameLoad() {
 		// TODO Auto-generated method stub
 		
 	}

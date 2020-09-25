@@ -4,7 +4,7 @@ import java.io.File;
 
 import model.game.puzzle.SudokuPuzzle;
 
-public interface SudokuDAO {
-	public void savePuzzle(File fileName);
+public interface IGameDAO {
+	public void savePuzzle(SudokuPuzzle puzzle);
 	public SudokuPuzzle loadPuzzle(File fileName);
 }

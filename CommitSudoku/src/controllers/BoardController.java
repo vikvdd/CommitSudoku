@@ -1,8 +1,6 @@
 package controllers;
 
-import java.io.File;
 import java.util.List;
-
 import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.Button;
 import events.GameListener;
@@ -173,7 +171,7 @@ public class BoardController implements GameListener, GameStatListener{
 	
 	private void toggleAllNumButtons(boolean isEnabled)
 	{
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 10; i++) {
 			toggleNumButton(isEnabled, i);
 		}
 	}
