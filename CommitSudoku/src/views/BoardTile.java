@@ -9,17 +9,33 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.osgi.report.resolution.ResolutionReport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.w3c.dom.events.EventException;
 
+import com.ibm.icu.text.DateFormat.BooleanAttribute;
+
+import events.BoardTileListener;
 import util.Util;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.StackLayout;
 
 public class BoardTile extends Composite{
 	
-	public static Color MAIN_COLOR = new Color(null, 255,255,255);
-	public static Color HOVER_COLOR = new Color(null, 220,220,220);
+	public static Color MAIN_TILE_COLOR = new Color(null, 255,255,255);
+	public static Color HOVER_TILE_COLOR = new Color(null, 200,200,200);
+	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
+	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
+	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI Black", 23, SWT.BOLD);
+	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 23, SWT.NORMAL);
+	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 23, SWT.NORMAL);
+	public static final Font NOTE_FONT = SWTResourceManager.getFont("Segoe UI Historic", 8, SWT.NORMAL);
+	
+	List<BoardTileListener> listeners = new ArrayList<BoardTileListener>();
 	
 	List<Composite> composites = new ArrayList<Composite>();
 	Composite mainComp;
@@ -28,8 +44,7 @@ public class BoardTile extends Composite{
 	Composite bottomHintComp;
 	Composite compClick;
 	
-	
-	GridData mainData;
+	GridData gd_mainComp;
 	
 	Label numLabel;
 	Label note1;
@@ -42,18 +57,245 @@ public class BoardTile extends Composite{
 	Label note8;
 	Label note9;
 	List<Label> noteLabels = new ArrayList<Label>();
+	
+	private int width = 75;
+	private int height = 75;
+	private Color currentColor = MAIN_TILE_COLOR;
 
+	public void addBoardTileListener(BoardTileListener listener)
+	{
+		listeners.add(listener);
+	}
+	
+	public void removeBoardTileListener(BoardTileListener listener)
+	{
+		listeners.remove(listener);
+	}
+	
+	public void setText(String text)
+	{
+		try {
+			numLabel.setText(text);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+	
+	public void setNoteText(int num, boolean enabled)
+	{
+		try {
+			noteLabels.get(num-1).setVisible(enabled);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void setSize(int width, int height)
+	{
+		mainComp.setSize(width,height);
+		gd_mainComp.widthHint = width;
+		gd_mainComp.heightHint = height;
+	}
+	
+	
+	public void setNumTextColor(Color color)
+	{
+		numLabel.setForeground(color);
+	}
+	
+	public void setBackgroundColor(Color color)
+	{
+		currentColor = color;
+		super.setBackground(color);
+		mainComp.setBackground(color);
+		topHintComp.setBackground(color);
+		numberComp.setBackground(color);
+		bottomHintComp.setBackground(color);
+		numLabel.setBackground(color);
+		for(Label lbl : noteLabels) lbl.setBackground(color);
+	}
+	
+	public void setHoverColor(Color color)
+	{
+		super.setBackground(color);
+		mainComp.setBackground(color);
+		topHintComp.setBackground(color);
+		numberComp.setBackground(color);
+		bottomHintComp.setBackground(color);
+		numLabel.setBackground(color);
+		for(Label lbl : noteLabels) lbl.setBackground(color);
+	}
+	
+	public Color getBackgroundColor()
+	{
+		return currentColor;
+	}
+	
+	public void setNumFont(Font font)
+	{
+		numLabel.setFont(font);
+	}
+	
+	public String getText()
+	{
+		return numLabel.getText();
+	}
+	
+	public String getNoteLabelText(int num)
+	{
+		if(num < 1 || num > 9) return "";
+		return noteLabels.get(num-1).getText();
+	}
+	
+	public void toggleNoteText(boolean enabled)
+	{
+		for(Label label : noteLabels)
+		{
+			try {
+				setNoteText(Integer.parseInt(label.getText()), enabled);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+	}
+	
+	public void initListeners()
+	{
+		for(Composite comp : composites)
+		{
+			comp.addListener(SWT.MouseExit, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseExit(event);
+				}
+			});
+			comp.addListener(SWT.MouseEnter, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseEnter();
+				}
+			});
+			comp.addListener(SWT.MouseDown, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseDown(event);
+					
+				}
+			});
+		}
+		for(Control control : noteLabels)
+		{
+			control.addListener(SWT.MouseExit, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseExit(event);
+				}
+			});
+			control.addListener(SWT.MouseEnter, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					
+					onMouseEnter();
+				}
+			});
+			control.addListener(SWT.MouseDown, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseDown(event);
+					
+				}
+			});
+			numLabel.addListener(SWT.MouseExit, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseExit(event);
+				}
+			});
+			numLabel.addListener(SWT.MouseEnter, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					
+					onMouseEnter();
+				}
+			});	
+			numLabel.addListener(SWT.MouseDown, new Listener() {
+				
+				@Override
+				public void handleEvent(Event event) {
+					onMouseDown(event);
+					
+				}
+			});
+		}		
+	}
+	
+	public boolean isNoteEnabled(int num)
+	{
+		if(noteLabels.get(num-1).isVisible()) return true;
+		else return false;
+	}
+	
+	private void onMouseEnter()
+	{
+		setHoverColor(HOVER_TILE_COLOR);
+		notifyMouseEnter();
+	}
+	
+	private void onMouseExit(Event event)
+	{
+		for (Control control : getChildren()) {
+            if (control == event.item)
+                return;
+        }
+		setBackgroundColor(currentColor);
+		notifyMouseExit();
+	}
+	
+	private void onMouseDown(Event event)
+	{
+		if(event.button == 1)
+		{
+			onLeftClick();
+		}
+		if(event.button == 3)
+		{
+			onRightClick();
+		}
+	}
+	
+	private void onLeftClick()
+	{
+		notifyLeftClick();
+	}
+	
+	private void onRightClick()
+	{
+		notifyRightClick();
+	}
+	
 	public BoardTile(Composite parent, int style) {
 		super(parent, style);
-		
-		mainData = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		setLayout(new GridLayout(1, false));
 		mainComp = new Composite(this, SWT.NONE);
-		mainComp.setLayoutData(mainData);
+		gd_mainComp = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_mainComp.heightHint = 100;
+		gd_mainComp.widthHint = 100;
+		mainComp.setLayoutData(gd_mainComp);
 		GridLayout gl_mainComp = new GridLayout(1, true);
 		gl_mainComp.marginRight = 5;
 		gl_mainComp.marginLeft = 5;
-		gl_mainComp.marginTop = 5;
-		gl_mainComp.marginBottom = 5;
+		gl_mainComp.marginTop = 0;
+		gl_mainComp.marginBottom = 0;
 		gl_mainComp.marginWidth = 0;
 		gl_mainComp.marginHeight = 0;
 		gl_mainComp.horizontalSpacing = 0;
@@ -71,36 +313,41 @@ public class BoardTile extends Composite{
 		topHintComp.setLayout(gl_composite);
 		
 		note1 = new Label(topHintComp, SWT.NONE);
-		note1.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note1.setFont(NOTE_FONT);
 		note1.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false, 1, 1));
 		note1.setText("1");
 		
 		note2 = new Label(topHintComp, SWT.NONE);
-		note2.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note2.setFont(NOTE_FONT);
 		note2.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
 		note2.setText("2");
 		
 		note3 = new Label(topHintComp, SWT.NONE);
-		note3.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note3.setFont(NOTE_FONT);
 		note3.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
 		note3.setText("3");
 		
 		note4 = new Label(topHintComp, SWT.NONE);
-		note4.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note4.setFont(NOTE_FONT);
 		note4.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
 		note4.setText("4");
 		
 		note5 = new Label(topHintComp, SWT.NONE);
-		note5.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note5.setFont(NOTE_FONT);
 		note5.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, false, false, 1, 1));
 		note5.setText("5");
 		
 		numberComp = new Composite(mainComp, SWT.NONE);
-		numberComp.setLayout(new GridLayout(1, false));
+		GridLayout gl_numberComp = new GridLayout(1, true);
+		gl_numberComp.horizontalSpacing = 0;
+		gl_numberComp.verticalSpacing = 0;
+		gl_numberComp.marginWidth = 0;
+		gl_numberComp.marginHeight = 0;
+		numberComp.setLayout(gl_numberComp);
 		numberComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
 		numLabel = new Label(numberComp, SWT.NONE);
-		numLabel.setFont(SWTResourceManager.getFont("Segoe UI Black", 24, SWT.NORMAL));
+		numLabel.setFont(DEFAULT_FONT);
 		numLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
 		numLabel.setText("8");
 		GridData numData = new GridData(SWT.CENTER, SWT.FILL, true, true,1,1);
@@ -116,134 +363,59 @@ public class BoardTile extends Composite{
 		bottomHintComp.setLayout(gl_composite_1);
 		
 		note6 = new Label(bottomHintComp, SWT.NONE);
-		note6.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note6.setFont(NOTE_FONT);
 		note6.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false, 1, 1));
 		note6.setText("6");
 		
 		note7 = new Label(bottomHintComp, SWT.NONE);
-		note7.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note7.setFont(NOTE_FONT);
 		note7.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, false, false, 1, 1));
 		note7.setText("7");
 		
 		note8 = new Label(bottomHintComp, SWT.NONE);
-		note8.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note8.setFont(NOTE_FONT);
 		note8.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, false, false, 1, 1));
 		note8.setText("8");
 		
 		note9 = new Label(bottomHintComp, SWT.NONE);
-		note9.setFont(SWTResourceManager.getFont("Segoe UI Historic", 7, SWT.NORMAL));
+		note9.setFont(NOTE_FONT);
 		note9.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, false, false, 1, 1));
 		note9.setText("9");
 		noteLabels.addAll(Arrays.asList(note1,note2,note3,note4,note5,note6,note7,note8,note9));
 	
 		composites.addAll(Arrays.asList(mainComp, numberComp, topHintComp, bottomHintComp));
 		
-		setSize(100,100);
-		setBackground(new Color(null, 0,0,0));
+		setSize(width,height);
+		setBackgroundColor(MAIN_TILE_COLOR);
 		initListeners();
+		toggleNoteText(false);
 	}
 	
-	public void setText(String text)
-	{
-		try {
-			numLabel.setText(text);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-	}
-	
-	public void setNoteText(int num)
-	{
-		try {
-			noteLabels.get(num-1).setText(num + "");
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-	
-	public void setSize(int width, int height)
-	{
-		mainData.heightHint = height;
-		mainData.widthHint = width;
-		mainComp.setBounds(0,0,width,height);
-	}
-	
-	public void setBackGround(Color color)
-	{
-		setBackground(color);
-		mainComp.setBackground(color);
-		topHintComp.setBackground(color);
-		numberComp.setBackground(color);
-		bottomHintComp.setBackground(color);
-		numLabel.setBackground(color);
-		for(Label lbl : noteLabels) lbl.setBackground(color);
-	}
-	
-	public void initListeners()
-	{
-		for(Composite comp : composites)
+	private void notifyMouseEnter() {
+		for(BoardTileListener l : listeners)
 		{
-			comp.addListener(SWT.MouseExit, new Listener() {
-				
-				@Override
-				public void handleEvent(Event event) {
-					for (Control control : getChildren()) {
-		                if (control == event.item)
-		                    return;
-		            }
-					setBackGround(MAIN_COLOR);
-				}
-			});
-			comp.addListener(SWT.MouseEnter, new Listener() {
-				
-				@Override
-				public void handleEvent(Event event) {
-					
-					setBackGround(HOVER_COLOR);
-				}
-			});
+			l.onTileMouseEnter();
 		}
-		for(Control control : noteLabels)
+	}
+	
+	private void notifyMouseExit() {
+		for(BoardTileListener l : listeners)
 		{
-			control.addListener(SWT.MouseExit, new Listener() {
-				
-				@Override
-				public void handleEvent(Event event) {
-					for (Control control : getChildren()) {
-		                if (control == event.item)
-		                    return;
-		            }
-					setBackGround(MAIN_COLOR);
-				}
-			});
-			control.addListener(SWT.MouseEnter, new Listener() {
-				
-				@Override
-				public void handleEvent(Event event) {
-					
-					setBackGround(HOVER_COLOR);
-				}
-			});
-			numLabel.addListener(SWT.MouseExit, new Listener() {
-				
-				@Override
-				public void handleEvent(Event event) {
-					for (Control control : getChildren()) {
-		                if (control == event.item)
-		                    return;
-		            }
-					setBackGround(MAIN_COLOR);
-				}
-			});
-			numLabel.addListener(SWT.MouseEnter, new Listener() {
-				
-				@Override
-				public void handleEvent(Event event) {
-					
-					setBackGround(HOVER_COLOR);
-				}
-			});		
-		}		
+			l.onTileMouseExit();
+		}
+	}
+	
+	private void notifyLeftClick() {
+		for(BoardTileListener l : listeners)
+		{
+			l.onLeftClick();
+		}
+	}
+	
+	private void notifyRightClick() {
+		for(BoardTileListener l : listeners)
+		{
+			l.onRightClick();
+		}
 	}
 }

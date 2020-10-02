@@ -21,9 +21,18 @@ public class Util {
 		System.out.println(string);
 	}
 	
+	public static void println(int intText)
+	{
+		println(intText + "");
+	}
+	
 	public static void print(String string)
 	{
 		System.out.print(string);
+	}
+	
+	public static void print(int intText) {
+		print(intText + "");
 	}
 	
 	public static String formatStringToTitle(String text)

@@ -14,47 +14,30 @@ import org.eclipse.swt.widgets.Shell;
 
 import util.Util;
 import views.BoardTile;
+import views.BoardView;
 
 public class boardTileTest {
 	public static void main(String[] args) {
+		
+		Display display = Display.getDefault();
+		Shell shell = new Shell();
+		shell = new Shell();
+		GridLayout gridLayout = new GridLayout(9, false);
+		gridLayout.makeColumnsEqualWidth = true;
 		GridData data = new GridData();
 		data.horizontalAlignment = SWT.FILL;
 		data.verticalAlignment = SWT.FILL;
 		data.grabExcessHorizontalSpace = true;
-		data.minimumHeight = 100;
-		data.minimumWidth = 100;
-		data.heightHint = 150;
-		data.widthHint = 100;
-		Display display = Display.getDefault();
-		Shell shell = new Shell();
-		shell = new Shell();
+		
+		shell.setLayout(gridLayout);
 		shell.setText("CommitSudoku");
 		shell.setBackground(new Color(null,209, 191, 174));
 		shell.setData(data);
-		GridLayout gridLayout = new GridLayout(9, false);
-		gridLayout.makeColumnsEqualWidth = true;
-		shell.setLayout(gridLayout);
-		Composite comp = new Composite(shell, SWT.NORMAL);
+		shell.setSize(1024,1024);
+		BoardView boardView = new BoardView(shell, SWT.BORDER);
 		
 		
-		comp.setLayout(gridLayout);
-		comp.setData(data);
-		comp.setBounds(0,0,400,400);
-		BoardTile tile = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile2 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile3 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile4 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile5 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile6 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile7 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile8 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile9 = new BoardTile(comp, SWT.PUSH);
-		BoardTile tile10 = new BoardTile(comp, SWT.PUSH);
 		
-	
-		
-		
-		tile.setData(data);
 		
 		
 		

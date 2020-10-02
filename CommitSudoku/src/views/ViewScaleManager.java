@@ -19,10 +19,10 @@ public class ViewScaleManager {
 	private void calculateCompositeDimensions(int _windowSize)
 	{
 		this.windowSize = _windowSize;
-		float brdSize = ((float)windowSize-((float)padding*2.0F)) * (7.0F/10.0F);
+		float brdSize = ((float)windowSize-((float)padding*2.0F)) * (6.0F/10.0F);
 		Util.print(brdSize + "");
 		boardSize = (int)brdSize;
-		float pnlSize = ((float)windowSize-(float)padding*1.0F) * (2.5F/10.0F);
+		float pnlSize = ((float)windowSize-(float)padding*1.0F) * (4.0F/10.0F);
 		panelSize =  (int)pnlSize; 
 		float btnViewSize = (float)boardSize * (4.0F/5.0F);
 		float btnSize = (btnViewSize-((float)padding*17.0F))/9;

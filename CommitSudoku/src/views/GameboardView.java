@@ -4,6 +4,7 @@ import java.util.TreeMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -11,7 +12,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import model.game.puzzle.Coordinate;
 
-public class GameboardView extends Composite{
+public class GameboardView extends Composite implements IBoardView{
 	
 	private static final int BTN_PADDING = 2;
 	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI", 18, SWT.BOLD);
@@ -24,14 +25,14 @@ public class GameboardView extends Composite{
 	public static final Color SELECTED_TILE = new Color(null, 164, 218, 237);
 	
 	private int btnSize;
-	private Button[][] gameboardBtns;
-	private Map<String, Button> buttons;
-	private Button selectedBtn;
+	private BoardTile[][] gameboardBtns;
+	private Map<String, BoardTile> buttons;
+	private BoardTile selectedBtn;
 	
 	public GameboardView(Composite parent, int style) {
 		super(parent, style);
 		buttons = new TreeMap<>();
-		gameboardBtns = new Button[9][9];
+		gameboardBtns = new BoardTile[9][9];
 	}
 
 	public void init(int x, int y, int width, int height) {
@@ -45,6 +46,8 @@ public class GameboardView extends Composite{
 		buildGameboardButtons();
 		buildGameboardSeperators();
 		setSelectedButton(gameboardBtns[0][0]);
+		BoardTile tile = new BoardTile(this, SWT.BORDER);
+		tile.setText("GOONLAD");
 	}
 	
 	private void buildGameboardButtons()
@@ -54,14 +57,18 @@ public class GameboardView extends Composite{
 		{
 			for (int x = 0; x < 9; x++) 
 			{
-				Button button = new Button(this, SWT.PUSH);
-				button.setBackground(NORMAL_TILE);
-				button.setBounds(x * (BTN_PADDING*2 + btnSize), y * (BTN_PADDING*2 + btnSize), btnSize, btnSize);
-				button.setFont(SWTResourceManager.getFont("Segoe UI", 13, SWT.BOLD));
-				button.setText(0 + "");
+				if(y%3 == 0) 
+				{
+					Label vertSep = new Label(this, SWT.NONE);
+					GridData vertData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 9);
+					vertSep.setData(vertData);
+				}
+				BoardTile tile = new BoardTile(this, SWT.NONE);
+				tile.setBackgroundColor(NORMAL_TILE);
+				tile.setSize(btnSize, btnSize);
 				String key = "btn" + y + x;
-				buttons.put(key, button);
-				gameboardBtns[y][x] = button;
+				buttons.put(key, tile);
+				gameboardBtns[y][x] = tile;
 			}
 		}
 	}
@@ -83,12 +90,18 @@ public class GameboardView extends Composite{
 	}
 
 	
-	public void setSelectedButton(Button button)
+	public void setSelectedButton(BoardTile tile)
 	{	
-		selectedBtn = button;
+		selectedBtn = tile;
 	}
 	
-	public Button getSelectedButton()
+	@Override
+	public void setSelectedButton(Coordinate coord) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public BoardTile getSelectedButton()
 	{
 		return selectedBtn;
 	}
@@ -120,22 +133,22 @@ public class GameboardView extends Composite{
 		}
 	}
 	
-	public Button getButton(int y, int x)
+	public BoardTile getButton(int y, int x)
 	{
 		return gameboardBtns[y][x];
 	}
 	
-	public Button getButton(Coordinate coord)
+	public BoardTile getButton(Coordinate coord)
 	{
 		return gameboardBtns[coord.y][coord.x];
 	}
 	
-	public Map<String, Button> getBoardButtons()
+	public Map<String, BoardTile> getBoardButtons()
 	{
 		return buttons;
 	}
 	
-	public Button[][] getGameBoard()
+	public BoardTile[][] getGameBoard()
 	{
 		return gameboardBtns;
 	}

@@ -213,8 +213,9 @@ public class GamePanelController implements GameListener, GameDAOListener
 	
 	private void updateGameTitles(String name, Difficulty difficulty)
 	{
+		
 		try {
-			view.getPuzzleNameLbl().setText(Util.formatStringToTitle(name));
+			view.getPuzzleNameLbl().setText(name + "");
 			view.getDifficultyLbl().setText(Util.capitalizeFirstLetter(difficulty.name()));
 		} catch (Exception e) {
 			// TODO: handle exception

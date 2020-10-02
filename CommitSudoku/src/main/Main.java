@@ -20,8 +20,10 @@ import model.savesystem.GameDataSaver;
 import model.savesystem.IGameDAO;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
+import views.BoardView;
 import views.GameButtonsView;
 import views.GameboardView;
+import views.IBoardView;
 import views.PanelView;
 import views.ViewScaleManager;
 
@@ -35,8 +37,8 @@ public class Main {
 	{
 		//INIT DISPLAY/WINDOW
 		Display display = Display.getDefault();
-		ViewScaleManager sm = new ViewScaleManager(1037, true);
-		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-120); 
+		ViewScaleManager sm = new ViewScaleManager(1200, true);
+		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-220); 
 		
 		//INIT MODEL
 		SudokuGame game = new SudokuGame();
@@ -46,8 +48,9 @@ public class Main {
 		game.loadNewGame(tryLoadFirstPuzzle(gameDAO));
 		
 		//INIT VIEWS
-		GameboardView board = new GameboardView(shell, SWT.BORDER);
-		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize()-5, sm.getBoardSize()-5);
+		//IBoardView board = new GameboardView(shell, SWT.BORDER);
+		IBoardView board = new BoardView(shell, SWT.NONE);
+		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize(), sm.getBoardSize());
 		PanelView panelView = new PanelView(shell, SWT.NONE);
 		panelView.init();
 		GridData buttonsData = new GridData();
@@ -82,7 +85,7 @@ public class Main {
 		return shell;
 	}
 	
-	private static void initControllers(SudokuGame game, Shell shell, GameboardView board, GameButtonsView buttonsView, PanelView panelView)
+	private static void initControllers(SudokuGame game, Shell shell, IBoardView board, GameButtonsView buttonsView, PanelView panelView)
 	{
 		BoardController boardController = new BoardController(game, board, buttonsView);
 		boardController.init();

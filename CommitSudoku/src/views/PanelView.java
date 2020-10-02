@@ -135,6 +135,7 @@ public class PanelView extends Composite{
 		gridLayout.horizontalSpacing = 1;
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
 		gridData.widthHint = SWT.FILL;
+		gridData.minimumWidth = 250;
 		gridData.heightHint = SWT.DEFAULT;
 		setLayoutData(gridData);
 		
