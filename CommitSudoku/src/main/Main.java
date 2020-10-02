@@ -25,6 +25,7 @@ import views.GameButtonsView;
 import views.GameboardView;
 import views.IBoardView;
 import views.PanelView;
+import views.ViewDimension;
 import views.ViewScaleManager;
 
 public class Main {
@@ -37,8 +38,8 @@ public class Main {
 	{
 		//INIT DISPLAY/WINDOW
 		Display display = Display.getDefault();
-		ViewScaleManager sm = new ViewScaleManager(1200, true);
-		Shell shell = initWindow(sm.getWindowSize(), sm.getWindowSize()-220); 
+		ViewScaleManager sm = new ViewScaleManager(new ViewDimension(1920, 1080));
+		Shell shell = initWindow(sm.getWindowSize().getWidth(), sm.getWindowSize().getHeight()); 
 		
 		//INIT MODEL
 		SudokuGame game = new SudokuGame();
@@ -50,14 +51,14 @@ public class Main {
 		//INIT VIEWS
 		//IBoardView board = new GameboardView(shell, SWT.BORDER);
 		IBoardView board = new BoardView(shell, SWT.NONE);
-		board.init(sm.getPadding(), sm.getPadding(), sm.getBoardSize(), sm.getBoardSize());
+		board.init(sm.getBoardSize().getWidth(), sm.getBoardSize().getHeight());
 		PanelView panelView = new PanelView(shell, SWT.NONE);
 		panelView.init();
 		GridData buttonsData = new GridData();
 		buttonsData.horizontalAlignment = SWT.CENTER;
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
 		buttonsView.setLayoutData(buttonsData);
-		buttonsView.init(sm.getBoardSize()/2-sm.getButtonViewSize()/2, sm.getBoardSize() + sm.getPadding()*4, sm.getButtonViewSize(), 60);
+		buttonsView.init(sm.getButtonViewSize().getWidth(), sm.getButtonViewSize().getHeight());
 		
 		//INIT CONTROLLERS
 		initControllers(game, shell, board, buttonsView, panelView);
@@ -76,7 +77,7 @@ public class Main {
 	{
 		Shell shell = new Shell();
 		shell = new Shell();
-		shell.setSize(width, height);
+		shell.setBounds(0,0,width, height);
 		shell.setText("CommitSudoku");
 		shell.setBackground(new Color(null,209, 191, 174));
 		GridLayout gridLayout = new GridLayout(2, false);

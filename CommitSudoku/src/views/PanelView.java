@@ -41,8 +41,9 @@ public class PanelView extends Composite{
 	private Button undoButton;
 	private Button redoButton;
 	
-	public static Color primaryColor;
-	public static Color secondaryColor = new Color(null, 232, 232, 232);
+	public static Color primaryColor = new Color(null, 209, 209, 209);
+	public static Color secondaryColor = new Color(null, 173, 173, 173);
+	public static Color highlightColor = new Color(null, 230, 230, 230);
 	private Button deleteBtn;
 	
 	public PanelView(Composite parent, int style) {
@@ -133,20 +134,22 @@ public class PanelView extends Composite{
 		gridLayout.marginTop = 10;
 		gridLayout.marginWidth = 10;
 		gridLayout.horizontalSpacing = 1;
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gridData.widthHint = SWT.FILL;
+		GridData gridData = new GridData(SWT.LEFT, SWT.FILL, true, false);
+		gridData.widthHint = 250;
 		gridData.minimumWidth = 250;
 		gridData.heightHint = SWT.DEFAULT;
 		setLayoutData(gridData);
 		
 		setLayout(gridLayout);
 		setLayoutData(gridData);
+		setBackground(primaryColor);
 		
 		composite_2 = new Composite(this, SWT.NONE);
 		GridLayout gl_composite_2 = new GridLayout(2, true);
 		gl_composite_2.verticalSpacing = 10;
 		composite_2.setLayout(gl_composite_2);
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		composite_2.setBackground(primaryColor);
 		
 		composite_3 = new Composite(composite_2, SWT.BORDER);
 		composite_3.setBackground(secondaryColor);
@@ -202,6 +205,7 @@ public class PanelView extends Composite{
 		gd_gameList.heightHint = 200;
 		gameList.setLayoutData(gd_gameList);
 		gameList.setItems(new String[] {});
+		gameList.setBackground(highlightColor);
 		
 		playButton = new Button(composite_2, SWT.NONE);
 		GridData gd_playButton = new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1);
@@ -231,6 +235,7 @@ public class PanelView extends Composite{
 		gl_composite.verticalSpacing = 10;
 		composite.setLayout(gl_composite);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		composite.setBackground(primaryColor);
 		
 		/////////////////PUZZLE GEN COMPOSITE///////////////////
 		
@@ -239,6 +244,7 @@ public class PanelView extends Composite{
 		gl_compositePuzzleGen.marginBottom = 10;
 		compositePuzzleGen.setLayout(gl_compositePuzzleGen);
 		compositePuzzleGen.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
+		compositePuzzleGen.setBackground(primaryColor);
 		
 		Label label = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
@@ -248,11 +254,13 @@ public class PanelView extends Composite{
 		lblTotalSolutions.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblTotalSolutions.setBounds(0, 0, 77, 15);
 		lblTotalSolutions.setText("Total Solutions");
+		lblTotalSolutions.setBackground(primaryColor);
 		
 		lblemptySpaces = new Label(compositePuzzleGen, SWT.NONE);
 		lblemptySpaces.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 1, 1));
 		lblemptySpaces.setBounds(0, 0, 73, 15);
 		lblemptySpaces.setText("Empty Spaces");
+		lblemptySpaces.setBackground(primaryColor);
 		
 		totalSolutionsSpin = new Spinner(compositePuzzleGen, SWT.BORDER);
 		totalSolutionsSpin.setMaximum(1000);
@@ -260,12 +268,15 @@ public class PanelView extends Composite{
 		totalSolutionsSpin.setSelection(10);
 		totalSolutionsSpin.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		totalSolutionsSpin.setBounds(0, 0, 47, 22);
+		totalSolutionsSpin.setBackground(highlightColor);
 		
 		emptySpacesSpin = new Spinner(compositePuzzleGen, SWT.BORDER);
 		emptySpacesSpin.setMaximum(81);
 		emptySpacesSpin.setSelection(40);
 		emptySpacesSpin.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		emptySpacesSpin.setBounds(0, 0, 47, 22);
+		emptySpacesSpin.setBackground(highlightColor);
+		
 		
 		generateBtn = new Button(compositePuzzleGen, SWT.NONE);
 		GridData gd_generateBtn = new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1);
@@ -279,10 +290,12 @@ public class PanelView extends Composite{
 		composite_1 = new Composite(this, SWT.NONE);
 		composite_1.setLayout(new GridLayout(2, true));
 		composite_1.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		composite_1.setBackground(primaryColor);
 		
 		label_1 = new Label(composite_1, SWT.SEPARATOR | SWT.HORIZONTAL | SWT.CENTER);
 		label_1.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, true, false, 2, 1));
 		label_1.setSize(64, 2);
+		label_1.setBackground(primaryColor);
 		
 		btnSolve = new Button(composite_1, SWT.NONE);
 		btnSolve.setText("Solve");

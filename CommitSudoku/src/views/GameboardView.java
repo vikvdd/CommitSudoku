@@ -35,9 +35,9 @@ public class GameboardView extends Composite implements IBoardView{
 		gameboardBtns = new BoardTile[9][9];
 	}
 
-	public void init(int x, int y, int width, int height) {
+	public void init(int width, int height) {
 		setBackground(SWTResourceManager.getColor(110, 110, 110));
-		setBounds(x,y,width,height);
+		setSize(width,height);
 		buildGameboard();
 	}
 	

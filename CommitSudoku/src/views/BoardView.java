@@ -48,7 +48,7 @@ public class BoardView extends Composite implements IBoardView{
 		layout.marginRight = 0;
 		layout.marginLeft = 0;
 		setLayout(layout);
-		GridData mainData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		GridData mainData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		setData(mainData);
 	}
 
@@ -134,9 +134,9 @@ public class BoardView extends Composite implements IBoardView{
 	}
 
 	@Override
-	public void init(int x, int y, int width, int height) 
+	public void init(int width, int height) 
 	{
-		setBounds(x,y,width,height);
+		setSize(width,height);
 		initSubGrids();
 		//buildGameBoard();
 		buildBoard();

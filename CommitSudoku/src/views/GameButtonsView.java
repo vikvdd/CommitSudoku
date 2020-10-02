@@ -24,9 +24,9 @@ public class GameButtonsView extends Composite{
 		buttons = new Button[9];
 	}
 	
-	public void init(int x, int y, int width, int height)
+	public void init(int width, int height)
 	{
-		setBounds(x,y,width,height);
+		setSize(width,height);
 		setBackground(new Color(null, 125, 125, 125));
 		btnSize = Math.floorDiv(getBounds().width, 9) - (BTN_PADDING*2);
 		BuildNumButtons();

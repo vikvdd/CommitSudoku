@@ -3,53 +3,41 @@ package views;
 import util.Util;
 
 public class ViewScaleManager {
-	private int windowSize;
-	private int boardSize;
-	private int buttonViewSize;
-	private int panelSize;
-	private int padding;
+	private ViewDimension windowSize;
+	private ViewDimension boardSize;
+	private ViewDimension buttonViewSize;
+	private ViewDimension panelSize;
+	private int padding = 5;
 	
-	public ViewScaleManager(int _windowSize, boolean adjustResToFit) {
-		calculateCompositeDimensions(_windowSize);
-		padding = 10;
-		if(adjustResToFit) adjustResToFit();
-		Util.println(windowSize + ":" + boardSize + ":" + buttonViewSize + ":" + panelSize + ":");
+	public ViewScaleManager(ViewDimension dimension) {
+		windowSize = dimension;
+		calculateCompositeDimensions(windowSize);
+		
 	}
 	
-	private void calculateCompositeDimensions(int _windowSize)
+	private void calculateCompositeDimensions(ViewDimension dimension)
 	{
-		this.windowSize = _windowSize;
-		float brdSize = ((float)windowSize-((float)padding*2.0F)) * (6.0F/10.0F);
-		Util.print(brdSize + "");
-		boardSize = (int)brdSize;
-		float pnlSize = ((float)windowSize-(float)padding*1.0F) * (4.0F/10.0F);
-		panelSize =  (int)pnlSize; 
-		float btnViewSize = (float)boardSize * (4.0F/5.0F);
-		float btnSize = (btnViewSize-((float)padding*17.0F))/9;
-		buttonViewSize = (int)btnSize *9 + (padding*17);
+		boardSize = new ViewDimension(dimension.getHeight()-300, dimension.getHeight()-60);
+		buttonViewSize = new ViewDimension((60*9)+(4*9), 60);
+		panelSize = new ViewDimension(300, boardSize.getHeight());
 	}
 	
-	private void adjustResToFit()
-	{
-		windowSize = boardSize + panelSize + (padding*5);
-	}
-	
-	public int getWindowSize()
+	public ViewDimension getWindowSize()
 	{
 		return windowSize;
 	}
 	
-	public int getBoardSize()
+	public ViewDimension getBoardSize()
 	{
 		return boardSize;
 	}
 	
-	public int getButtonViewSize()
+	public ViewDimension getButtonViewSize()
 	{
 		return buttonViewSize;
 	}
 	
-	public int getPanelSize()
+	public ViewDimension getPanelSize()
 	{
 		return panelSize;
 	}
