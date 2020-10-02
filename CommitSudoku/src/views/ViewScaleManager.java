@@ -1,5 +1,6 @@
 package views;
 
+import org.eclipse.swt.graphics.Rectangle;
 import util.Util;
 
 public class ViewScaleManager {
@@ -9,7 +10,8 @@ public class ViewScaleManager {
 	private ViewDimension panelSize;
 	private int padding = 5;
 	
-	public ViewScaleManager(ViewDimension dimension) {
+	public ViewScaleManager(Rectangle rectangle) {
+		ViewDimension dimension = new ViewDimension(rectangle.width, rectangle.height);
 		windowSize = dimension;
 		calculateCompositeDimensions(windowSize);
 		
@@ -17,9 +19,14 @@ public class ViewScaleManager {
 	
 	private void calculateCompositeDimensions(ViewDimension dimension)
 	{
-		boardSize = new ViewDimension(dimension.getHeight()-300, dimension.getHeight()-60);
-		buttonViewSize = new ViewDimension((60*9)+(4*9), 60);
-		panelSize = new ViewDimension(300, boardSize.getHeight());
+		int size = dimension.getHeight()-500;
+		
+		
+		boardSize = new ViewDimension(size,size);
+		
+		buttonViewSize = new ViewDimension((60*9)+(4*9),60);
+		panelSize = new ViewDimension(250, boardSize.getHeight());
+		windowSize = new ViewDimension(boardSize.getWidth() + panelSize.getWidth() + 150 , boardSize.getHeight() + buttonViewSize.getHeight() + 100);
 	}
 	
 	public ViewDimension getWindowSize()

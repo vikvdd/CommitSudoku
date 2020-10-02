@@ -17,7 +17,6 @@ public class PuzzleSaveList implements Serializable
 	private PuzzleSaveList() {
 		saveList = new ArrayList<SudokuSave>();
 		loadSaveList();	
-		Util.println(saveList.size() + "------");
 	}
 	
 	public static PuzzleSaveList getInstance()

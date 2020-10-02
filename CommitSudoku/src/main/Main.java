@@ -1,9 +1,6 @@
 package main;
 
 import java.io.File;
-
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -22,10 +19,8 @@ import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import views.BoardView;
 import views.GameButtonsView;
-import views.GameboardView;
 import views.IBoardView;
 import views.PanelView;
-import views.ViewDimension;
 import views.ViewScaleManager;
 
 public class Main {
@@ -38,8 +33,12 @@ public class Main {
 	{
 		//INIT DISPLAY/WINDOW
 		Display display = Display.getDefault();
-		ViewScaleManager sm = new ViewScaleManager(new ViewDimension(1920, 1080));
-		Shell shell = initWindow(sm.getWindowSize().getWidth(), sm.getWindowSize().getHeight()); 
+		
+		
+		
+		Shell shell = new Shell();
+		initWindow(shell);
+		ViewScaleManager sm = new ViewScaleManager(shell.getDisplay().getPrimaryMonitor().getClientArea());
 		
 		//INIT MODEL
 		SudokuGame game = new SudokuGame();
@@ -53,7 +52,7 @@ public class Main {
 		IBoardView board = new BoardView(shell, SWT.NONE);
 		board.init(sm.getBoardSize().getWidth(), sm.getBoardSize().getHeight());
 		PanelView panelView = new PanelView(shell, SWT.NONE);
-		panelView.init();
+		panelView.init(sm.getPanelSize().getWidth());
 		GridData buttonsData = new GridData();
 		buttonsData.horizontalAlignment = SWT.CENTER;
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
@@ -73,15 +72,14 @@ public class Main {
 		display.dispose();
 	}
 	
-	private static Shell initWindow(int width, int height)
+	private static Shell initWindow(Shell shell)
 	{
-		Shell shell = new Shell();
-		shell = new Shell();
-		shell.setBounds(0,0,width, height);
+		
+		//shell.setBounds(0,0,width, height);
 		shell.setText("CommitSudoku");
 		shell.setBackground(new Color(null,209, 191, 174));
 		GridLayout gridLayout = new GridLayout(2, false);
-		GridData shellData = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		GridData shellData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		shell.setLayout(gridLayout);
 		return shell;
 	}

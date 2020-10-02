@@ -51,63 +51,6 @@ public class BoardView extends Composite implements IBoardView{
 		GridData mainData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		setData(mainData);
 	}
-
-	private void buildGameBoard()
-	{	
-		btnSize = Math.floorDiv(getBounds().width, 9) - (btnPadding*2);
-		for (int y = 0; y < 9; y++) {
-			
-			for (int x = 0; x < 9; x++) {
-				/*if(y%3 == 0 && y != 0 && x == 0)
-				{
-					for (int i = 0; i < 11; i++) {
-						Label horzSep = new Label(this, SWT.HORIZONTAL | SWT.SEPARATOR);
-						GridData horzData = new GridData(SWT.LEFT, SWT.TOP, true, false, 11, 1);						
-						horzSep.setData(horzData);
-						horzSep.setSize(getBounds().width, 4);
-						//horzSep.setBackground(new Color(null, 0,0,0));
-					}
-					
-				}*/
-				/*if(x%3 == 0 && x != 0) 
-				{
-					Label label = new Label(this, SWT.SEPARATOR | SWT.VERTICAL);
-					//label.setData(new GridData(SWT.CENTER, SWT.FILL, false, true, 1, 11));	
-					GridData layoutData = new GridData();
-					layoutData.heightHint = btnSize;
-					label.setLayoutData(layoutData);*/
-					
-					//fillComp.setData(vertData);
-					
-					
-					/*Label vertSep = new Label(this, SWT.VERTICAL | SWT.SEPARATOR);
-					seperators.add(vertSep);
-					vertSep.setData(vertData);
-					vertSep.setForeground(new Color(null, 0,0,0));
-					vertSep.setBackground(new Color(null, 0,0,0));*/
-					/*if(y == 0)
-					{
-						Label vertSep = new Label(this, SWT.SEPARATOR);
-						seperators.add(vertSep);
-						vertSep.setData(vertData);
-						vertSep.setBackground(new Color(null, 0,0,0));
-					}
-					else {
-						Label fill = new Label(this, SWT.NONE);
-					}*/
-					
-					
-				
-				BoardTile tile = new BoardTile(this, SWT.BORDER);
-				tile.setSize(btnSize,btnSize);
-				tile.setText("5");
-				tile.setBackgroundColor(BoardTile.MAIN_TILE_COLOR);
-				boardTiles[y][x] = tile;
-			}
-			
-		}
-		
-	}
 	
 	public void buildBoard()
 	{	
@@ -118,7 +61,7 @@ public class BoardView extends Composite implements IBoardView{
 				Composite comp = subGrids[i][j];
 				for (int y = 0; y < 3; y++) {
 					for (int x = 0; x < 3; x++) {
-						BoardTile tile = new BoardTile(comp, SWT.BORDER);
+						BoardTile tile = new BoardTile(comp, SWT.NONE);
 						tile.setSize(btnSize,btnSize);
 						tile.setText("5");
 						tile.setBackgroundColor(BoardTile.MAIN_TILE_COLOR);
@@ -138,7 +81,6 @@ public class BoardView extends Composite implements IBoardView{
 	{
 		setSize(width,height);
 		initSubGrids();
-		//buildGameBoard();
 		buildBoard();
 	}
 	
@@ -147,55 +89,55 @@ public class BoardView extends Composite implements IBoardView{
 		GridLayout subGridLayout = new GridLayout(3, false);
 		subGridLayout.verticalSpacing = 1;
 		subGridLayout.horizontalSpacing = 1;
-		subGridLayout.marginHeight = 3;
-		subGridLayout.marginWidth = 3;
+		subGridLayout.marginHeight = 2;
+		subGridLayout.marginWidth = 2;
 		GridData subGridData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		
 		subGrids = new Composite[3][3];
-		subGrid1 = new Composite(this, SWT.BORDER);
+		subGrid1 = new Composite(this, SWT.NONE);
 		subGrid1.setLayout(subGridLayout);
 		subGrid1.setData(subGridData);
-		subGrid1.setBackground(new Color(null, 191, 191, 191));
+		subGrid1.setBackground(new Color(null, 128, 128, 128));
 		
-		subGrid2 = new Composite(this, SWT.BORDER);
+		subGrid2 = new Composite(this, SWT.NONE);
 		subGrid2.setLayout(subGridLayout);
 		subGrid2.setData(subGridData);
-		subGrid2.setBackground(new Color(null, 191, 191, 191));
+		subGrid2.setBackground(new Color(null, 128, 128, 128));
 		
-		subGrid3 = new Composite(this, SWT.BORDER);
+		subGrid3 = new Composite(this, SWT.NONE);
 		subGrid3.setLayout(subGridLayout);
 		subGrid3.setData(subGridData);
-		subGrid3.setBackground(new Color(null, 191, 191, 191));
+		subGrid3.setBackground(new Color(null, 128, 128, 128));
 		
-		subGrid4 = new Composite(this, SWT.BORDER);
+		subGrid4 = new Composite(this, SWT.NONE);
 		subGrid4.setLayout(subGridLayout);
 		subGrid4.setData(subGridData);
-		subGrid4.setBackground(new Color(null, 191, 191, 191));
+		subGrid4.setBackground(new Color(null, 128, 128, 128));
 		
-		subGrid5 = new Composite(this, SWT.BORDER);
+		subGrid5 = new Composite(this, SWT.NONE);
 		subGrid5.setLayout(subGridLayout);
 		subGrid5.setData(subGridData);
-		subGrid5.setBackground(new Color(null, 191, 191, 191));
+		subGrid5.setBackground(new Color(null,128, 128, 128));
 		
-		subGrid6 = new Composite(this, SWT.BORDER);
+		subGrid6 = new Composite(this, SWT.NONE);
 		subGrid6.setLayout(subGridLayout);
 		subGrid6.setData(subGridData);
-		subGrid6.setBackground(new Color(null, 191, 191, 191));
+		subGrid6.setBackground(new Color(null, 128, 128, 128));
 		
-		subGrid7 = new Composite(this, SWT.BORDER);
+		subGrid7 = new Composite(this, SWT.NONE);
 		subGrid7.setLayout(subGridLayout);
 		subGrid7.setData(subGridData);
-		subGrid7.setBackground(new Color(null, 191, 191, 191));
+		subGrid7.setBackground(new Color(null, 128, 128, 128));
 		
-		subGrid8 = new Composite(this, SWT.BORDER);
+		subGrid8 = new Composite(this, SWT.NONE);
 		subGrid8.setLayout(subGridLayout);
 		subGrid8.setData(subGridData);
-		subGrid8.setBackground(new Color(null, 191, 191, 191));
+		subGrid8.setBackground(new Color(null,128, 128, 128));
 		
-		subGrid9 = new Composite(this, SWT.BORDER);
+		subGrid9 = new Composite(this, SWT.NONE);
 		subGrid9.setLayout(subGridLayout);
 		subGrid9.setData(subGridData);
-		subGrid9.setBackground(new Color(null, 191, 191, 191));
+		subGrid9.setBackground(new Color(null, 128, 128, 128));
 		
 		
 		subGrids[0][0] = subGrid1;

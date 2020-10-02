@@ -127,7 +127,7 @@ public class PanelView extends Composite{
 	{
 		return redoButton;
 	}
-	public void init()
+	public void init(int width)
 	{
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.verticalSpacing = 10;
@@ -135,8 +135,8 @@ public class PanelView extends Composite{
 		gridLayout.marginWidth = 10;
 		gridLayout.horizontalSpacing = 1;
 		GridData gridData = new GridData(SWT.LEFT, SWT.FILL, true, false);
-		gridData.widthHint = 250;
-		gridData.minimumWidth = 250;
+		gridData.widthHint = width;
+		gridData.minimumWidth = width;
 		gridData.heightHint = SWT.DEFAULT;
 		setLayoutData(gridData);
 		

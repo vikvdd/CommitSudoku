@@ -52,7 +52,7 @@ public class BoardController implements GameListener, GameStatListener{
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
 				Coordinate coord = new Coordinate(x, y);
-				Util.println(buttons[y][x].getText());
+
 				try {
 					buttons[y][x].addBoardTileListener(new BoardTileListener() {
 						
@@ -216,7 +216,6 @@ public class BoardController implements GameListener, GameStatListener{
 	
 	private void numButtonRightClickAction(int num)
 	{
-		Util.println(view.getButton(selectedCoord).isNoteEnabled(num) + "");
 		if(view.getButton(selectedCoord).isNoteEnabled(num))
 		{
 			view.getButton(selectedCoord).setNoteText(num, false);
