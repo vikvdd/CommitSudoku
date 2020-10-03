@@ -39,6 +39,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public void loadNewGame(SudokuPuzzle puzzle)
 	{
 		this.puzzle = puzzle;
+		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
 		start();
 	}
 	

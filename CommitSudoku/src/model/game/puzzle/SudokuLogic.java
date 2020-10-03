@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import model.savesystem.SaveManager;
 import util.Util;
 
 public class SudokuLogic {
@@ -57,6 +58,8 @@ public class SudokuLogic {
 	public static SudokuPuzzle generateRandomPuzzle(int removeTotal, int maxSolutions)
 	{
 		SudokuPuzzle puzzle = new SudokuPuzzle();
+		puzzle.setName(SaveManager.createRandomPuzzleName());
+		puzzle.setDifficulty(Difficulty.UNSOLVED);
 		List<Integer> values = Arrays.asList(1,2,3,4,5,6,7,8,9);
 		generateRec(puzzle.get(), values);
 		int maxAttemps = 100;

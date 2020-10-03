@@ -80,7 +80,7 @@ public class SaveManager
 		return new File(genName);
 	}
 	
-	private static String createRandomPuzzleName()
+	public static String createRandomPuzzleName()
 	{
 		Random random = new Random();
 		String name = "Puzzle" + random.nextInt(10000) * random.nextInt(10000);

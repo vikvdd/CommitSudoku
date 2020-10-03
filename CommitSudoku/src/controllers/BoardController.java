@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
@@ -176,7 +177,6 @@ public class BoardController implements GameListener, GameStatListener{
 	
 	@Override
 	public void onNumberCompleted(int number) {
-		Util.println("go");
 		try {
 			Button btn = btnView.getButton(number-1);
 			if(isBoardValid())
@@ -193,9 +193,11 @@ public class BoardController implements GameListener, GameStatListener{
 		
 		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) fixedTileClickAction(coord);
 		else entryTileClickAction(coord);
-			
+		
 		view.setSelectedButton(selectedCoord);
 		view.getSelectedButton().setBackgroundColor(GameboardView.SELECTED_TILE);
+		
+		
 	}
 	
 	private void fixedTileClickAction(Coordinate coord)
@@ -253,6 +255,7 @@ public class BoardController implements GameListener, GameStatListener{
 		EntryType entryType = game.getEntryType(coord, num);
 		formatTileText(entryType, view.getButton(coord));
 		updateBoardTileText(coord, num);
+		updateTileNotes(coord, num);
 	}
 	
 	private void formatTileText(EntryType entryType, BoardTile btn)
@@ -285,6 +288,18 @@ public class BoardController implements GameListener, GameStatListener{
 		btn.setText(text);
 	}
 	
+	private void updateTileNotes(Coordinate coord, int num)
+	{
+		List<Coordinate> col = getColCoordsAtCoord(coord);
+		List<Coordinate> row = getRowCoordsAtCoord(coord);
+		List<Coordinate> sub = getSubGridCoordsAtCoord(coord);
+		for (int i = 0; i < 9; i++) {
+			view.getButton(col.get(i)).setNoteText(num, false);
+			view.getButton(row.get(i)).setNoteText(num, false);
+			view.getButton(sub.get(i)).setNoteText(num, false);
+		}
+	}
+	
 	private void setBoardButtonTileType(TileType tileType)
 	{
 		for (int y = 0; y < 9; y++) {
@@ -301,32 +316,46 @@ public class BoardController implements GameListener, GameStatListener{
 	
 	private void setHighlighedButtonsTileType(TileType tileType, Coordinate coord)
 	{
-		setButtonColumnTileType(tileType, coord.x);
-		setButtonRowTileType(tileType, coord.y);
-		setButtonSubGridTileType(tileType, coord);
+		setButtonsTileType(tileType, getColCoordsAtCoord(coord));
+		setButtonsTileType(tileType, getRowCoordsAtCoord(coord));
+		setButtonsTileType(tileType, getSubGridCoordsAtCoord(coord));
 	}
 	
-	private void setButtonRowTileType(TileType tileType, int y)
+	private List<Coordinate> getRowCoordsAtCoord(Coordinate coord)
 	{
+		List<Coordinate> coords = new ArrayList<Coordinate>();
 		for (int x = 0; x < 9; x++) {
-			setTileType(tileType, view.getButton(y, x));
+			coords.add(new Coordinate(x, coord.y));
 		}
+		return coords;
 	}
 	
-	private void setButtonColumnTileType(TileType tileType, int x)
+	private List<Coordinate> getColCoordsAtCoord(Coordinate coord)
 	{
+		List<Coordinate> coords = new ArrayList<Coordinate>();
 		for (int y = 0; y < 9; y++) {
-			setTileType(tileType, view.getButton(y, x));
+			coords.add(new Coordinate(coord.x, y));
 		}
+		return coords;
 	}
 	
-	private void setButtonSubGridTileType(TileType tileType, Coordinate coord)
+	private List<Coordinate> getSubGridCoordsAtCoord(Coordinate coord)
 	{
-		Coordinate subGrid = SudokuLogic.getNearestSubGridCoordinate(coord);
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		coord = SudokuLogic.getNearestSubGridCoordinate(coord);
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
-				setTileType(tileType, view.getButton(subGrid.y + y, subGrid.x + x));
+				coords.add(new Coordinate(x + coord.x, y + coord.y));
 			}
+		}
+		return coords;
+	}
+	
+	private void setButtonsTileType(TileType tileType, List<Coordinate> coords)
+	{
+		for(Coordinate coord : coords)
+		{
+			setTileType(tileType, view.getButton(coord));
 		}
 	}
 	

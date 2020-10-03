@@ -29,7 +29,6 @@ public class GameDataSaver implements GameListener{
 
 	@Override
 	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
-		Util.println("Goon laddy");
 		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
 

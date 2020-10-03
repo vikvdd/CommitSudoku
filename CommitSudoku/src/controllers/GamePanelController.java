@@ -233,6 +233,7 @@ public class GamePanelController implements GameListener, GameDAOListener
 	@Override
 	public void onGameStart(int[][] puzzleClone) {
 		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

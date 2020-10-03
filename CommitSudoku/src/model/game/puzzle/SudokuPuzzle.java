@@ -35,6 +35,8 @@ public class SudokuPuzzle implements Serializable{
 		difficulty = Difficulty.UNSOLVED;
 	}
 	
+	
+	
 	public SudokuPuzzle(String name, Difficulty difficulty, int[][] puzzle, int[][] userPuzzle, List<int[][]> solutions, int totalSolutions, Boolean solved)
 	{
 		this.name = name;
