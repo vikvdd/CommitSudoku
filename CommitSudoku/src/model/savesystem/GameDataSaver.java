@@ -46,4 +46,10 @@ public class GameDataSaver implements GameListener{
 	public void onPuzzleSolved(int[][] solution) {
 		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
+
+	@Override
+	public void onNoteEntry(int num) {
+		sudokuDAO.savePuzzle(game.getPuzzle());
+		
+	}
 }

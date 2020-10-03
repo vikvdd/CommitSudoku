@@ -1,5 +1,7 @@
 package model.game;
 
+import java.io.NotSerializableException;
+import java.util.ArrayList;
 import java.util.List;
 
 import events.GameModelEvent;
@@ -9,6 +11,7 @@ import model.game.actions.ActionLog;
 import model.game.actions.PuzzleAction;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
+import model.game.puzzle.Notes;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
 import model.game.stats.GameStatTracker;
@@ -20,6 +23,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	private ActionLog actionLog;
 	private GameStatTracker statTracker;
 	private GameTime gameTime;
+	private Coordinate selectedCoord;
 	
 	public SudokuGame()
 	{
@@ -27,6 +31,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		actionLog = new ActionLog();
 		statTracker = new GameStatTracker();
 		puzzle = SudokuLogic.generateRandomPuzzle(45, 10);
+		selectedCoord = new Coordinate(0, 0);
 	}
 	
 	public SudokuGame(SudokuPuzzle puzzle)
@@ -62,15 +67,23 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
 	}
 	
-	public void enterNumber(Coordinate coord, int num)
+	public void enterNumber(int num)
 	{
-		int n = getEntryValue(coord, num);
+		int n = getEntryValue(selectedCoord, num);
 		if(n == -1) return;
-		PuzzleAction action = new PuzzleAction(coord, puzzle.getUserPuzzle()[coord.y][coord.x], n);
+		PuzzleAction action = new PuzzleAction(selectedCoord, puzzle.getUserPuzzle()[selectedCoord.y][selectedCoord.x], n);
 		actionLog.addAction(action);
 		statTracker.addAction(action);
-		puzzle.enterValue(n, coord);
-		notifyNumberEntry(coord, n);
+		puzzle.enterValue(n, selectedCoord);
+		updateNotesForCoord(n,selectedCoord);
+		notifyNumberEntry(selectedCoord, n);
+	}
+	
+	public void enterNote(int num)
+	{
+		puzzle.enterNote(num, selectedCoord);
+		Util.println(puzzle.getAllNotes()[selectedCoord.y][selectedCoord.x].isNoteActive(num) + "");
+		notifyNoteEntry(num);
 	}
 	
 	public void solve()
@@ -133,6 +146,17 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		return puzzle.getUserPuzzle()[coord.y][coord.x];
 	}
 	
+	public Notes getNotesAtCoordinate(Coordinate coord)
+	{
+		Notes notes = new Notes();
+		try {
+			notes = puzzle.getAllNotes()[coord.y][coord.x];
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return notes;
+	}
+	
 	public EntryType getEntryType(Coordinate coord, int n)
 	{
 		int[][] puz = puzzle.get();
@@ -156,6 +180,37 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public List<Coordinate> getAllCoordinatesOfN(int n)
 	{
 		return SudokuLogic.findCoordinatesOfN(puzzle.getUserPuzzle(), n);
+	}
+	
+	public List<Coordinate> getRowCoordsAtCoord(Coordinate coord)
+	{
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		for (int x = 0; x < 9; x++) {
+			if(coord.x != x) coords.add(new Coordinate(x, coord.y));
+		}
+		return coords;
+	}
+	
+	public List<Coordinate> getColCoordsAtCoord(Coordinate coord)
+	{
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		for (int y = 0; y < 9; y++) {
+			if(coord.y != y) coords.add(new Coordinate(coord.x, y));	
+		}
+		return coords;
+	}
+	
+	public List<Coordinate> getSubGridCoordsAtCoord(Coordinate coord)
+	{
+		List<Coordinate> coords = new ArrayList<Coordinate>();
+		Coordinate subCoord = SudokuLogic.getNearestSubGridCoordinate(coord);
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+				if(coord.y != subCoord.y + y && coord.x != subCoord.x + x)
+					coords.add(new Coordinate(x + subCoord.x, y + subCoord.y));
+			}
+		}
+		return coords;
 	}
 	
 	public GameStatTracker getStatTracker()
@@ -186,6 +241,36 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		Util.println("PUZZLE COMPLETED!!!!");
 		end();
 		
+	}
+	
+	private void updateNotesForCoord(int n, Coordinate coord)
+	{
+		List<Coordinate> col = getColCoordsAtCoord(coord);
+		List<Coordinate> row = getRowCoordsAtCoord(coord);
+		List<Coordinate> sub = getSubGridCoordsAtCoord(coord);
+		
+		updateNotesAtCoords(n,col);
+		updateNotesAtCoords(n,row);
+		updateNotesAtCoords(n,sub);
+	}
+	
+	private void updateNotesAtCoords(int n, List<Coordinate> coords)
+	{
+		for(Coordinate coord: coords)
+		{
+			Notes notes = getNotesAtCoordinate(coord);
+			notes.setNoteStatus(n, false);
+		}
+	}
+	
+	public void setSelectedCoord(Coordinate coord)
+	{
+		selectedCoord = coord;
+	}
+	
+	public Coordinate getSelectedCoord()
+	{
+		return selectedCoord;
 	}
 	
 	

@@ -14,6 +14,7 @@ public class SudokuPuzzle implements Serializable{
 	private final int[][] puzzle;//puzzle grid with only the numbers that can't change
 	private int[][] userPuzzle;//user puzzle with all base puzzle numbers and user entered numbers
 	private List<int[][]> solutions;
+	private Notes[][] notes;
 	private int totalSolutions;
 	private Boolean solved;
 	
@@ -24,6 +25,8 @@ public class SudokuPuzzle implements Serializable{
 		solutions = new ArrayList<int[][]>();
 		totalSolutions = 0;
 		difficulty = Difficulty.UNSOLVED;
+		notes = new Notes[9][9];
+		initNotes();
 	}
 	
 	public SudokuPuzzle(int[][] _puzzle)
@@ -33,11 +36,13 @@ public class SudokuPuzzle implements Serializable{
 		solutions = new ArrayList<int[][]>();
 		totalSolutions = 0;
 		difficulty = Difficulty.UNSOLVED;
+		notes = new Notes[9][9];
+		initNotes();
 	}
 	
 	
 	
-	public SudokuPuzzle(String name, Difficulty difficulty, int[][] puzzle, int[][] userPuzzle, List<int[][]> solutions, int totalSolutions, Boolean solved)
+	public SudokuPuzzle(String name, Difficulty difficulty, int[][] puzzle, int[][] userPuzzle, List<int[][]> solutions, Notes[][] notes, int totalSolutions, Boolean solved)
 	{
 		this.name = name;
 		this.difficulty = difficulty;
@@ -46,6 +51,7 @@ public class SudokuPuzzle implements Serializable{
 		this.solutions = solutions;
 		this.totalSolutions = totalSolutions;
 		this.solved = solved;
+		this.notes = notes;
 	}
 	
 	public void enterValue(int val, Coordinate coord)
@@ -55,7 +61,23 @@ public class SudokuPuzzle implements Serializable{
 	
 	public void enterValue(int val, int y, int x)
 	{
-		userPuzzle[y][x] = val;
+		try {
+			userPuzzle[y][x] = val;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+	}
+	
+	public void enterNote(int val, Coordinate coord)
+	{
+		try {
+			Notes numNotes = notes[coord.y][coord.x];
+			numNotes.toggleNoteStatus(val);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 	
 	public void addSolution(int[][] _solution)
@@ -97,6 +119,11 @@ public class SudokuPuzzle implements Serializable{
 	public int[][] getUserPuzzle()
 	{
 		return Util.clone2dArray(userPuzzle);
+	}
+	
+	public Notes[][] getAllNotes()
+	{
+		return notes;
 	}
 	
 	public int[][] getSolution(int index)
@@ -169,5 +196,14 @@ public class SudokuPuzzle implements Serializable{
 			}
 		}
 		return true;
+	}
+	
+	private void initNotes()
+	{
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
+				notes[y][x] = new Notes();
+			}
+		}
 	}
 }

@@ -52,6 +52,14 @@ public class GameModelEvent {
 			listener.onNumberEntry(coord, num);
 		}
 	}
+	
+	protected void notifyNoteEntry(int num)
+	{
+		for(GameListener listener : listeners)
+		{
+			listener.onNoteEntry(num);
+		}
+	}
 	protected void notifyPuzzleCompleted()
 	{
 		for(GameListener listener : listeners)

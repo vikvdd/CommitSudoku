@@ -271,6 +271,12 @@ public class GamePanelController implements GameListener, GameDAOListener
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void onNoteEntry(int num) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void onPuzzleCompleted() {
@@ -295,4 +301,6 @@ public class GamePanelController implements GameListener, GameDAOListener
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 }

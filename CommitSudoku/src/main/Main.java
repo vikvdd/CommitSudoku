@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import controllers.BoardController;
 import controllers.GamePanelController;
+import controllers.NumButtonController;
 import model.game.SudokuGame;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
@@ -89,10 +90,12 @@ public class Main {
 	
 	private static void initControllers(SudokuGame game, Shell shell, IBoardView board, GameButtonsView buttonsView, PanelView panelView)
 	{
-		BoardController boardController = new BoardController(game, board, buttonsView);
+		BoardController boardController = new BoardController(game, board);
 		boardController.init();
 		GamePanelController panelController = new GamePanelController(game, shell, panelView);
 		panelController.init();
+		NumButtonController buttonController = new NumButtonController(game, buttonsView);
+		buttonController.init();
 	}
 	
 	private static SudokuPuzzle tryLoadFirstPuzzle(IGameDAO dao)

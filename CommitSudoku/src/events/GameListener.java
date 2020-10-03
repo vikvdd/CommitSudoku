@@ -8,6 +8,7 @@ public interface GameListener {
 	public void onGameEnd();
 	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime);
 	public void onNumberEntry(Coordinate coord, int number);
+	public void onNoteEntry(int num);
 	public void onPuzzleCompleted();
 	public void onPuzzleSolved(int[][] solution);
 }
