@@ -11,6 +11,7 @@ public class BoardView extends Composite implements IBoardView{
 	public static final Color HIGHLIGHTED_TILE = new Color(null, 178, 178, 178);
 	public static final Color NORMAL_TILE = new Color(null, 220,220,220);
 	public static final Color SELECTED_TILE = new Color(null, 164, 218, 237);
+	public static final Color SUBGRID_COLOR = new Color(null, 28, 34, 41);
 	
 	private int btnSize;
 	private BoardTile[][] boardTiles = new BoardTile[9][9];
@@ -87,47 +88,47 @@ public class BoardView extends Composite implements IBoardView{
 		subGrid1 = new Composite(this, SWT.NONE);
 		subGrid1.setLayout(subGridLayout);
 		subGrid1.setData(subGridData);
-		subGrid1.setBackground(new Color(null, 128, 128, 128));
+		subGrid1.setBackground(SUBGRID_COLOR);
 		
 		subGrid2 = new Composite(this, SWT.NONE);
 		subGrid2.setLayout(subGridLayout);
 		subGrid2.setData(subGridData);
-		subGrid2.setBackground(new Color(null, 128, 128, 128));
+		subGrid2.setBackground(SUBGRID_COLOR);
 		
 		subGrid3 = new Composite(this, SWT.NONE);
 		subGrid3.setLayout(subGridLayout);
 		subGrid3.setData(subGridData);
-		subGrid3.setBackground(new Color(null, 128, 128, 128));
+		subGrid3.setBackground(SUBGRID_COLOR);
 		
 		subGrid4 = new Composite(this, SWT.NONE);
 		subGrid4.setLayout(subGridLayout);
 		subGrid4.setData(subGridData);
-		subGrid4.setBackground(new Color(null, 128, 128, 128));
+		subGrid4.setBackground(SUBGRID_COLOR);
 		
 		subGrid5 = new Composite(this, SWT.NONE);
 		subGrid5.setLayout(subGridLayout);
 		subGrid5.setData(subGridData);
-		subGrid5.setBackground(new Color(null,128, 128, 128));
+		subGrid5.setBackground(SUBGRID_COLOR);
 		
 		subGrid6 = new Composite(this, SWT.NONE);
 		subGrid6.setLayout(subGridLayout);
 		subGrid6.setData(subGridData);
-		subGrid6.setBackground(new Color(null, 128, 128, 128));
+		subGrid6.setBackground(SUBGRID_COLOR);
 		
 		subGrid7 = new Composite(this, SWT.NONE);
 		subGrid7.setLayout(subGridLayout);
 		subGrid7.setData(subGridData);
-		subGrid7.setBackground(new Color(null, 128, 128, 128));
+		subGrid7.setBackground(SUBGRID_COLOR);
 		
 		subGrid8 = new Composite(this, SWT.NONE);
 		subGrid8.setLayout(subGridLayout);
 		subGrid8.setData(subGridData);
-		subGrid8.setBackground(new Color(null,128, 128, 128));
+		subGrid8.setBackground(SUBGRID_COLOR);
 		
 		subGrid9 = new Composite(this, SWT.NONE);
 		subGrid9.setLayout(subGridLayout);
 		subGrid9.setData(subGridData);
-		subGrid9.setBackground(new Color(null, 128, 128, 128));
+		subGrid9.setBackground(SUBGRID_COLOR);
 		
 		
 		subGrids[0][0] = subGrid1;

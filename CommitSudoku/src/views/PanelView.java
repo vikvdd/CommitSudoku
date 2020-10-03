@@ -281,10 +281,7 @@ public class PanelView extends Composite{
 		generateBtn = new Button(compositePuzzleGen, SWT.NONE);
 		GridData gd_generateBtn = new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1);
 		gd_generateBtn.heightHint = 40;
-		gd_generateBtn.minimumWidth = 100;
-		gd_generateBtn.widthHint = 100;
 		generateBtn.setLayoutData(gd_generateBtn);
-		generateBtn.setSize(100, 40);
 		generateBtn.setText("Generate Puzzle");
 		
 		composite_1 = new Composite(this, SWT.NONE);

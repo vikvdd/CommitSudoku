@@ -10,11 +10,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
 import events.BoardTileListener;
+import util.TriggerDelay;
+import util.Util;
 
 public class BoardTile extends Composite{
 	
@@ -22,10 +25,10 @@ public class BoardTile extends Composite{
 	public static Color HOVER_TILE_COLOR = new Color(null, 200,200,200);
 	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
-	public static final Font DEFAULT_FONT = SWTResourceManager.getFont("Segoe UI Black", 23, SWT.BOLD);
-	public static final Font ENTRY_FONT = SWTResourceManager.getFont("Segoe UI", 23, SWT.NORMAL);
-	public static final Font INVALID_FONT = SWTResourceManager.getFont("Segoe UI", 23, SWT.NORMAL);
-	public static final Font NOTE_FONT = SWTResourceManager.getFont("Segoe UI Historic", 8, SWT.NORMAL);
+	public static Font DEFAULT_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 23, SWT.BOLD);
+	public static Font ENTRY_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 23, SWT.NORMAL);
+	public static Font INVALID_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 23, SWT.NORMAL);
+	public static Font NOTE_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 8, SWT.NORMAL);
 	
 	List<BoardTileListener> listeners = new ArrayList<BoardTileListener>();
 	
@@ -53,6 +56,7 @@ public class BoardTile extends Composite{
 	private int width = 75;
 	private int height = 75;
 	private Color currentColor = MAIN_TILE_COLOR;
+	private TriggerDelay clickDelay = new TriggerDelay(1);
 
 	public void addBoardTileListener(BoardTileListener listener)
 	{
@@ -62,6 +66,28 @@ public class BoardTile extends Composite{
 	public void removeBoardTileListener(BoardTileListener listener)
 	{
 		listeners.remove(listener);
+	}
+	
+	private void initFontSize()
+	{
+		int compSize = mainComp.getBounds().height;
+		
+		FontData[] noteFontData =  NOTE_FONT.getFontData();
+		noteFontData[0].setHeight(Math.floorDiv(compSize, 9));
+		NOTE_FONT = new Font(getDisplay(), noteFontData[0]);
+		
+		int numSize = Math.floorDiv(compSize,10)*3;
+		FontData[] numFontData = DEFAULT_FONT.getFontData();
+		numFontData[0].setHeight(numSize);
+		DEFAULT_FONT = new Font(getDisplay(), numFontData[0]);
+		
+		FontData[] numFontData2 = ENTRY_FONT.getFontData();
+		numFontData2[0].setHeight(numSize);
+		ENTRY_FONT = new Font(getDisplay(), numFontData2[0]);
+		
+		FontData[] numFontData3 = INVALID_FONT.getFontData();
+		numFontData3[0].setHeight(numSize);
+		INVALID_FONT = new Font(getDisplay(), numFontData3[0]);
 	}
 	
 	public void setText(String text)
@@ -380,6 +406,7 @@ public class BoardTile extends Composite{
 		setSize(width,height);
 		setBackgroundColor(MAIN_TILE_COLOR);
 		initListeners();
+		initFontSize();
 		toggleNoteText(false);
 	}
 	

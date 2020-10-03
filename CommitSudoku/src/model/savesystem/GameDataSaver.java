@@ -34,7 +34,7 @@ public class GameDataSaver implements GameListener{
 
 	@Override
 	public void onNumberEntry(Coordinate coord, int number) {
-		
+		sudokuDAO.savePuzzle(game.getPuzzle());
 	}
 
 	@Override

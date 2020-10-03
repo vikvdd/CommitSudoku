@@ -75,7 +75,6 @@ public class BoardController implements GameListener, GameStatListener{
 						@Override
 						public void onLeftClick() {
 							// TODO Auto-generated method stub
-							
 							selectTileAction(coord);
 						}
 					});
