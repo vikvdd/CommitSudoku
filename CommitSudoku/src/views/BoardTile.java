@@ -305,7 +305,6 @@ public class BoardTile extends Composite{
 	{
 		if(clickDelay.isFinished())
 		{
-			Util.println("clicked");
 			clickDelay.startDelay();
 			if(event.button == 1)
 			{

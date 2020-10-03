@@ -8,6 +8,7 @@ import model.EntryType;
 import model.game.actions.ActionLog;
 import model.game.actions.PuzzleAction;
 import model.game.puzzle.Coordinate;
+import model.game.puzzle.Difficulty;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
 import model.game.stats.GameStatTracker;
@@ -53,6 +54,12 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public void end()
 	{
 		notifyGameEnd();
+	}
+	
+	public void reset()
+	{
+		puzzle.setUserPuzzle(puzzle.get());
+		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
 	}
 	
 	public void enterNumber(Coordinate coord, int num)
@@ -115,6 +122,11 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	{
 		return puzzle.getName();
 	} 
+	
+	public Difficulty getPuzzleDifficulty()
+	{
+		return puzzle.getDifficulty();
+	}
 	
 	public int getNumAtCoordinate(Coordinate coord)
 	{

@@ -225,6 +225,7 @@ public class BoardController implements GameListener, GameStatListener{
 		}
 	}
 	
+	
 	private void toggleAllNumButtons(boolean isEnabled)
 	{
 		for (int i = 0; i < 10; i++) {

@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.internal.handlers.RestartWorkbenchHandler;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -40,8 +41,9 @@ public class PanelView extends Composite{
 	private Button btnSolve;
 	private Button undoButton;
 	private Button redoButton;
+	private Button resetButton;
 	
-	public static Color primaryColor = new Color(null, 209, 209, 209);
+	public static Color primaryColor = new Color(null, 220,220,220);
 	public static Color secondaryColor = new Color(null, 173, 173, 173);
 	public static Color highlightColor = new Color(null, 230, 230, 230);
 	private Button deleteBtn;
@@ -127,6 +129,12 @@ public class PanelView extends Composite{
 	{
 		return redoButton;
 	}
+	
+	public Button getResetButton()
+	{
+		return resetButton;
+	}
+	
 	public void init(int width)
 	{
 		GridLayout gridLayout = new GridLayout(1, false);
@@ -302,6 +310,9 @@ public class PanelView extends Composite{
 		
 		redoButton = new Button(composite_1, SWT.NONE);
 		redoButton.setText("Redo");
+		
+		resetButton = new Button(composite_1, SWT.NONE);
+		resetButton.setText("Reset");
 		//new Label(composite_1, SWT.NONE);
 	}
 }

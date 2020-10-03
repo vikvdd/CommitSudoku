@@ -39,6 +39,7 @@ public class GamePanelController implements GameListener, GameDAOListener
 	{
 		initGameList();		
 		initListeners();
+		updateGameTitles(game.getPuzzleName(), game.getPuzzleDifficulty());
 	}
 	
 	private void initGameList()
@@ -145,7 +146,20 @@ public class GamePanelController implements GameListener, GameDAOListener
 				
 			}
 		});
-		
+		view.getResetButton().addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				resetButtonAction();
+				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 	}
 	
@@ -204,6 +218,11 @@ public class GamePanelController implements GameListener, GameDAOListener
 	private void solvePuzzleAction()
 	{
 		game.solve();
+	}
+	
+	private void resetButtonAction()
+	{
+		game.reset();
 	}
 	
 	private void updateGameTime()
