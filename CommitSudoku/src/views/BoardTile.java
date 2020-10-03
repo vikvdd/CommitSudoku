@@ -25,10 +25,10 @@ public class BoardTile extends Composite{
 	public static Color HOVER_TILE_COLOR = new Color(null, 200,200,200);
 	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
-	public static Font DEFAULT_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 23, SWT.BOLD);
-	public static Font ENTRY_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 23, SWT.NORMAL);
-	public static Font INVALID_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 23, SWT.NORMAL);
-	public static Font NOTE_FONT = SWTResourceManager.getFont("COURIER NEW GREEK", 8, SWT.NORMAL);
+	public static Font DEFAULT_FONT = SWTResourceManager.getFont("TREBUCHET MS", 23, SWT.BOLD);
+	public static Font ENTRY_FONT = SWTResourceManager.getFont("TREBUCHET MS", 23, SWT.NORMAL);
+	public static Font INVALID_FONT = SWTResourceManager.getFont("TREBUCHET MS", 23, SWT.NORMAL);
+	public static Font NOTE_FONT = SWTResourceManager.getFont("TREBUCHET MS", 8, SWT.NORMAL);
 	
 	List<BoardTileListener> listeners = new ArrayList<BoardTileListener>();
 	
@@ -73,10 +73,10 @@ public class BoardTile extends Composite{
 		int compSize = mainComp.getBounds().height;
 		
 		FontData[] noteFontData =  NOTE_FONT.getFontData();
-		noteFontData[0].setHeight(Math.floorDiv(compSize, 9));
+		noteFontData[0].setHeight(Math.floorDiv(compSize, 8));
 		NOTE_FONT = new Font(getDisplay(), noteFontData[0]);
 		
-		int numSize = Math.floorDiv(compSize,10)*3;
+		int numSize = Math.floorDiv(compSize,13)*4;
 		FontData[] numFontData = DEFAULT_FONT.getFontData();
 		numFontData[0].setHeight(numSize);
 		DEFAULT_FONT = new Font(getDisplay(), numFontData[0]);
