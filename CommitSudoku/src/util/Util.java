@@ -47,6 +47,7 @@ public class Util {
 	
 	public static String capitalizeFirstLetter(String word)
 	{
+		word = word.toLowerCase();
 		String output = word.substring(0,1).toUpperCase() + word.substring(1);
 		return output;
 	}

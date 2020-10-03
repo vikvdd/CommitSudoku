@@ -10,19 +10,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.osgi.report.resolution.ResolutionReport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
-import org.w3c.dom.events.EventException;
-
-import com.ibm.icu.text.DateFormat.BooleanAttribute;
-
 import events.BoardTileListener;
-import util.Util;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.custom.StackLayout;
 
 public class BoardTile extends Composite{
 	

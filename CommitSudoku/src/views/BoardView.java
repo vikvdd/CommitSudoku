@@ -1,25 +1,11 @@
 package views;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.security.auth.x500.X500Principal;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.internal.dialogs.NewWizard;
-import org.eclipse.ui.internal.handlers.WizardHandler.New;
-import org.eclipse.wb.swt.SWTResourceManager;
-
 import model.game.puzzle.Coordinate;
-import util.Util;
 
 public class BoardView extends Composite implements IBoardView{	
 	public static final Color HIGHLIGHTED_TILE = new Color(null, 178, 178, 178);
@@ -27,7 +13,6 @@ public class BoardView extends Composite implements IBoardView{
 	public static final Color SELECTED_TILE = new Color(null, 164, 218, 237);
 	
 	private int btnSize;
-	private int btnPadding = 5;
 	private BoardTile[][] boardTiles = new BoardTile[9][9];
 	private BoardTile selectedButton = boardTiles[0][0];
 	private Composite subGrid1;
@@ -48,8 +33,9 @@ public class BoardView extends Composite implements IBoardView{
 		layout.makeColumnsEqualWidth = false;
 		layout.verticalSpacing = 0;
 		layout.horizontalSpacing = 0;
-		layout.marginRight = 0;
-		layout.marginLeft = 0;
+		
+		layout.marginHeight = 0;
+		layout.marginWidth = 0;
 		setLayout(layout);
 		GridData mainData = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
 		setData(mainData);
@@ -83,6 +69,7 @@ public class BoardView extends Composite implements IBoardView{
 	public void init(int width, int height) 
 	{
 		setSize(width,height);
+		setBackground(new Color(null, 57,73,89));
 		initSubGrids();
 		buildBoard();
 	}

@@ -80,7 +80,7 @@ public class Main {
 	{
 		shell.setSize(0,0);
 		shell.setText("CommitSudoku");
-		shell.setBackground(new Color(null,36, 36, 36));
+		shell.setBackground(new Color(null,30, 59, 89));
 		GridLayout gridLayout = new GridLayout(2, false);
 		GridData shellData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		shell.setLayout(gridLayout);

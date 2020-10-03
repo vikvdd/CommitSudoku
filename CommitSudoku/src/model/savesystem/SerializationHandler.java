@@ -29,6 +29,8 @@ public class SerializationHandler
 			out.writeObject(obj);
 			out.flush();
 			out.close();
+			fOut.flush();
+			fOut.close();
 			Util.println("Saved " + file.getName() + " successfully!");
 		} catch (Exception e) 
 		{
@@ -47,6 +49,7 @@ public class SerializationHandler
 		try {
 			ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 			Object obj = in.readObject();
+			in.close();
 			Util.println("Loaded " + file.getName() + " successfully!");
 			return obj;
 		} catch (Exception e) {

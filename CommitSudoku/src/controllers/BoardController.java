@@ -187,12 +187,13 @@ public class BoardController implements GameListener, GameStatListener{
 	{
 		setBoardButtonTileType(TileType.NORMAL);
 		selectedCoord = coord;
+		view.setSelectedButton(selectedCoord);
+		view.getSelectedButton().setBackgroundColor(BoardView.SELECTED_TILE);
 		
 		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) fixedTileClickAction(coord);
 		else entryTileClickAction(coord);
 		
-		view.setSelectedButton(selectedCoord);
-		view.getSelectedButton().setBackgroundColor(BoardView.SELECTED_TILE);
+		
 		
 		
 	}
@@ -290,10 +291,24 @@ public class BoardController implements GameListener, GameStatListener{
 		List<Coordinate> col = getColCoordsAtCoord(coord);
 		List<Coordinate> row = getRowCoordsAtCoord(coord);
 		List<Coordinate> sub = getSubGridCoordsAtCoord(coord);
-		for (int i = 0; i < 9; i++) {
-			view.getButton(col.get(i)).setNoteText(num, false);
-			view.getButton(row.get(i)).setNoteText(num, false);
-			view.getButton(sub.get(i)).setNoteText(num, false);
+		for (int i = 0; i < 8; i++) {
+			try {
+				view.getButton(col.get(i)).setNoteText(num, false);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			try {
+				view.getButton(row.get(i)).setNoteText(num, false);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			try {
+				view.getButton(sub.get(i)).setNoteText(num, false);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
 		}
 	}
 	
@@ -322,7 +337,7 @@ public class BoardController implements GameListener, GameStatListener{
 	{
 		List<Coordinate> coords = new ArrayList<Coordinate>();
 		for (int x = 0; x < 9; x++) {
-			coords.add(new Coordinate(x, coord.y));
+			if(coord.x != x) coords.add(new Coordinate(x, coord.y));
 		}
 		return coords;
 	}
@@ -331,7 +346,7 @@ public class BoardController implements GameListener, GameStatListener{
 	{
 		List<Coordinate> coords = new ArrayList<Coordinate>();
 		for (int y = 0; y < 9; y++) {
-			coords.add(new Coordinate(coord.x, y));
+			if(coord.y != y) coords.add(new Coordinate(coord.x, y));	
 		}
 		return coords;
 	}
@@ -339,10 +354,11 @@ public class BoardController implements GameListener, GameStatListener{
 	private List<Coordinate> getSubGridCoordsAtCoord(Coordinate coord)
 	{
 		List<Coordinate> coords = new ArrayList<Coordinate>();
-		coord = SudokuLogic.getNearestSubGridCoordinate(coord);
+		Coordinate subCoord = SudokuLogic.getNearestSubGridCoordinate(coord);
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
-				coords.add(new Coordinate(x + coord.x, y + coord.y));
+				if(coord.y != subCoord.y + y && coord.x != subCoord.x + x)
+					coords.add(new Coordinate(x + subCoord.x, y + subCoord.y));
 			}
 		}
 		return coords;
