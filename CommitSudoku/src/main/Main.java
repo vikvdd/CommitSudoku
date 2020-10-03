@@ -3,6 +3,7 @@ package main;
 import java.io.File;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -48,7 +49,6 @@ public class Main {
 		game.loadNewGame(tryLoadFirstPuzzle(gameDAO));
 		
 		//INIT VIEWS
-		//IBoardView board = new GameboardView(shell, SWT.BORDER);
 		IBoardView board = new BoardView(shell, SWT.NONE);
 		board.init(sm.getBoardSize().getWidth(), sm.getBoardSize().getHeight());
 		PanelView panelView = new PanelView(shell, SWT.NONE);
@@ -64,6 +64,10 @@ public class Main {
 		
 		shell.open();
 		shell.layout();
+		
+		final Point newSize = shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true); 
+		shell.setSize(newSize);
+		
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -74,10 +78,9 @@ public class Main {
 	
 	private static Shell initWindow(Shell shell)
 	{
-		
-		//shell.setBounds(0,0,width, height);
+		shell.setSize(0,0);
 		shell.setText("CommitSudoku");
-		shell.setBackground(new Color(null,209, 191, 174));
+		shell.setBackground(new Color(null,36, 36, 36));
 		GridLayout gridLayout = new GridLayout(2, false);
 		GridData shellData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		shell.setLayout(gridLayout);

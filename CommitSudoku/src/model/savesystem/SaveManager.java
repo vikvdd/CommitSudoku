@@ -28,7 +28,7 @@ public class SaveManager
 		}
 		
 		SerializationHandler.SaveObject(puzzle, file, false);
-		Util.println("uzzle: " + puzzle.getName());
+		Util.println("Puzzle: " + puzzle.getName());
 		SudokuSave save = new SudokuSave(puzzle.getName(), puzzle.getDifficulty());
 		PuzzleSaveList.getInstance().addPuzzle(save);
 	}

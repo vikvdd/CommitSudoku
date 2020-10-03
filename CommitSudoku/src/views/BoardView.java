@@ -22,11 +22,14 @@ import model.game.puzzle.Coordinate;
 import util.Util;
 
 public class BoardView extends Composite implements IBoardView{	
+	public static final Color HIGHLIGHTED_TILE = new Color(null, 178, 178, 178);
+	public static final Color NORMAL_TILE = new Color(null, 220,220,220);
+	public static final Color SELECTED_TILE = new Color(null, 164, 218, 237);
+	
 	private int btnSize;
 	private int btnPadding = 5;
 	private BoardTile[][] boardTiles = new BoardTile[9][9];
 	private BoardTile selectedButton = boardTiles[0][0];
-	
 	private Composite subGrid1;
 	private Composite subGrid2;
 	private Composite subGrid3;

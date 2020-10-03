@@ -3,26 +3,22 @@ package controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.*;
+import org.eclipse.swt.*;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-
 import events.BoardTileListener;
 import events.GameListener;
 import events.GameStatListener;
 import model.EntryType;
 import model.game.SudokuGame;
-import model.game.puzzle.*;
-import tests.boardTileTest;
-import util.Util;
+import model.game.puzzle.Coordinate;
+import model.game.puzzle.Difficulty;
+import model.game.puzzle.SudokuLogic;
 import views.BoardTile;
-import views.BoardView;
-import views.GameButtonsView;
-import views.GameboardView;
-import views.IBoardView;
-import views.TileType;
+import views.*;
 
 public class BoardController implements GameListener, GameStatListener{
 	
@@ -30,6 +26,7 @@ public class BoardController implements GameListener, GameStatListener{
 	private IBoardView view;
 	private GameButtonsView btnView;
 	private Coordinate selectedCoord;
+	
 	
 	
 	public BoardController(SudokuGame game, IBoardView view, GameButtonsView btnView)
@@ -45,7 +42,7 @@ public class BoardController implements GameListener, GameStatListener{
 		initBoardButtons();
 		initGameButtons();
 		loadStartBoard();
-		game.start();
+		game.start(); 
 	}
 	
 	private void initBoardButtons() {
@@ -195,7 +192,7 @@ public class BoardController implements GameListener, GameStatListener{
 		else entryTileClickAction(coord);
 		
 		view.setSelectedButton(selectedCoord);
-		view.getSelectedButton().setBackgroundColor(GameboardView.SELECTED_TILE);
+		view.getSelectedButton().setBackgroundColor(BoardView.SELECTED_TILE);
 		
 		
 	}
@@ -372,13 +369,13 @@ public class BoardController implements GameListener, GameStatListener{
 	{
 		switch (tileType) {
 		case NORMAL:	
-			btn.setBackgroundColor(GameboardView.NORMAL_TILE);	
+			btn.setBackgroundColor(BoardView.NORMAL_TILE);	
 			break;
 		case SELECTED:
-			btn.setBackgroundColor(GameboardView.SELECTED_TILE);
+			btn.setBackgroundColor(BoardView.SELECTED_TILE);
 			break;
 		case HIGHLIGHTED:
-			btn.setBackgroundColor(GameboardView.HIGHLIGHTED_TILE);
+			btn.setBackgroundColor(BoardView.HIGHLIGHTED_TILE);
 			break;
 		}
 	}
