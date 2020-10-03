@@ -19,7 +19,7 @@ public class ViewScaleManager {
 	
 	private void calculateCompositeDimensions(ViewDimension dimension)
 	{
-		int size = dimension.getHeight()-500;
+		int size = (dimension.getHeight()/5)*3;
 		boardSize = new ViewDimension(size,size);	
 		buttonViewSize = new ViewDimension((60*9)+(4*9),60);
 		panelSize = new ViewDimension(250, boardSize.getHeight());
