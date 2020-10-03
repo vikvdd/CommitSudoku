@@ -10,6 +10,7 @@ public class PuzzleSaveList implements Serializable
 	public static PuzzleSaveList instance;
 	
 	private static final long serialVersionUID = -3790626449400083854L;
+	private static final String SAVE_DIR = "gamesaves/";
 	private static final String FILE_NAME = "PuzzleList";
 	private List<SudokuSave> saveList;
 	private SudokuSave selectedSave;
@@ -37,7 +38,8 @@ public class PuzzleSaveList implements Serializable
 	{
 		try
 		{
-			File file = new File(FILE_NAME + ".txt");
+			Util.println(SAVE_DIR + FILE_NAME + ".txt");
+			File file = new File(SAVE_DIR + FILE_NAME + ".txt");
 			if(!file.exists())
 			{
 				file.createNewFile();
@@ -45,9 +47,14 @@ public class PuzzleSaveList implements Serializable
 			else 
 			{
 				saveList = new ArrayList<SudokuSave>();
+				try {
+					PuzzleSaveList puzzleSaveList = (PuzzleSaveList)SerializationHandler.LoadSave(file);
+					setSaveList(puzzleSaveList.getSaveList());
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
 			}
-			PuzzleSaveList puzzleSaveList = (PuzzleSaveList)SerializationHandler.LoadSave(file);
-			setSaveList(puzzleSaveList.getSaveList());
 		}
 		catch (Exception e) {
 			Util.print("ERROR: " + e);
@@ -57,7 +64,7 @@ public class PuzzleSaveList implements Serializable
 	
 	private static void updateSaveFile()
 	{
-		SerializationHandler.SaveObject(instance, FILE_NAME, false);			
+		SerializationHandler.SaveObject(instance, new File(SAVE_DIR + FILE_NAME + ".txt"), false);			
 	}
 	
 	public void setSaveList(List<SudokuSave> list)

@@ -55,6 +55,6 @@ public class SerializationHandler
 		} catch (Exception e) {
 			Util.println("ERROR: " + e);
 		}
-		return new SudokuPuzzle();
+		return new Object();
 	}	
 }

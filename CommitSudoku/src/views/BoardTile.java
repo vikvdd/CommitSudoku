@@ -70,13 +70,35 @@ public class BoardTile extends Composite{
 	
 	private void initFontSize()
 	{
-		int compSize = mainComp.getBounds().height;
+		boolean isFontLoaded = getDisplay().loadFont("fonts/MontBold.ttf");
+		boolean isSecondFontLoaded = getDisplay().loadFont("fonts/MontLight.ttf");
+
 		
-		FontData[] noteFontData =  NOTE_FONT.getFontData();
-		noteFontData[0].setHeight(Math.floorDiv(compSize, 8));
+		int compSize = mainComp.getBounds().height;
+		int noteSize = Math.floorDiv(compSize, 8);
+		int numSize = Math.floorDiv(compSize,16)*5;
+		
+		if(isFontLoaded)
+		{
+		    Font fontMain = new Font(getDisplay(), "MontBold", numSize, SWT.BOLD);
+
+		    DEFAULT_FONT = fontMain;		   
+		}
+		if(isSecondFontLoaded)
+		{
+			Font fontentry = new Font(getDisplay(), "Mont Extra Light DEMO", numSize, SWT.NORMAL);
+		    Font fontInvalid = new Font(getDisplay(), "Mont Extra Light DEMO", numSize, SWT.NORMAL);
+		    Font noteFont = new Font(getDisplay(), "Mont Extra Light DEMO", noteSize, SWT.NORMAL);
+		    
+		    ENTRY_FONT = fontentry;
+		    INVALID_FONT = fontInvalid;
+		    NOTE_FONT = noteFont;
+		}
+		/*FontData[] noteFontData =  NOTE_FONT.getFontData();
+		noteFontData[0].setHeight();
 		NOTE_FONT = new Font(getDisplay(), noteFontData[0]);
 		
-		int numSize = Math.floorDiv(compSize,13)*4;
+		
 		FontData[] numFontData = DEFAULT_FONT.getFontData();
 		numFontData[0].setHeight(numSize);
 		DEFAULT_FONT = new Font(getDisplay(), numFontData[0]);
@@ -87,7 +109,7 @@ public class BoardTile extends Composite{
 		
 		FontData[] numFontData3 = INVALID_FONT.getFontData();
 		numFontData3[0].setHeight(numSize);
-		INVALID_FONT = new Font(getDisplay(), numFontData3[0]);
+		INVALID_FONT = new Font(getDisplay(), numFontData3[0]);*/
 	}
 	
 	public void setText(String text)
@@ -281,14 +303,20 @@ public class BoardTile extends Composite{
 	
 	private void onMouseDown(Event event)
 	{
-		if(event.button == 1)
+		if(clickDelay.isFinished())
 		{
-			onLeftClick();
+			Util.println("clicked");
+			clickDelay.startDelay();
+			if(event.button == 1)
+			{
+				onLeftClick();
+			}
+			if(event.button == 3)
+			{
+				onRightClick();
+			}
 		}
-		if(event.button == 3)
-		{
-			onRightClick();
-		}
+		
 	}
 	
 	private void onLeftClick()

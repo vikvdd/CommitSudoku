@@ -6,7 +6,7 @@ import util.Util;
 
 public class SaveManager 
 {
-	public static final String saveDir = "";
+	public static final String saveDir = "gamesaves/";
 	public static final String fileExtension = ".txt";
 	
 	public static void savePuzzle(SudokuPuzzle puzzle, Boolean overwrite)

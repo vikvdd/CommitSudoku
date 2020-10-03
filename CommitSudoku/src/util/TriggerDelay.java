@@ -1,13 +1,16 @@
 package util;
 
 public class TriggerDelay {
+	private static long nanoSecsInSec = 1_000_000_000;
+	
 	private long startTime;
 	private long endTime;
 	private long delayTime;
 	
+	
 	public TriggerDelay(long delayTime)
 	{
-		this.delayTime = delayTime;
+		this.delayTime = delayTime * nanoSecsInSec;
 	}
 	
 	public void startDelay()
@@ -24,6 +27,7 @@ public class TriggerDelay {
 			startTime = 0;
 			return true;
 		}
+		if(startTime == 0) return true;
 		return false;
 	}
 }
