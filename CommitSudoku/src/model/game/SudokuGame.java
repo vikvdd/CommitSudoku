@@ -58,7 +58,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	
 	public void reset()
 	{
-		puzzle.setUserPuzzle(puzzle.get());
+		puzzle.setUserPuzzle(Util.clone2dArray(puzzle.get()));
 		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
 	}
 	

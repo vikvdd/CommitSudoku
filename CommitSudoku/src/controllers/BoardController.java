@@ -141,6 +141,7 @@ public class BoardController implements GameListener, GameStatListener{
 		game.getStatTracker().addGameStatListener(this);
 		fillGameboard(puzzleClone);
 		loadStartBoard();
+		clearTileNotes();
 		selectedCoord = new Coordinate(0, 0);
 		selectTileAction(selectedCoord);
 	}
@@ -306,9 +307,16 @@ public class BoardController implements GameListener, GameStatListener{
 				view.getButton(sub.get(i)).setNoteText(num, false);
 			} catch (Exception e) {
 				// TODO: handle exception
+			}			
+		}
+	}
+	
+	private void clearTileNotes()
+	{
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
+				view.getButton(new Coordinate(x, y)).toggleNoteText(false);
 			}
-			
-			
 		}
 	}
 	
