@@ -1,9 +1,7 @@
 package model.game;
 
-import java.io.NotSerializableException;
 import java.util.ArrayList;
 import java.util.List;
-
 import events.GameModelEvent;
 import events.GameStatListener;
 import model.EntryType;
@@ -75,14 +73,14 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		actionLog.addAction(action);
 		statTracker.addAction(action);
 		puzzle.enterValue(n, selectedCoord);
-		updateNotesForCoord(n,selectedCoord);
+		getNotesAtCoordinate(selectedCoord).clearAllNotes();
+		updateOpposingNotes(selectedCoord, n);
 		notifyNumberEntry(selectedCoord, n);
 	}
 	
 	public void enterNote(int num)
 	{
 		puzzle.enterNote(num, selectedCoord);
-		Util.println(puzzle.getAllNotes()[selectedCoord.y][selectedCoord.x].isNoteActive(num) + "");
 		notifyNoteEntry(num);
 	}
 	
@@ -92,7 +90,6 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		try {
 			puzzle.setUserPuzzle(puzzle.getSolution(0));
 			notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
-			//notifyPuzzleSolved(puzzle.getSolution(0));
 		}
 		catch (Exception e) {
 
@@ -154,7 +151,16 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+		
 		return notes;
+	}
+	
+	public void updateOpposingNotes(Coordinate coord, int n)
+	{
+		for(Coordinate c : getAllOpposingCoord(coord))
+		{
+			getNotesAtCoordinate(c).setNoteStatus(n, false);
+		}
 	}
 	
 	public EntryType getEntryType(Coordinate coord, int n)
@@ -180,6 +186,15 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public List<Coordinate> getAllCoordinatesOfN(int n)
 	{
 		return SudokuLogic.findCoordinatesOfN(puzzle.getUserPuzzle(), n);
+	}
+	
+	public List<Coordinate> getAllOpposingCoord(Coordinate coord)
+	{
+		List<Coordinate> coords = getColCoordsAtCoord(coord);
+		coords.addAll(getRowCoordsAtCoord(coord));
+		coords.addAll(getSubGridCoordsAtCoord(coord));
+		
+		return coords;
 	}
 	
 	public List<Coordinate> getRowCoordsAtCoord(Coordinate coord)
@@ -235,6 +250,9 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		
 	}
 
+	@Override
+	public void onNumberUncompleted(int number) {		
+	}
 	
 	@Override
 	public void onPuzzleCompleted() {
@@ -256,6 +274,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	
 	private void updateNotesAtCoords(int n, List<Coordinate> coords)
 	{
+		Util.println(coords.get(0) + ":::");
 		for(Coordinate coord: coords)
 		{
 			Notes notes = getNotesAtCoordinate(coord);
@@ -265,13 +284,11 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	
 	public void setSelectedCoord(Coordinate coord)
 	{
-		selectedCoord = coord;
+		selectedCoord = new Coordinate(coord.x, coord.y);
 	}
 	
 	public Coordinate getSelectedCoord()
 	{
 		return selectedCoord;
 	}
-	
-	
 }

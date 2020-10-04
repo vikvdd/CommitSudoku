@@ -16,7 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
 import events.BoardTileListener;
-import util.TriggerDelay;
+import util.CooldownDelay;
 import util.Util;
 
 public class BoardTile extends Composite{
@@ -56,7 +56,7 @@ public class BoardTile extends Composite{
 	private int width = 75;
 	private int height = 75;
 	private Color currentColor = MAIN_TILE_COLOR;
-	private TriggerDelay clickDelay = new TriggerDelay(1);
+	private CooldownDelay clickDelay = new CooldownDelay(1);
 
 	public void addBoardTileListener(BoardTileListener listener)
 	{

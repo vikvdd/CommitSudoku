@@ -38,7 +38,6 @@ public class PuzzleSaveList implements Serializable
 	{
 		try
 		{
-			Util.println(SAVE_DIR + FILE_NAME + ".txt");
 			File file = new File(SAVE_DIR + FILE_NAME + ".txt");
 			if(!file.exists())
 			{

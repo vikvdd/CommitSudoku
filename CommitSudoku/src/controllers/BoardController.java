@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import events.BoardTileListener;
 import events.GameListener;
-import events.GameStatListener;
 import model.EntryType;
 import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
@@ -14,30 +13,47 @@ import util.Util;
 import views.BoardTile;
 import views.*;
 
-public class BoardController implements GameListener, GameStatListener{
+public class BoardController extends BaseController implements GameListener{
 	
-	private SudokuGame game;
-	private IBoardView view;
-	private List<Coordinate> highlightedTiles = new ArrayList<Coordinate>();
+	BoardViewBase view;
+	private List<Coordinate> selectedTiles = new ArrayList<Coordinate>();
 	
 	
-	public BoardController(SudokuGame game, IBoardView view)
+	public BoardController(SudokuGame game, BoardViewBase view)
 	{
-		this.game = game;
+		super(game);
 		this.view = view;
+	}
+	
+	@Override
+	public void initModel() {
+		
+	}
 
-	}
-	
-	public void init()
+	public void initView()
 	{
-		initListeners();
-		initBoardButtons();
-		//initGameButtons();
-		loadStartBoard();
-		game.start(); 
+		view.init();
 	}
 	
-	private void initBoardButtons() {
+	@Override
+	public void initController() {
+		
+	}
+	
+	@Override
+	protected void initListeners()
+	{
+		super.initListeners();
+		initBoardListeners();
+	}
+
+	@Override
+	public void start() {
+		game.start();
+		
+	}
+	
+	private void initBoardListeners() {
 		BoardTile[][] buttons = view.getGameBoard();
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
@@ -75,46 +91,7 @@ public class BoardController implements GameListener, GameStatListener{
 				}
 			}
 		}
-		setBoardButtonTileType(TileType.NORMAL);
-	}
-	
-	private void initListeners()
-	{
-		game.addGameListener(this);
-	}
-	
-	private void loadStartBoard() 
-	{
-		setBoardButtonTileType(TileType.NORMAL);
-		initBoardButtons();
-	}
-	
-	
-	private void selectTileAction(Coordinate coord)
-	{
-		Coordinate selectCoord = game.getSelectedCoord();
-		setButtonsTileType(TileType.NORMAL, highlightedTiles);
-		setTileType(TileType.NORMAL, view.getButton(selectCoord));
-		game.setSelectedCoord(coord);
-		view.setSelectedButton(coord);
-		view.getSelectedButton().setBackgroundColor(BoardView.SELECTED_TILE);
-		
-		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) fixedTileClickAction(coord);
-		else entryTileClickAction(coord);
-	}
-	
-	private void fixedTileClickAction(Coordinate coord)
-	{
-		highlightedTiles = game.getAllCoordinatesOfN(game.getNumAtCoordinate(coord));
-		setMatchingNumbersTileType(TileType.HIGHLIGHTED, highlightedTiles);
-	}
-	
-	private void entryTileClickAction(Coordinate coord)
-	{
-		highlightedTiles = game.getColCoordsAtCoord(coord);
-		highlightedTiles.addAll(game.getRowCoordsAtCoord(coord));
-		highlightedTiles.addAll(game.getSubGridCoordsAtCoord(coord));
-		setButtonsTileType(TileType.HIGHLIGHTED, highlightedTiles);
+		setBoardTileType(TileType.NORMAL);
 	}
 	
 	private void fillGameboard(int[][] puz)
@@ -122,20 +99,56 @@ public class BoardController implements GameListener, GameStatListener{
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
 				Coordinate coord = new Coordinate(x, y);
-				updateBoardTile(coord, puz[y][x]);
+				updateTile(coord, puz[y][x]);
 			}	
 		}
 	}
 	
-	private void updateBoardTile(Coordinate coord, int num)
+	private void selectTileAction(Coordinate coord)
 	{
-		EntryType entryType = game.getEntryType(coord, num);
-		formatTileText(entryType, view.getButton(coord));
-		updateBoardTileText(coord, num);
-		updateAllTileNotes();
+		Coordinate selectCoord = game.getSelectedCoord();
+		setTileType(TileType.NORMAL, selectedTiles);
+		setTileType(TileType.NORMAL, selectCoord);
+		
+		game.setSelectedCoord(coord);
+		view.setSelectedButton(coord);
+		
+		view.getSelectedButton().setBackgroundColor(BoardView.SELECTED_TILE);
+		
+		if(game.getEntryType(coord, game.getNumAtCoordinate(coord)) == EntryType.FIXED) 
+		{
+			selectAllTilesMatchingCoord(coord);
+		}
+		else 
+		{
+			selectAllOpposingTiles(coord);
+		}
+		
+		setTileType(TileType.HIGHLIGHTED, selectedTiles);
 	}
 	
-	private void updateBoardTileText(Coordinate coord, int n)
+	private void selectAllTilesMatchingCoord(Coordinate coord)
+	{
+		selectedTiles = game.getAllCoordinatesOfN(game.getNumAtCoordinate(coord));
+	}
+	
+	private void selectAllOpposingTiles(Coordinate coord)
+	{
+		selectedTiles = game.getColCoordsAtCoord(coord);
+		selectedTiles.addAll(game.getRowCoordsAtCoord(coord));
+		selectedTiles.addAll(game.getSubGridCoordsAtCoord(coord));
+		setTileType(TileType.HIGHLIGHTED, selectedTiles);
+	}
+	
+	private void updateTile(Coordinate coord, int num)
+	{
+		EntryType entryType = game.getEntryType(coord, num);
+		updateTileFont(entryType, view.getButton(coord));
+		updateTileText(coord, num);
+		updateTileNotes(selectedTiles);
+	}
+	
+	private void updateTileText(Coordinate coord, int n)
 	{
 		BoardTile btn = view.getButton(coord);
 		String text = "";
@@ -156,14 +169,13 @@ public class BoardController implements GameListener, GameStatListener{
 		}
 	}
 	
-	private void updateGivenTileNotes(List<Coordinate> coords)
+	private void updateTileNotes(List<Coordinate> coords)
 	{
 		for(Coordinate coord : coords)
 		{
 			Notes notes = game.getNotesAtCoordinate(coord);
 			for(int i = 1; i <= 9; i++)
 			{
-				Util.println(notes.isNoteActive(i) + "");
 				view.getButton(coord).setNoteText(i, notes.isNoteActive(i));
 			}
 		}
@@ -188,7 +200,7 @@ public class BoardController implements GameListener, GameStatListener{
 		}
 	}
 	
-	private void formatTileText(EntryType entryType, BoardTile btn)
+	private void updateTileFont(EntryType entryType, BoardTile btn)
 	{
 		switch (entryType) {
 		case FIXED:
@@ -206,12 +218,12 @@ public class BoardController implements GameListener, GameStatListener{
 		}
 	}
 	
-	private void setBoardButtonTileType(TileType tileType)
+	private void setBoardTileType(TileType tileType)
 	{
 		for (int y = 0; y < 9; y++) {
 			for (int x = 0; x < 9; x++) {
 				try {
-					setTileType(tileType, view.getButton(y, x));
+					setTileType(tileType, new Coordinate(x, y));
 				} catch (Exception e) {
 				}
 				
@@ -219,48 +231,34 @@ public class BoardController implements GameListener, GameStatListener{
 		}
 	}
 	
-	private void setButtonsTileType(TileType tileType, List<Coordinate> coords)
+	private void setTileType(TileType tileType, List<Coordinate> coords)
 	{
 		for(Coordinate coord : coords)
 		{
-			setTileType(tileType, view.getButton(coord));
+			setTileType(tileType, coord);
 		}
 	}
 	
-	private void setMatchingNumbersTileType(TileType tileType, List<Coordinate> coords)
+	private void setTileType(TileType tileType, Coordinate coord)
 	{
-		for(int i = 0; i < coords.size(); i++)
-		{
-			setTileType(tileType, view.getButton(coords.get(i)));
-		}
-	}
-	
-	private void setTileType(TileType tileType, BoardTile btn)
-	{
+		BoardTile tile = view.getButton(coord);
 		switch (tileType) {
 		case NORMAL:	
-			btn.setBackgroundColor(BoardView.NORMAL_TILE);	
+			tile.setBackgroundColor(BoardView.NORMAL_TILE);	
 			break;
 		case SELECTED:
-			btn.setBackgroundColor(BoardView.SELECTED_TILE);
+			tile.setBackgroundColor(BoardView.SELECTED_TILE);
 			break;
 		case HIGHLIGHTED:
-			btn.setBackgroundColor(BoardView.HIGHLIGHTED_TILE);
+			tile.setBackgroundColor(BoardView.HIGHLIGHTED_TILE);
 			break;
 		}
 	}
 	
 	@Override
 	public void onGameStart(int[][] puzzleClone) {
-		game.getStatTracker().addGameStatListener(this);
 		fillGameboard(puzzleClone);
-		loadStartBoard();
 		selectTileAction(game.getSelectedCoord());
-	}
-
-	@Override
-	public void onGameEnd() {
-		
 	}
 
 	@Override
@@ -270,30 +268,15 @@ public class BoardController implements GameListener, GameStatListener{
 
 	@Override
 	public void onNumberEntry(Coordinate coord, int n) {
-		updateBoardTile(coord, n);
+		updateTile(coord, n);
 	}
 
 	@Override
 	public void onNoteEntry(int num) {
 		// TODO Auto-generated method stub
-		Util.println(num);
 		updateTileNotes(game.getSelectedCoord());
-		updateGivenTileNotes(highlightedTiles);
+		updateTileNotes(selectedTiles);
 	}
+
 	
-	@Override
-	public void onPuzzleCompleted() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	public void onPuzzleSolved(int[][] solution) {
-		//fillGameboard(solution);
-	}
-	
-	@Override
-	public void onNumberCompleted(int number) {
-		
-	}
 }

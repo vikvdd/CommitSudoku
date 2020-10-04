@@ -6,16 +6,18 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import events.GameListener;
+import events.GameStatListener;
 import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 import views.GameButtonsView;
 
-public class NumButtonController implements GameListener{
+public class NumButtonController implements GameListener, GameStatListener{
 	SudokuGame game;
 	GameButtonsView view;
 	
-	public NumButtonController(SudokuGame game, GameButtonsView view) {
+	public NumButtonController(SudokuGame game, GameButtonsView view) 
+	{
 		this.game = game;
 		this.view = view;
 	}
@@ -23,6 +25,7 @@ public class NumButtonController implements GameListener{
 	public void init()
 	{
 		game.addGameListener(this);
+		game.getStatTracker().addGameStatListener(this);
 		initGameButtons();
 	}
 	
@@ -96,7 +99,7 @@ public class NumButtonController implements GameListener{
 	}
 	@Override
 	public void onNoteEntry(int num) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
@@ -106,6 +109,17 @@ public class NumButtonController implements GameListener{
 	}
 	@Override
 	public void onPuzzleSolved(int[][] solution) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onNumberCompleted(int number) {
+		
+	}
+
+	@Override
+	public void onNumberUncompleted(int number) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -33,6 +33,11 @@ public class Notes implements Serializable{
 		}
 	}
 	
+	public void clearAllNotes()
+	{
+		status = new boolean[9];
+	}
+	
 	public boolean isNoteActive(int num)
 	{
 		int i = num-1;
@@ -43,4 +48,14 @@ public class Notes implements Serializable{
 		}
 		return false;
 	}
-}
+	
+	public int getTotal()
+	{
+		int counter = 0;
+		for (int i = 0; i < status.length; i++) {
+			if (status[i] == true) counter++;
+		}
+		return counter;
+	}
+		
+	}

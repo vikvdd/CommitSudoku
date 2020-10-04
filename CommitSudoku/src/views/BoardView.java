@@ -1,13 +1,15 @@
 package views;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import model.game.puzzle.Coordinate;
+import org.eclipse.swt.widgets.Control;
 
-public class BoardView extends Composite implements IBoardView{	
+import model.game.puzzle.Coordinate;
+import util.Util;
+
+public class BoardView extends BoardViewBase{	
 	public static final Color HIGHLIGHTED_TILE = new Color(null, 178, 178, 178);
 	public static final Color NORMAL_TILE = new Color(null, 220,220,220);
 	public static final Color SELECTED_TILE = new Color(null, 164, 218, 237);
@@ -42,6 +44,31 @@ public class BoardView extends Composite implements IBoardView{
 		setData(mainData);
 	}
 	
+	@Override
+	public void init() {
+		setBackground(new Color(null, 57,73,89));
+		updateComponentSizes();
+	}
+
+	@Override
+	public void updateComponentSizes() {
+		Control[] controls = getChildren();
+		int size = controls.length;
+		
+		for (int i = 0; i < size; i++) {
+			controls[i].dispose();
+		}
+		Util.println(getChildren().length);
+		
+		updateBoard();
+	}
+	
+	public void updateBoard()
+	{
+		initSubGrids();
+		buildBoard();
+	}
+	
 	public void buildBoard()
 	{	
 		btnSize = Math.floorDiv(getBounds().width, 9);
@@ -65,15 +92,6 @@ public class BoardView extends Composite implements IBoardView{
 			}				
 		}
 	}
-
-	@Override
-	public void init(int width, int height) 
-	{
-		setSize(width,height);
-		setBackground(new Color(null, 57,73,89));
-		initSubGrids();
-		buildBoard();
-	}
 	
 	private void initSubGrids()
 	{
@@ -83,6 +101,8 @@ public class BoardView extends Composite implements IBoardView{
 		subGridLayout.marginHeight = 2;
 		subGridLayout.marginWidth = 2;
 		GridData subGridData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
+		
+		subGrids = new Composite[9][9];
 		
 		subGrids = new Composite[3][3];
 		subGrid1 = new Composite(this, SWT.NONE);

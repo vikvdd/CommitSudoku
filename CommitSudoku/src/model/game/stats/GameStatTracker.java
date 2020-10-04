@@ -73,7 +73,9 @@ public class GameStatTracker{
 		totNew++;
 		total.set(oldVal, totOld);
 		total.set(newVal, totNew);
-
+		
+		
+		isNumberCompleted(oldVal);
 		isNumberCompleted(newVal);
 	}
 	
@@ -88,6 +90,9 @@ public class GameStatTracker{
 		{
 			notifyNumberCompleted(n);
 			return true;
+		}
+		else {
+			notifyNumberCompleted(n);
 		}
 		return false;
 	}
@@ -108,7 +113,7 @@ public class GameStatTracker{
 			}
 		}
 		totalFilledSpaces = totalFilled;
-		return totalFilled;
+		return totalFilledSpaces;
 	}
 	
 	public int getTotalEmptySpaces()
@@ -117,7 +122,7 @@ public class GameStatTracker{
 		return totalEmptySpaces;
 	}
 	
-	public void notifyNumberCompleted(int number)
+	private void notifyNumberCompleted(int number)
 	{
 		for (GameStatListener listener : listeners) {
 			listener.onNumberCompleted(number);
@@ -125,7 +130,15 @@ public class GameStatTracker{
 		if(isPuzzleCompleted()) notifyPuzzleCompleted();
 	}
 	
-	public void notifyPuzzleCompleted()
+	private void notifyNumberUncompleted()
+	{
+		for(GameStatListener listener : listeners)
+		{
+			
+		}
+	}
+	
+	private void notifyPuzzleCompleted()
 	{
 		for(GameStatListener listener : listeners)
 		{

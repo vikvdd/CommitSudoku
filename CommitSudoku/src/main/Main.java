@@ -21,8 +21,9 @@ import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import views.BoardView;
 import views.GameButtonsView;
-import views.IBoardView;
+import views.BoardViewBase;
 import views.PanelView;
+import views.View;
 import views.ViewScaleManager;
 
 public class Main {
@@ -50,8 +51,8 @@ public class Main {
 		game.loadNewGame(tryLoadFirstPuzzle(gameDAO));
 		
 		//INIT VIEWS
-		IBoardView board = new BoardView(shell, SWT.NONE);
-		board.init(sm.getBoardSize().getWidth(), sm.getBoardSize().getHeight());
+		BoardViewBase board = new BoardView(shell, SWT.NONE);
+		board.setSize(sm.getBoardSize().getWidth(), sm.getBoardSize().getHeight());
 		PanelView panelView = new PanelView(shell, SWT.NONE);
 		panelView.init(sm.getPanelSize().getWidth());
 		GridData buttonsData = new GridData();
@@ -88,7 +89,7 @@ public class Main {
 		return shell;
 	}
 	
-	private static void initControllers(SudokuGame game, Shell shell, IBoardView board, GameButtonsView buttonsView, PanelView panelView)
+	private static void initControllers(SudokuGame game, Shell shell, BoardViewBase board, GameButtonsView buttonsView, PanelView panelView)
 	{
 		BoardController boardController = new BoardController(game, board);
 		boardController.init();

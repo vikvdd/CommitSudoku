@@ -5,7 +5,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class GameButtonsView extends Composite{
+public class GameButtonsView extends View{
 	
 	private static final int MARGINS = 4;
 	private static final int BTN_PADDING = 2;
@@ -19,10 +19,16 @@ public class GameButtonsView extends Composite{
 		buttons = new Button[9];
 	}
 	
+	@Override
+	public void init() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void init(int width, int height)
 	{
 		setSize(width,height);
-		setBackground(new Color(null, 58, 74, 89));
+		setBackground(new Color(null, 23, 43, 64));
 		btnSize = Math.floorDiv(getBounds().width, 9) - (BTN_PADDING*2);
 		BuildNumButtons();
 	}
@@ -48,4 +54,11 @@ public class GameButtonsView extends Composite{
 	{
 		return buttons[index];
 	}
+
+	@Override
+	public void updateComponentSizes() {
+		BuildNumButtons();
+	}
+
+	
 }
