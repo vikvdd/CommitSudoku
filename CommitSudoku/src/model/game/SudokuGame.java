@@ -44,7 +44,6 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	{
 		this.puzzle = puzzle;
 		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
-		start();
 	}
 	
 	public void start()
@@ -56,6 +55,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	
 	public void end()
 	{
+		Util.println("GoOOO");
 		notifyGameEnd();
 	}
 	
@@ -244,7 +244,6 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		return !isFixedTile(coord);
 	}
 
-	
 	@Override
 	public void onNumberCompleted(int number) {
 		

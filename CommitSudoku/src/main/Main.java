@@ -21,6 +21,7 @@ import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import views.BoardView;
 import views.GameButtonsView;
+import views.LogoView;
 import views.BoardViewBase;
 import views.PanelView;
 import views.View;
@@ -60,6 +61,8 @@ public class Main {
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
 		buttonsView.setLayoutData(buttonsData);
 		buttonsView.init(sm.getButtonViewSize().getWidth(), sm.getButtonViewSize().getHeight());
+		LogoView logoView = new LogoView(shell, SWT.NONE);
+		logoView.init(display);
 		
 		//INIT CONTROLLERS
 		initControllers(game, shell, board, buttonsView, panelView);
@@ -84,6 +87,7 @@ public class Main {
 		shell.setText("CommitSudoku");
 		shell.setBackground(new Color(null,30, 59, 89));
 		GridLayout gridLayout = new GridLayout(2, false);
+		gridLayout.verticalSpacing = 0;
 		GridData shellData = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
 		shell.setLayout(gridLayout);
 		return shell;

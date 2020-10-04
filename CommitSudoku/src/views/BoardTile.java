@@ -464,4 +464,13 @@ public class BoardTile extends Composite{
 			l.onRightClick();
 		}
 	}
+	
+	public void resetTile()
+	{
+		for(int n = 1; n <= 9; n++)
+		{
+			setNoteText(n, false);
+		}
+		numLabel.setText("");
+	}
 }

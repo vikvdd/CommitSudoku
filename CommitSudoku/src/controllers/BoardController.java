@@ -9,6 +9,7 @@ import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 import model.game.puzzle.Notes;
+import model.game.puzzle.SudokuPuzzle;
 import util.Util;
 import views.BoardTile;
 import views.*;
@@ -145,7 +146,7 @@ public class BoardController extends BaseController implements GameListener{
 		EntryType entryType = game.getEntryType(coord, num);
 		updateTileFont(entryType, view.getButton(coord));
 		updateTileText(coord, num);
-		updateTileNotes(selectedTiles);
+		updateTileNotes(coord);
 	}
 	
 	private void updateTileText(Coordinate coord, int n)
@@ -177,25 +178,6 @@ public class BoardController extends BaseController implements GameListener{
 			for(int i = 1; i <= 9; i++)
 			{
 				view.getButton(coord).setNoteText(i, notes.isNoteActive(i));
-			}
-		}
-	}
-	
-	private void updateAllTileNotes()
-	{
-		for (int y = 0; y < 9; y++) {
-			for (int x = 0; x < 9; x++) {
-				Coordinate coord = new Coordinate(x, y);
-				Notes notes = game.getNotesAtCoordinate(coord);
-				for(int i = 1; i <= 9; i++)
-				{
-					try {
-						view.getButton(coord).setNoteText(i, notes.isNoteActive(i));
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-					
-				}
 			}
 		}
 	}
@@ -255,20 +237,36 @@ public class BoardController extends BaseController implements GameListener{
 		}
 	}
 	
+	private void clearBoard()
+	{
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
+				BoardTile tile = view.getButton(new Coordinate(x, y));
+				tile.resetTile();
+			}
+		}
+	}
+	
 	@Override
 	public void onGameStart(int[][] puzzleClone) {
 		fillGameboard(puzzleClone);
 		selectTileAction(game.getSelectedCoord());
 	}
+	
+	@Override 
+	public void onGameEnd() {
+		clearBoard();
+	}
 
 	@Override
 	public void onPuzzleChanged(String name, Difficulty difficulty, String elapsedTime) {
-		game.start();
+		start();
 	}
 
 	@Override
 	public void onNumberEntry(Coordinate coord, int n) {
 		updateTile(coord, n);
+		updateTileNotes(selectedTiles);
 	}
 
 	@Override

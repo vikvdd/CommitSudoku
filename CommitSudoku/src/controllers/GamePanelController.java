@@ -170,8 +170,9 @@ public class GamePanelController implements GameListener, GameDAOListener
 	{
 		try {
 			updateGameState();
+			game.end();
 			PuzzleSaveList saveList = PuzzleSaveList.getInstance();
-			SudokuPuzzle puzzle = SaveManager.loadPuzzle(PuzzleSaveList.getInstance().getSelectedSave().getName());			
+			SudokuPuzzle puzzle = SaveManager.loadPuzzle(PuzzleSaveList.getInstance().getSelectedSave().getName());		
 			game.loadNewGame(puzzle);	
 		} catch (Exception e) {
 			Util.println("No puzzle was selected.");
@@ -211,6 +212,7 @@ public class GamePanelController implements GameListener, GameDAOListener
 	
 	private void generatePuzzleAction(int emptySpaces, int maxSolutions)
 	{
+		game.end();
 		savePuzzleAction();
 		game.loadNewGame(SudokuLogic.generateRandomPuzzle(emptySpaces, maxSolutions));
 	}
