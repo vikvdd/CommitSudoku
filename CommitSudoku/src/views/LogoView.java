@@ -31,11 +31,11 @@ public class LogoView extends Composite{
 		layout.verticalSpacing = 0;
 		layout.horizontalSpacing = 0;
 		setLayout(layout);
-		GridData data = new GridData(SWT.CENTER, SWT.TOP, true, true, 1, 1);
+		GridData data = new GridData(SWT.RIGHT, SWT.TOP, false, true, 1, 1);
 		setBackground(new Color(null, 0,0,0,0));
 		try {
 			image = new Image(display, "SudokuLogo.jpg");
-			image = resize(image, 250, 70);
+			image = resize(image, 200, 50);
 			//image = new Image(display, LogoView.class.getResourceAsStream("SudokuLogo"));
 			
 		} catch (Exception e) {
@@ -52,6 +52,8 @@ public class LogoView extends Composite{
 		        }
 		    }
 		);*/
+		setData(data);
+		logo.setData(data);
 		logo.setImage(image);
 		logo.setBackground(new Color(null,0,0,0,0));		
 	}

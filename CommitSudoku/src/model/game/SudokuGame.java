@@ -20,14 +20,16 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	private SudokuPuzzle puzzle;
 	private ActionLog actionLog;
 	private GameStatTracker statTracker;
-	private GameTime gameTime;
+	private TimerEvent gameTime;
 	private Coordinate selectedCoord;
+	private boolean active;
 	
 	public SudokuGame()
 	{
 		super();
 		actionLog = new ActionLog();
 		statTracker = new GameStatTracker();
+		gameTime = new TimerEvent();
 		puzzle = SudokuLogic.generateRandomPuzzle(45, 10);
 		selectedCoord = new Coordinate(0, 0);
 	}
@@ -37,11 +39,15 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		super();
 		actionLog = new ActionLog();
 		statTracker = new GameStatTracker();
+		gameTime = new TimerEvent();
 		this.puzzle = puzzle;
 	}
 	
 	public void loadNewGame(SudokuPuzzle puzzle)
 	{
+		gameTime.reset();
+		Util.println(puzzle.getElapsedMilliseconds() + "::");
+		gameTime.setElapsedTimeMilli(puzzle.getElapsedMilliseconds());
 		this.puzzle = puzzle;
 		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
 	}
@@ -51,18 +57,25 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 		actionLog.restartLog();
 		statTracker.init(puzzle.getUserPuzzle());
 		notifyGameStart(Util.clone2dArray(puzzle.getUserPuzzle()));
+		gameTime.start();
+		active = true;
 	}
 	
 	public void end()
-	{
-		Util.println("GoOOO");
+	{ 	
+		gameTime.stop();
+		Util.println(gameTime.getTime()/1000 + "");
+		puzzle.setElapsedMilliseconds(gameTime.getTime());
 		notifyGameEnd();
+		active = false;
 	}
 	
 	public void reset()
 	{
+		gameTime = new TimerEvent();
 		puzzle.setUserPuzzle(Util.clone2dArray(puzzle.get()));
 		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
+		gameTime.setElapsedTimeMilli(puzzle.getElapsedMilliseconds());
 	}
 	
 	public void enterNumber(int num)
@@ -289,5 +302,10 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public Coordinate getSelectedCoord()
 	{
 		return selectedCoord;
+	}
+	
+	public TimerEvent getGameTime()
+	{
+		return gameTime;
 	}
 }

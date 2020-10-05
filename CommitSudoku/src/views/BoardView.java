@@ -1,5 +1,7 @@
 package views;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -48,6 +50,21 @@ public class BoardView extends BoardViewBase{
 	public void init() {
 		setBackground(new Color(null, 57,73,89));
 		updateComponentSizes();
+		initBoard();
+		initListeners();
+	}
+	
+	public void initListeners()
+	{
+		addDisposeListener(new DisposeListener() {
+            public void widgetDisposed(DisposeEvent e)
+            {
+                HIGHLIGHTED_TILE.dispose();
+                NORMAL_TILE.dispose();
+                SELECTED_TILE.dispose();
+                SUBGRID_COLOR.dispose();
+            }
+        });
 	}
 
 	@Override
@@ -58,12 +75,9 @@ public class BoardView extends BoardViewBase{
 		for (int i = 0; i < size; i++) {
 			controls[i].dispose();
 		}
-		Util.println(getChildren().length);
-		
-		updateBoard();
 	}
 	
-	public void updateBoard()
+	public void initBoard()
 	{
 		initSubGrids();
 		buildBoard();

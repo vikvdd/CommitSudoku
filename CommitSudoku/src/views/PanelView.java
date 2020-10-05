@@ -14,7 +14,7 @@ import org.eclipse.ui.internal.handlers.RestartWorkbenchHandler;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-public class PanelView extends Composite{
+public class PanelView extends View{
 
 	private Composite gamePanel;
 	private List gameList;
@@ -48,8 +48,17 @@ public class PanelView extends Composite{
 	public static Color highlightColor = new Color(null, 230, 230, 230);
 	private Button deleteBtn;
 	
+	private int width = 250;
+	
 	public PanelView(Composite parent, int style) {
 		super(parent, style);
+	}
+	
+	
+
+	@Override
+	public void updateComponentSizes() {
+		
 	}
 	
 	public List getGameList()
@@ -135,8 +144,8 @@ public class PanelView extends Composite{
 		return resetButton;
 	}
 	
-	public void init(int width)
-	{
+	@Override
+	public void init() {
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.verticalSpacing = 10;
 		gridLayout.marginTop = 10;
@@ -172,10 +181,10 @@ public class PanelView extends Composite{
 		lblTime.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 1));
 		lblTime.setFont(SWTResourceManager.getFont("Segoe UI", 12, SWT.BOLD));
 		lblTime.setBackground(secondaryColor);
-		lblTime.setText("5:12");
+		lblTime.setText("000:000");
 		
 		lblPuzzle = new Label(composite_3, SWT.NONE);
-		lblPuzzle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPuzzle.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		lblPuzzle.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblPuzzle.setText("Puzzle Name:");
 		lblPuzzle.setBackground(secondaryColor);
@@ -314,5 +323,6 @@ public class PanelView extends Composite{
 		resetButton = new Button(composite_1, SWT.NONE);
 		resetButton.setText("Reset");
 		//new Label(composite_1, SWT.NONE);
+		
 	}
 }

@@ -9,8 +9,6 @@ import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 import model.game.puzzle.Notes;
-import model.game.puzzle.SudokuPuzzle;
-import util.Util;
 import views.BoardTile;
 import views.*;
 
@@ -18,8 +16,7 @@ public class BoardController extends BaseController implements GameListener{
 	
 	BoardViewBase view;
 	private List<Coordinate> selectedTiles = new ArrayList<Coordinate>();
-	
-	
+		
 	public BoardController(SudokuGame game, BoardViewBase view)
 	{
 		super(game);
@@ -46,12 +43,6 @@ public class BoardController extends BaseController implements GameListener{
 	{
 		super.initListeners();
 		initBoardListeners();
-	}
-
-	@Override
-	public void start() {
-		game.start();
-		
 	}
 	
 	private void initBoardListeners() {
@@ -94,6 +85,12 @@ public class BoardController extends BaseController implements GameListener{
 		}
 		setBoardTileType(TileType.NORMAL);
 	}
+
+	@Override
+	public void start() {
+		game.start();
+		
+	}
 	
 	private void fillGameboard(int[][] puz)
 	{
@@ -102,6 +99,16 @@ public class BoardController extends BaseController implements GameListener{
 				Coordinate coord = new Coordinate(x, y);
 				updateTile(coord, puz[y][x]);
 			}	
+		}
+	}
+	
+	private void clearGameboard()
+	{
+		for (int y = 0; y < 9; y++) {
+			for (int x = 0; x < 9; x++) {
+				BoardTile tile = view.getButton(new Coordinate(x, y));
+				tile.resetTile();
+			}
 		}
 	}
 	
@@ -237,16 +244,6 @@ public class BoardController extends BaseController implements GameListener{
 		}
 	}
 	
-	private void clearBoard()
-	{
-		for (int y = 0; y < 9; y++) {
-			for (int x = 0; x < 9; x++) {
-				BoardTile tile = view.getButton(new Coordinate(x, y));
-				tile.resetTile();
-			}
-		}
-	}
-	
 	@Override
 	public void onGameStart(int[][] puzzleClone) {
 		fillGameboard(puzzleClone);
@@ -255,7 +252,7 @@ public class BoardController extends BaseController implements GameListener{
 	
 	@Override 
 	public void onGameEnd() {
-		clearBoard();
+		clearGameboard();
 	}
 
 	@Override

@@ -17,6 +17,7 @@ public class SudokuPuzzle implements Serializable{
 	private Notes[][] notes;
 	private int totalSolutions;
 	private Boolean solved;
+	private long elapsedTime;
 	
 	public SudokuPuzzle()
 	{
@@ -42,7 +43,7 @@ public class SudokuPuzzle implements Serializable{
 	
 	
 	
-	public SudokuPuzzle(String name, Difficulty difficulty, int[][] puzzle, int[][] userPuzzle, List<int[][]> solutions, Notes[][] notes, int totalSolutions, Boolean solved)
+	public SudokuPuzzle(String name, Difficulty difficulty, int[][] puzzle, int[][] userPuzzle, List<int[][]> solutions, Notes[][] notes, int totalSolutions, Boolean solved, long elapsedTime)
 	{
 		this.name = name;
 		this.difficulty = difficulty;
@@ -52,6 +53,7 @@ public class SudokuPuzzle implements Serializable{
 		this.totalSolutions = totalSolutions;
 		this.solved = solved;
 		this.notes = notes;
+		this.elapsedTime = elapsedTime;
 	}
 	
 	public void enterValue(int val, Coordinate coord)
@@ -106,6 +108,11 @@ public class SudokuPuzzle implements Serializable{
 		this.solutions = solutions;
 	}
 	
+	public void setElapsedMilliseconds(long milliseconds)
+	{
+		elapsedTime = milliseconds;
+	}
+	
 	public int[][] get()
 	{
 		return puzzle;
@@ -147,6 +154,11 @@ public class SudokuPuzzle implements Serializable{
 	public String getName()
 	{
 		return name;
+	}
+	
+	public long getElapsedMilliseconds()
+	{
+		return elapsedTime;
 	}
 	
 	public Difficulty getDifficulty()

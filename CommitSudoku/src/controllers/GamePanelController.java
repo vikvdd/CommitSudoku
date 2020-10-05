@@ -1,64 +1,78 @@
 package controllers;
 
+import java.util.Timer;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-
 import events.GameListener;
-import model.game.GameTime;
+import events.TimeListener;
 import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 import model.game.puzzle.SudokuLogic;
 import model.game.puzzle.SudokuPuzzle;
-import model.savesystem.GameDAOListener;
 import model.savesystem.PuzzleSaveList;
 import model.savesystem.SaveManager;
 import util.Util;
 import views.PanelView;
 
-public class GamePanelController implements GameListener, GameDAOListener
+public class GamePanelController extends BaseController implements GameListener, TimeListener
 {
 	private SudokuGame game;
 	private PanelView view;
-	private Shell shell;
+	private Display display;
 	private int currentSolution;
 	
-	public GamePanelController(SudokuGame game, Shell shell, PanelView view)
+	public GamePanelController(Display display, SudokuGame game, PanelView view)
 	{
+		super(game);
+		this.display = display;
 		this.game = game;
 		this.view = view;
-		this.shell = shell;
 		currentSolution = 0;
 	}
 	
-	public void init()
-	{
-		initGameList();		
-		initListeners();
+	@Override
+	protected void initModel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void initView() {
+		// TODO Auto-generated method stub
 		updateGameTitles(game.getPuzzleName(), game.getPuzzleDifficulty());
 	}
-	
+
+	@Override
+	protected void initController() {
+		// TODO Auto-generated method stub
+		initGameList();
+	}
+
+	@Override
+	public void start() {
+		
+		
+	}
+		
 	private void initGameList()
 	{
 		view.updateGameList(PuzzleSaveList.getInstance().getListAsStrings());
 	}
 	
-	private void initListeners()
+	@Override
+	protected void initListeners()
 	{
+		super.initListeners();
 		game.addGameListener(this);
-		shell.addListener(SWT.Close, new Listener() {
-			
-			@Override
-			public void handleEvent(Event arg0) {
-				savePuzzleAction();
-				shell.setVisible(false);
-				
-			}
-		});
+		game.getGameTime().addTimeListener(this);
+		Util.println("listeners");
 		
 		view.getPlayButton().addSelectionListener(new SelectionListener() {
 			
@@ -195,7 +209,6 @@ public class GamePanelController implements GameListener, GameDAOListener
 	
 	private void savePuzzleAction()
 	{
-		//SaveManager.saveSudokuPuzzle(game.getPuzzle(), true);
 		PuzzleSaveList.getInstance().refresh();
 		initGameList();
 	}
@@ -229,7 +242,14 @@ public class GamePanelController implements GameListener, GameDAOListener
 	
 	private void updateGameTime()
 	{
-		view.getTimeLabel().setText(GameTime.getInstance().getTime().toString());
+		if(!display.isDisposed())
+		{
+			long elapsed = game.getGameTime().getTime();
+			long second = (elapsed / 1000) % 60;
+			long minute = (elapsed / (1000 * 60)) % 60;
+			String time = String.format("%02d:%02d", minute, second);
+			view.getTimeLabel().setText(time);
+		}
 	}
 	
 	private void updateGameTitles(String name, Difficulty difficulty)
@@ -253,8 +273,8 @@ public class GamePanelController implements GameListener, GameDAOListener
 
 	@Override
 	public void onGameStart(int[][] puzzleClone) {
-		// TODO Auto-generated method stub
 		
+		game.getGameTime().addTimeListener(this);
 	}
 
 	@Override
@@ -266,6 +286,7 @@ public class GamePanelController implements GameListener, GameDAOListener
 	@Override
 	public void onPuzzleChanged(String name, Difficulty difficulty, String gameTime) {
 		updateGameTitles(name, difficulty);
+
 	}
 
 	@Override
@@ -292,17 +313,27 @@ public class GamePanelController implements GameListener, GameDAOListener
 		
 	}
 
-	@Override
-	public void onGameSave() {
-		updateGameState();
-		initGameList();
-	}
+
+
 
 	@Override
-	public void onGameLoad() {
-		// TODO Auto-generated method stub
+	public void onStart() {
+		Runnable timer = new Runnable() {
+			
+			@Override
+			public void run() {
+				updateGameTime();
+				if(!display.isDisposed())
+					display.timerExec(500, this);
+			}
+		};
+		display.timerExec(500, timer);
 		
 	}
 
-	
+	@Override
+	public void onStop() {
+		
+		
+	}	
 }

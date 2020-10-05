@@ -7,6 +7,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import controllers.BoardController;
 import controllers.GamePanelController;
@@ -55,7 +57,7 @@ public class Main {
 		BoardViewBase board = new BoardView(shell, SWT.NONE);
 		board.setSize(sm.getBoardSize().getWidth(), sm.getBoardSize().getHeight());
 		PanelView panelView = new PanelView(shell, SWT.NONE);
-		panelView.init(sm.getPanelSize().getWidth());
+		panelView.init();
 		GridData buttonsData = new GridData();
 		buttonsData.horizontalAlignment = SWT.CENTER;
 		GameButtonsView buttonsView = new GameButtonsView(shell, SWT.None);
@@ -65,13 +67,23 @@ public class Main {
 		logoView.init(display);
 		
 		//INIT CONTROLLERS
-		initControllers(game, shell, board, buttonsView, panelView);
+		initControllers(display, game, board, buttonsView, panelView);
 		
 		shell.open();
 		shell.layout();
 		
 		final Point newSize = shell.computeSize(SWT.DEFAULT, SWT.DEFAULT, true); 
 		shell.setSize(newSize);
+		
+		shell.addListener(SWT.Close, new Listener() {
+			
+			@Override
+			public void handleEvent(Event arg0) {
+				shell.setVisible(false);
+				game.end();
+				shell.dispose();
+			}
+		});
 		
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
@@ -93,14 +105,14 @@ public class Main {
 		return shell;
 	}
 	
-	private static void initControllers(SudokuGame game, Shell shell, BoardViewBase board, GameButtonsView buttonsView, PanelView panelView)
+	private static void initControllers(Display display, SudokuGame game, BoardViewBase board, GameButtonsView buttonsView, PanelView panelView)
 	{
-		BoardController boardController = new BoardController(game, board);
-		boardController.init();
-		GamePanelController panelController = new GamePanelController(game, shell, panelView);
+		GamePanelController panelController = new GamePanelController(display, game, panelView);
 		panelController.init();
 		NumButtonController buttonController = new NumButtonController(game, buttonsView);
 		buttonController.init();
+		BoardController boardController = new BoardController(game, board);
+		boardController.init();
 	}
 	
 	private static SudokuPuzzle tryLoadFirstPuzzle(IGameDAO dao)
@@ -114,4 +126,6 @@ public class Main {
 		}
 		return puzzle;
 	}
+	
+	
 }
