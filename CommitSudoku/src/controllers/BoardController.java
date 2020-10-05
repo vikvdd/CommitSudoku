@@ -9,6 +9,7 @@ import model.game.SudokuGame;
 import model.game.puzzle.Coordinate;
 import model.game.puzzle.Difficulty;
 import model.game.puzzle.Notes;
+import util.Util;
 import views.BoardTile;
 import views.*;
 
@@ -172,8 +173,13 @@ public class BoardController extends BaseController implements GameListener{
 	{
 		Notes notes = game.getNotesAtCoordinate(coord);
 		for(int i = 1; i <= 9; i++)
-		{			
-			view.getButton(coord).setNoteText(i, notes.isNoteActive(i));
+		{	
+			try {
+				view.getButton(coord).setNoteText(i, notes.isNoteActive(i));
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
 		}
 	}
 	
@@ -198,7 +204,7 @@ public class BoardController extends BaseController implements GameListener{
 			break;
 		case VALIDENTRY:
 			btn.setNumFont(BoardTile.ENTRY_FONT);
-			btn.setNumTextColor(BoardTile.DEFAULT_COLOR);					
+			btn.setNumTextColor(BoardTile.ENTRY_COLOR);					
 			break;
 		case INVALIDENTRY:
 			btn.setNumFont(BoardTile.INVALID_FONT);

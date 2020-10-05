@@ -73,7 +73,7 @@ public class SudokuGame extends GameModelEvent implements GameStatListener{
 	public void reset()
 	{
 		gameTime = new TimerEvent();
-		puzzle.setUserPuzzle(Util.clone2dArray(puzzle.get()));
+		puzzle.resetPuzzle();
 		notifyPuzzleChanged(puzzle.getName(), puzzle.getDifficulty(), "000");
 		gameTime.setElapsedTimeMilli(puzzle.getElapsedMilliseconds());
 	}

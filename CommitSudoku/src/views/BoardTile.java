@@ -24,6 +24,7 @@ public class BoardTile extends Composite{
 	public static Color MAIN_TILE_COLOR = new Color(null, 255,255,255);
 	public static Color HOVER_TILE_COLOR = new Color(null, 200,200,200);
 	public static final Color DEFAULT_COLOR = new Color(null, 0,0,0);
+	public static final Color ENTRY_COLOR = new Color(null, 43, 43, 43);
 	public static final Color INVALID_COLOR = new Color(null, 255,0,0);
 	public static Font DEFAULT_FONT = SWTResourceManager.getFont("TREBUCHET MS", 23, SWT.BOLD);
 	public static Font ENTRY_FONT = SWTResourceManager.getFont("TREBUCHET MS", 23, SWT.NORMAL);

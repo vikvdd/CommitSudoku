@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.internal.handlers.RestartWorkbenchHandler;
+import org.eclipse.ui.internal.handlers.WizardHandler.New;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.wb.swt.SWTResourceManager;
 
@@ -43,9 +44,9 @@ public class PanelView extends View{
 	private Button redoButton;
 	private Button resetButton;
 	
-	public static Color primaryColor = new Color(null, 220,220,220);
-	public static Color secondaryColor = new Color(null, 173, 173, 173);
-	public static Color highlightColor = new Color(null, 230, 230, 230);
+	public static Color primaryColor = new Color(null,  220,220,220);
+	public static Color secondaryColor = new Color(null, 220,220,220);
+	public static Color highlightColor = new Color(null, 176, 209, 217);
 	private Button deleteBtn;
 	
 	private int width = 250;
@@ -168,7 +169,7 @@ public class PanelView extends View{
 		composite_2.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		composite_2.setBackground(primaryColor);
 		
-		composite_3 = new Composite(composite_2, SWT.BORDER);
+		composite_3 = new Composite(composite_2, SWT.NONE);
 		composite_3.setBackground(secondaryColor);
 		GridLayout gl_composite_3 = new GridLayout(2, true);
 		gl_composite_3.verticalSpacing = 3;
@@ -184,13 +185,13 @@ public class PanelView extends View{
 		lblTime.setText("000:000");
 		
 		lblPuzzle = new Label(composite_3, SWT.NONE);
-		lblPuzzle.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		lblPuzzle.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblPuzzle.setFont(SWTResourceManager.getFont("Segoe UI", 9, SWT.BOLD));
 		lblPuzzle.setText("Puzzle Name:");
 		lblPuzzle.setBackground(secondaryColor);
 		
 		lblPuzzleName = new Label(composite_3, SWT.NONE);
-		lblPuzzleName.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lblPuzzleName.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblPuzzleName.setText("ExamplePuzzle");
 		lblPuzzleName.setBackground(secondaryColor);
 		
@@ -201,7 +202,7 @@ public class PanelView extends View{
 		lblDifficultyTitle.setBackground(secondaryColor);
 		
 		lbldifficulty = new Label(composite_3, SWT.NONE);
-		lbldifficulty.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		lbldifficulty.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lbldifficulty.setText("HARD AF");
 		lbldifficulty.setBackground(secondaryColor);
 		
@@ -214,6 +215,7 @@ public class PanelView extends View{
 		lblDateCompleted = new Label(composite_3, SWT.NONE);
 		lblDateCompleted.setText("-");
 		lblDateCompleted.setBackground(secondaryColor);
+		lblDateCompleted.setData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		new Label(composite_3, SWT.NONE);
 		new Label(composite_3, SWT.NONE);
 		
@@ -243,8 +245,6 @@ public class PanelView extends View{
 		deleteBtn.setText("Delete");
 		deleteBtn.setBackground(new Color(null, 235, 59, 59));
 
-		
-		//////////////////////GAME INFO COMPOSITE//////////////////////////////////////
 		
 		composite = new Composite(this, SWT.NONE);
 		GridLayout gl_composite = new GridLayout(2, false);

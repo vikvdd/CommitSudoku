@@ -82,6 +82,14 @@ public class SudokuPuzzle implements Serializable{
 		
 	}
 	
+	public void resetPuzzle()
+	{
+		userPuzzle = Util.clone2dArray(puzzle);
+		initNotes();
+		solved = false;
+		elapsedTime = 0;
+	}
+	
 	public void addSolution(int[][] _solution)
 	{
 		solutions.add(_solution);
